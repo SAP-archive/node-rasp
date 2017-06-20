@@ -1379,6 +1379,8 @@
         'strtod.h',
         'ic/stub-cache.cc',
         'ic/stub-cache.h',
+        'taint.cpp',
+        'taint.h',
         'tracing/trace-event.cc',
         'tracing/trace-event.h',
         'tracing/traced-value.cc',
