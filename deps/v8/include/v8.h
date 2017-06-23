@@ -9003,7 +9003,7 @@ class Internals {
   static const int kHeapObjectMapOffset = 0;
   static const int kMapInstanceTypeAndBitFieldOffset =
       1 * kApiPointerSize + kApiIntSize;
-  static const int kStringResourceOffset = 3 * kApiPointerSize;
+  static const int kStringResourceOffset = 3 * kApiPointerSize + kApiPointerSize;
 
   static const int kOddballKindOffset = 4 * kApiPointerSize + sizeof(double);
   static const int kForeignAddressOffset = kApiPointerSize;

@@ -5330,7 +5330,6 @@ class JSPromise;
 class JSPromiseCapability : public JSObject {
  public:
   DECL_CAST(JSPromiseCapability)
-
   DECL_VERIFIER(JSPromiseCapability)
 
   DECL_ACCESSORS(promise, Object)

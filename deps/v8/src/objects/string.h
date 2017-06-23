@@ -7,6 +7,7 @@
 
 #include "src/base/bits.h"
 #include "src/objects/name.h"
+#include "src/taint.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -180,6 +181,12 @@ class String : public Name {
   // possible.
   inline bool HasOnlyOneByteChars();
 
+  // TaintV8
+  inline const StringTaint& GetTaint();
+  inline void SetTaint(StringTaint value);
+  inline void ClearTaint();
+  inline void InitializeTaint();
+
   // Get and set individual two byte chars in the string.
   inline void Set(int index, uint16_t value);
   // Get individual two byte char in the string.  Repeated calls
@@ -335,7 +342,8 @@ class String : public Name {
 
   // Layout description.
   static const int kLengthOffset = Name::kSize;
-  static const int kSize = kLengthOffset + kPointerSize;
+  static const int kTaintOffset = kLengthOffset + kPointerSize;
+  static const int kSize = kTaintOffset + kPointerSize;
 
   // Max char codes.
   static const int32_t kMaxOneByteCharCode = unibrow::Latin1::kMaxChar;

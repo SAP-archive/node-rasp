@@ -3977,6 +3977,9 @@ AllocationResult Heap::AllocateRawOneByteString(int length,
   String::cast(result)->set_hash_field(String::kEmptyHashField);
   DCHECK_EQ(size, HeapObject::cast(result)->Size());
 
+  // TaintV8
+  String::cast(result)->InitializeTaint();
+
   return result;
 }
 
@@ -4000,6 +4003,10 @@ AllocationResult Heap::AllocateRawTwoByteString(int length,
   String::cast(result)->set_length(length);
   String::cast(result)->set_hash_field(String::kEmptyHashField);
   DCHECK_EQ(size, HeapObject::cast(result)->Size());
+
+  // TaintV8
+  String::cast(result)->InitializeTaint();
+
   return result;
 }
 
