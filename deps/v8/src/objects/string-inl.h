@@ -11,6 +11,7 @@
 #include "src/heap/factory.h"
 #include "src/objects/name-inl.h"
 #include "src/string-hasher-inl.h"
+#include "src/taint.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -363,6 +364,62 @@ String* String::GetUnderlying() {
   STATIC_ASSERT(ConsString::kFirstOffset == ThinString::kActualOffset);
   const int kUnderlyingOffset = SlicedString::kParentOffset;
   return String::cast(READ_FIELD(this, kUnderlyingOffset));
+}
+
+// TaintV8
+const StringTaint& String::GetTaint() {
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+
+  if (ptr) {
+    return *reinterpret_cast<StringTaint*>(ptr);
+  } else {
+    return EmptyTaint;
+  }	
+}
+
+// TODO: Fix WeakCallbackInfo / WeakCallbackData was removed
+/*static void FinalizeTaintedString(const v8::WeakCallbackInfo<v8::Value>& data) {
+  String** p = reinterpret_cast<String**>(data.GetParameter());
+  String* str = *p;
+  str->ClearTaint();
+  GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
+}*/
+
+void String::SetTaint(StringTaint value){
+  if (!value.hasTaint()) {
+    return ClearTaint();
+  }
+
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+  StringTaint* taint = reinterpret_cast<StringTaint*>(ptr);
+
+  if (taint) {
+    delete taint;
+  } else {
+    // Add finalizer to ensure deletion of the associated taint data
+    Heap* heap = GetHeap();
+    Isolate* isolate = heap->isolate();
+    //Handle<Object> wrapper = isolate->global_handles()->Create(this);
+    //GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(), FinalizeTaintedString);
+  }
+
+  ptr = reinterpret_cast<intptr_t>(new StringTaint(std::move(value)));
+  WRITE_INTPTR_FIELD(this, kTaintOffset, ptr);
+}
+
+void String::ClearTaint() {
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+  StringTaint* taint = reinterpret_cast<StringTaint*>(ptr);
+
+  if (taint) {
+    delete taint;
+  }
+
+  WRITE_INTPTR_FIELD(this, kTaintOffset, 0);
+}
+
+void String::InitializeTaint() {
+  WRITE_INTPTR_FIELD(this, kTaintOffset, 0);
 }
 
 template <class Visitor>
