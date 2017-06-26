@@ -1074,6 +1074,7 @@ namespace internal {
   TFJ(StringPrototypeIterator, 0)                                              \
                                                                                \
   TFJ(StringPrototypeIsTainted, 0)                                             \
+  TFJ(StringPrototypeGetTaint, 0)                                              \
                                                                                \
   /* StringIterator */                                                         \
   /* ES6 #sec-%stringiteratorprototype%.next */                                \
