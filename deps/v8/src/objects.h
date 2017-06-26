@@ -4604,6 +4604,7 @@ class ContextExtension : public Struct {
   V(String.prototype, trimLeft, StringTrimLeft)             \
   V(String.prototype, trimRight, StringTrimRight)           \
   V(String.prototype, valueOf, StringValueOf)               \
+  V(String.prototype, isTainted, StringIsTainted)           \
   V(String, fromCharCode, StringFromCharCode)               \
   V(String, fromCodePoint, StringFromCodePoint)             \
   V(String, raw, StringRaw)                                 \

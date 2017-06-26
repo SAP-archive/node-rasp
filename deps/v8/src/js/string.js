@@ -232,6 +232,12 @@ DEFINE_METHODS_LEN(
 // -------------------------------------------------------------------
 // String methods related to templates
 
+// TaintV8
+function StringIsTaintedJS() {
+  CHECK_OBJECT_COERCIBLE(this, "String.prototype.isTainted");
+  return %StringIsTainted(TO_STRING(this));
+}
+
 // Set up the non-enumerable functions on the String object.
 DEFINE_METHOD(
   GlobalString,

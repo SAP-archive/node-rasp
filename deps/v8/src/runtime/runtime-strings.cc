@@ -109,6 +109,20 @@ MaybeHandle<String> StringReplaceOneCharWithString(
   }
 }
 
+// TaintV8
+RUNTIME_FUNCTION(Runtime_StringIsTainted) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+
+  StringTaint taint = str->GetTaint(); 
+  if(taint.hasTaint()) {
+    return isolate->heap()->true_value();
+  } else {
+    return isolate->heap()->false_value();
+  }
+}
+
 RUNTIME_FUNCTION(Runtime_StringReplaceOneCharWithString) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());

@@ -534,7 +534,8 @@ namespace internal {
   F(FlattenString, 1, 1)                  \
   F(StringCharFromCode, 1, 1)             \
   F(StringCharCodeAt, 2, 1)               \
-  F(StringMaxLength, 0, 1)
+  F(StringMaxLength, 0, 1)                \
+  F(StringIsTainted, 1, 1)
 
 #define FOR_EACH_INTRINSIC_SYMBOL(F) \
   F(CreateSymbol, 1, 1)              \
