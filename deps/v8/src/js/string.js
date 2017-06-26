@@ -167,8 +167,19 @@ DEFINE_METHODS(
         s += s;
       }
     }
+
+    // TaintV8
+    isTainted() {
+      CHECK_OBJECT_COERCIBLE(this, "String.prototype.isTainted");
+      return %StringIsTainted(TO_STRING(this));
+    }
+
+    getTaint() {
+      CHECK_OBJECT_COERCIBLE(this, "String.prototype.getTaint");
+      return %StringGetTaint(TO_STRING(this));
+    }
   }
-);
+};
 
 function StringPad(thisString, maxLength, fillString) {
   maxLength = TO_LENGTH(maxLength);
@@ -231,12 +242,6 @@ DEFINE_METHODS_LEN(
 
 // -------------------------------------------------------------------
 // String methods related to templates
-
-// TaintV8
-function StringIsTaintedJS() {
-  CHECK_OBJECT_COERCIBLE(this, "String.prototype.isTainted");
-  return %StringIsTainted(TO_STRING(this));
-}
 
 // Set up the non-enumerable functions on the String object.
 DEFINE_METHOD(
