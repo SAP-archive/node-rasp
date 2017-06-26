@@ -12,6 +12,7 @@
 #include "src/regexp/regexp-utils.h"
 #include "src/string-builder.h"
 #include "src/string-search.h"
+#include "src/taint.h"
 
 namespace v8 {
 namespace internal {
@@ -421,6 +422,21 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
   DCHECK(!answer->IsOneByteRepresentation());
   return *answer;
 }
+
+// TaintV8
+RUNTIME_FUNCTION(Runtime_StringIsTainted) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+
+  StringTaint taint = str->GetTaint();
+  if(taint.hasTaint()) {
+    return isolate->heap()->true_value();
+  } else {
+    return isolate->heap()->false_value();
+  }
+}
+
 
 template <typename sinkchar>
 static void WriteRepeatToFlat(String* src, Vector<sinkchar> buffer, int cursor,
