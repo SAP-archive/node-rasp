@@ -437,6 +437,86 @@ RUNTIME_FUNCTION(Runtime_StringIsTainted) {
   }
 }
 
+RUNTIME_FUNCTION(Runtime_StringGetTaint) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+
+  const StringTaint& taint = str->GetTaint();
+  int length = 0;
+  for (const TaintRange& taint_range : taint) {
+    //Hackfix
+    taint_range.begin();
+    length++;
+  }
+  Handle<FixedArray> fast_elements = isolate->factory()->NewFixedArray(length);
+  int i = 0;
+  for (const TaintRange& taint_range : taint) {
+    Handle<JSObject> range = isolate->factory()->NewJSObject(isolate->object_function(), NOT_TENURED);
+    Handle<String> key_begin = isolate->factory()->InternalizeUtf8String("begin");
+    Handle<String> key_end = isolate->factory()->InternalizeUtf8String("end");
+    Handle<Object> begin = isolate->factory()->NewNumberFromUint(taint_range.begin(), NOT_TENURED);
+    Handle<Object> end = isolate->factory()->NewNumberFromUint(taint_range.end(), NOT_TENURED);
+    JSObject::DefinePropertyOrElementIgnoreAttributes(range, key_begin, begin).Check();
+    JSObject::DefinePropertyOrElementIgnoreAttributes(range, key_end, end).Check();
+
+    int flow_length = 0;
+    for (TaintNode& taint_node : taint_range.flow()) {
+      //Hackfix
+      taint_node.operation();
+      flow_length++;
+    }
+
+    //Build the flow array which includes the operations and the arguments
+    int j = 0;
+    Handle<FixedArray> flow_elements = isolate->factory()->NewFixedArray(flow_length);
+
+    for (TaintNode& taint_node : taint_range.flow()) {
+      Handle<JSObject> flow_object = isolate->factory()->NewJSObject(isolate->object_function(), NOT_TENURED);
+      Handle<String> key_operation = isolate->factory()->InternalizeUtf8String("operation");
+      Handle<String> operation = isolate->factory()->InternalizeUtf8String(taint_node.operation().name());
+
+      //Build the arguments array, which includes the arguments for each operation
+      int operation_length = 0;
+      std::vector<std::u16string> arguments = taint_node.operation().arguments();
+      for (auto& s : arguments) {
+        operation_length++;
+      }
+
+      int k = 0;
+      Handle<FixedArray> argument_elements = isolate->factory()->NewFixedArray(operation_length);
+      for (auto& s : arguments) {
+        Handle<SeqTwoByteString> argument = isolate->factory()->NewRawTwoByteString(s.length()).ToHandleChecked();
+        uint16_t* data = argument->GetChars();
+        for (int i = 0; i < s.length(); i++) {
+          data[i] = s[i];
+        }
+
+        argument_elements->set(k, *argument);
+        k++;
+      }
+
+      Handle<String> key_argument = isolate->factory()->InternalizeUtf8String("arguments");
+      Handle<JSArray> arguments_array = isolate->factory()->NewJSArrayWithElements(argument_elements);
+      JSObject::DefinePropertyOrElementIgnoreAttributes(flow_object, key_argument, arguments_array).Check();
+
+      JSObject::DefinePropertyOrElementIgnoreAttributes(flow_object, key_operation, operation).Check();
+      flow_elements->set(j, *flow_object);
+      j++;
+    }
+
+    Handle<String> key_flow = isolate->factory()->InternalizeUtf8String("flow");
+    Handle<JSArray> array = isolate->factory()->NewJSArrayWithElements(flow_elements);
+    JSObject::DefinePropertyOrElementIgnoreAttributes(range, key_flow, array).Check();
+
+    fast_elements->set(i, *range);
+    i++;
+  }
+
+  Handle<JSArray> result = isolate->factory()->NewJSArrayWithElements(fast_elements);
+  result->set_length(Smi::FromInt(length));
+  return *result;
+}
 
 template <typename sinkchar>
 static void WriteRepeatToFlat(String* src, Vector<sinkchar> buffer, int cursor,
