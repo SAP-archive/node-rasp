@@ -1359,6 +1359,8 @@
         '../src/string-stream.h',
         '../src/strtod.cc',
         '../src/strtod.h',
+        '../src/taint.cc',
+        '../src/taint.h',
         '../src/third_party/utf8-decoder/utf8-decoder.h',
         '../src/tracing/trace-event.cc',
         '../src/tracing/trace-event.h',
