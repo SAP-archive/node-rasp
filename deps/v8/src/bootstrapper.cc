@@ -2051,6 +2051,9 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     SimpleInstallFunction(prototype, "setTaint",
                           Builtins::kStringPrototypeSetTaint, 1, true);
 
+    SimpleInstallFunction(prototype, "removeTaint",
+                          Builtins::kStringPrototypeRemoveTaint, 0, true);
+
     SimpleInstallFunction(prototype, factory->iterator_symbol(),
                           "[Symbol.iterator]",
                           Builtins::kStringPrototypeIterator, 0, true,
