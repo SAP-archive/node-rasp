@@ -204,6 +204,62 @@ RUNTIME_FUNCTION(Runtime_StringGetTaint) {
   return *result;
 }
 
+static inline char16_t* AsciiToTwoByteString(const char* source) {
+  int array_length = i::StrLength(source) + 1;
+  char16_t* converted = i::NewArray<char16_t>(array_length);
+  for (int i = 0; i < array_length; i++) converted[i] = source[i];
+  return converted;
+}
+
+RUNTIME_FUNCTION(Runtime_StringSetTaint) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 3);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+  CONVERT_ARG_HANDLE_CHECKED(JSArray, array, 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, source, 2);
+
+  // We have to allocate a new string to prevent StringCaches and such
+  Handle<String> result;
+  str = String::Flatten(str);
+  DisallowHeapAllocation no_gc;
+  String::FlatContent content = str->GetFlatContent();
+
+  AllowHeapAllocation allow;
+  if (str->IsOneByteRepresentation()) {
+    result = isolate->factory()->NewStringFromOneByte(content.ToOneByteVector()).ToHandleChecked();
+  } else {
+    result = isolate->factory()->NewStringFromTwoByte(content.ToUC16Vector()).ToHandleChecked();
+  }
+
+  char* buf = (char*) Malloced::New(source->length() + 1);
+  memcpy(buf, (const char*)SeqOneByteString::cast(*source)->GetChars(), source->length());
+  buf[source->length()] = 0;
+
+  // Fill arguments array of TaintOperation
+  FixedArray* elements = FixedArray::cast(array->elements());
+  std::vector<std::u16string> operations_args(elements->length());
+  for (int i = 0; i < elements->length(); i++) {
+    String* string = String::cast(elements->get(i));
+    int length = string->length();
+    std::u16string u16str;
+
+    if (string->IsOneByteRepresentation()) {
+      const char* chars = (const char*)SeqOneByteString::cast(string)->GetChars();
+      char16_t* data = AsciiToTwoByteString(chars);
+      u16str = std::u16string(data, length);
+      DeleteArray(data);
+    } else {
+      u16str = std::u16string((const char16_t*)SeqTwoByteString::cast(string)->GetChars(), length);
+    }
+
+    operations_args[i] = u16str;
+  }
+
+  result->SetTaint(StringTaint(0, str->length(), TaintSource(buf, operations_args)));
+  Malloced::Delete(buf);
+  return *result;
+}
+
 RUNTIME_FUNCTION(Runtime_StringReplaceOneCharWithString) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());
