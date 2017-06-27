@@ -260,6 +260,31 @@ RUNTIME_FUNCTION(Runtime_StringSetTaint) {
   return *result;
 }
 
+RUNTIME_FUNCTION(Runtime_StringRemoveTaint) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 1);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+  StringTaint oldTaint =  str->GetTaint();
+  if (!oldTaint.hasTaint()) {
+    return *str;
+  }
+
+  int length = str->length();
+  if (str->IsOneByteRepresentation()) {
+    Handle<SeqOneByteString> result;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, result, isolate->factory()->NewRawOneByteString(length));
+    CopyChars(result->GetChars(), SeqOneByteString::cast(*str)->GetChars(), length);
+    return *result;
+  } else {
+    Handle<SeqTwoByteString> result;
+    ASSIGN_RETURN_FAILURE_ON_EXCEPTION(
+      isolate, result, isolate->factory()->NewRawTwoByteString(length));
+    CopyChars(result->GetChars(), SeqTwoByteString::cast(*str)->GetChars(), length);
+    return *result;
+  }
+}
+
 RUNTIME_FUNCTION(Runtime_StringReplaceOneCharWithString) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());

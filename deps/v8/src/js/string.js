@@ -184,6 +184,11 @@ DEFINE_METHODS(
       if (IS_UNDEFINED(operation_args)) operation_args = [];
       return %StringSetTaint(TO_STRING(this), operation_args, taint);
     }
+
+    removeTaint() {
+      CHECK_OBJECT_COERCIBLE(this, "String.prototype.removeTaint");
+      return %StringRemoveTaint(TO_STRING(this));
+    }
   }
 };
 
@@ -248,12 +253,6 @@ DEFINE_METHODS_LEN(
 
 // -------------------------------------------------------------------
 // String methods related to templates
-
-function StringSetTaintJS(taint, operation_args) {
-  CHECK_OBJECT_COERCIBLE(this, "String.prototype.setTaint");
-  if (IS_UNDEFINED(operation_args)) operation_args = [];
-  return %StringSetTaint(TO_STRING(this), operation_args, taint);
-}
 
 // Set up the non-enumerable functions on the String object.
 DEFINE_METHOD(
