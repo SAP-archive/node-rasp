@@ -3352,9 +3352,10 @@ static void ParseArgs(int* argc,
     if (debug_options.ParseOption(argv[0], arg)) {
       // Done, consumed by DebugOptions::ParseOption().
     } else if (strcmp(arg, "--version") == 0 || strcmp(arg, "-v") == 0) {
-      printf("%s\n", NODE_VERSION);
+      printf("Taint-aware Node.js based on version %s\n", NODE_VERSION);
       exit(0);
     } else if (strcmp(arg, "--help") == 0 || strcmp(arg, "-h") == 0) {
+      printf("Taint-aware Node.js based on version %s\n", NODE_VERSION);
       PrintHelp();
       exit(0);
     } else if (strcmp(arg, "--eval") == 0 ||
