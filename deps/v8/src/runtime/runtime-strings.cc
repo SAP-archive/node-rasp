@@ -108,6 +108,13 @@ MaybeHandle<String> StringReplaceOneCharWithString(
   }
 }
 
+static inline char16_t* AsciiToTwoByteString(const char* source) {
+  int array_length = i::StrLength(source) + 1;
+  char16_t* converted = i::NewArray<char16_t>(array_length);
+  for (int i = 0; i < array_length; i++) converted[i] = source[i];
+  return converted;
+}
+
 RUNTIME_FUNCTION(Runtime_StringReplaceOneCharWithString) {
   HandleScope scope(isolate);
   DCHECK_EQ(3, args.length());
@@ -515,6 +522,36 @@ RUNTIME_FUNCTION(Runtime_StringGetTaint) {
 
   Handle<JSArray> result = isolate->factory()->NewJSArrayWithElements(fast_elements);
   result->set_length(Smi::FromInt(length));
+  return *result;
+}
+
+RUNTIME_FUNCTION(Runtime_StringSetTaint) {
+  HandleScope scope(isolate);
+  DCHECK(args.length() == 2);
+  CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
+  CONVERT_ARG_HANDLE_CHECKED(String, source, 1);
+
+  // We have to allocate a new string to prevent StringCaches and such
+  Handle<String> result;
+  str = String::Flatten(str);
+  DisallowHeapAllocation no_gc;
+  String::FlatContent content = str->GetFlatContent();
+
+  AllowHeapAllocation allow;
+  if (str->IsOneByteRepresentation()) {
+    result = isolate->factory()->NewStringFromOneByte(content.ToOneByteVector()).ToHandleChecked();
+  } else {
+    result = isolate->factory()->NewStringFromTwoByte(content.ToUC16Vector()).ToHandleChecked();
+  }
+
+  char* buf = (char*) Malloced::New(source->length() + 1);
+  memcpy(buf, (const char*)SeqOneByteString::cast(*source)->GetChars(), source->length());
+  buf[source->length()] = 0;
+
+  std::vector<std::u16string> operations_args(0);
+
+  result->SetTaint(StringTaint(0, str->length(), TaintSource(buf, operations_args)));
+  Malloced::Delete(buf);
   return *result;
 }
 

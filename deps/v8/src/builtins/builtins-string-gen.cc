@@ -762,6 +762,14 @@ TF_BUILTIN(StringPrototypeGetTaint, CodeStubAssembler) {
   Return(CallRuntime(Runtime::kStringGetTaint, context, receiver));
 }
 
+TF_BUILTIN(StringPrototypeSetTaint, CodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+  Node* taint = Parameter(Descriptor::kTaint);
+
+  Return(CallRuntime(Runtime::kStringSetTaint, context, receiver, taint));
+}
+
 // ES6 #sec-string.prototype.charcodeat
 TF_BUILTIN(StringPrototypeCharCodeAt, StringBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));
