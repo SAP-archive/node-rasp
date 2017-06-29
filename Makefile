@@ -253,6 +253,9 @@ test-cov: all
 		$(CI_NATIVE_SUITES)
 	$(MAKE) lint
 
+test-taint: all
+	$(PYTHON) tools/test.py --mode=release taint -J
+
 test-parallel: all
 	$(PYTHON) tools/test.py --mode=release parallel -J
 
