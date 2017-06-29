@@ -299,6 +299,9 @@ test-cov: all
 	# $(MAKE) cctest
 	CI_SKIP_TESTS=core_line_numbers.js $(MAKE) jstest
 
+test-taint: all
+	$(PYTHON) tools/test.py --mode=release taint -J
+
 test-parallel: all
 	$(PYTHON) tools/test.py $(PARALLEL_ARGS) --mode=$(BUILDTYPE_LOWER) parallel
 
