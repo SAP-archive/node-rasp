@@ -486,29 +486,41 @@ V8_WARN_UNUSED_RESULT static Object* ConvertCase(
 BUILTIN(StringPrototypeToLocaleLowerCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLocaleLowerCase");
-  return ConvertCase(string, isolate,
-                     isolate->runtime_state()->to_lower_mapping());
+  Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_lower_mapping());
+
+  // TaintV8
+  String::cast(result)->SetTaint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToLocaleUpperCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLocaleUpperCase");
-  return ConvertCase(string, isolate,
-                     isolate->runtime_state()->to_upper_mapping());
+  Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_upper_mapping());
+
+  // TaintV8
+  String::cast(result)->SetTaint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToLowerCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLowerCase");
-  return ConvertCase(string, isolate,
-                     isolate->runtime_state()->to_lower_mapping());
+  Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_lower_mapping());
+  
+  // TaintV8
+  String::cast(result)->SetTaint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToUpperCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toUpperCase");
-  return ConvertCase(string, isolate,
-                     isolate->runtime_state()->to_upper_mapping());
+  Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_upper_mapping());
+
+  // TaintV8
+  String::cast(result)->SetTaint(string->GetTaint());
+  return result;
 }
 #endif  // !V8_INTL_SUPPORT
 
