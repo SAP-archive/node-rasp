@@ -351,6 +351,7 @@ MaybeHandle<String> Factory::NewStringFromOneByte(Vector<const uint8_t> string,
   CopyChars(SeqOneByteString::cast(*result)->GetChars(),
             string.start(),
             length);
+  result->InitializeTaint();
   return result;
 }
 
@@ -668,6 +669,10 @@ Handle<String> ConcatStringContent(Handle<StringType> result,
   SinkChar* sink = result->GetChars();
   String::WriteToFlat(*first, sink, 0, first->length());
   String::WriteToFlat(*second, sink + first->length(), 0, second->length());
+
+  // TaintV8
+  result->SetTaint(StringTaint::concat(first->GetTaint(), first->length(), second->GetTaint()));
+
   return result;
 }
 
@@ -681,16 +686,28 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
     right = handle(Handle<ThinString>::cast(right)->actual(), isolate());
   }
   int left_length = left->length();
-  if (left_length == 0) return right;
+  if (left_length == 0) {
+    right->InitializeTaint();
+    return right;
+  }
   int right_length = right->length();
-  if (right_length == 0) return left;
+  if (right_length == 0) {
+    left->InitializeTaint();
+    return left;
+  }
 
   int length = left_length + right_length;
 
   if (length == 2) {
     uint16_t c1 = left->Get(0);
     uint16_t c2 = right->Get(0);
-    return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
+
+    // TaintV8
+    StringTaint leftTaint = left->GetTaint();
+    StringTaint rightTaint = right->GetTaint();
+    result->SetTaint(StringTaint::concat(leftTaint.subtaint(0, 1), 1, rightTaint.subtaint(0, 1)));
+    return result;
   }
 
   // Make sure that an out of memory exception is thrown if the length
@@ -738,6 +755,11 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
                 ? Handle<ExternalOneByteString>::cast(right)->GetChars()
                 : Handle<SeqOneByteString>::cast(right)->GetChars();
       for (int i = 0; i < right_length; i++) *dest++ = src[i];
+
+      // TaintV8
+      StringTaint leftTaint = left->GetTaint();
+      StringTaint rightTaint = right->GetTaint();
+      result->SetTaint(StringTaint::concat(leftTaint, left_length, rightTaint));
       return result;
     }
 
@@ -770,6 +792,10 @@ Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
   result->set_length(length);
   result->set_first(*left, mode);
   result->set_second(*right, mode);
+
+  // TaintV8
+  result->InitializeTaint();
+
   return result;
 }
 
@@ -799,7 +825,11 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
 
   int length = end - begin;
   if (length <= 0) return empty_string();
-  if (length == 1) {
+
+  // TaintV8
+  bool hasTaint = false; //str->GetTaint().hasTaint();
+
+  if (length == 1 && !hasTaint) {
     return LookupSingleCharacterStringFromCode(str->Get(begin));
   }
   if (length == 2) {
@@ -808,7 +838,16 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
     // table to prevent creation of many unnecessary strings.
     uint16_t c1 = str->Get(begin);
     uint16_t c2 = str->Get(begin + 1);
-    return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    Handle<String> result =  MakeOrFindTwoCharacterString(isolate(), c1, c2);
+
+    // TaintV8
+    if (hasTaint) { 
+      result->SetTaint(StringTaint::substr(str->GetTaint(), begin, begin + 2));
+    } else {
+      result->InitializeTaint();
+    }
+
+    return result;
   }
 
   if (!FLAG_string_slices || length < SlicedString::kMinLength) {
@@ -818,6 +857,14 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       uint8_t* dest = result->GetChars();
       DisallowHeapAllocation no_gc;
       String::WriteToFlat(*str, dest, begin, end);
+
+      // TaintV8
+      if (hasTaint) {
+        result->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
+      } else {
+        result->InitializeTaint();
+      }
+
       return result;
     } else {
       Handle<SeqTwoByteString> result =
@@ -825,6 +872,14 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       uc16* dest = result->GetChars();
       DisallowHeapAllocation no_gc;
       String::WriteToFlat(*str, dest, begin, end);
+
+      // TaintV8
+      if (hasTaint) {
+        result->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
+      } else {
+        result->InitializeTaint();
+      }
+
       return result;
     }
   }
@@ -851,6 +906,11 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
   slice->set_length(length);
   slice->set_parent(*str);
   slice->set_offset(offset);
+
+  // TaintV8
+  slice->InitializeTaint();
+  //slice->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
+
   return slice;
 }
 

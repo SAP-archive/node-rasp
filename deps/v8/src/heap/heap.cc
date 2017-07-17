@@ -3935,6 +3935,9 @@ AllocationResult Heap::AllocateInternalizedStringImpl(T t, int chars,
   answer->set_length(chars);
   answer->set_hash_field(hash_field);
 
+  // TaintV8
+  answer->InitializeTaint();
+
   DCHECK_EQ(size, answer->Size());
 
   if (is_one_byte) {

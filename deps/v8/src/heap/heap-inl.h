@@ -166,6 +166,9 @@ AllocationResult Heap::AllocateOneByteInternalizedString(
   answer->set_length(str.length());
   answer->set_hash_field(hash_field);
 
+  // TainV8
+  answer->InitializeTaint();
+
   DCHECK_EQ(size, answer->Size());
 
   // Fill in the characters.
@@ -196,6 +199,9 @@ AllocationResult Heap::AllocateTwoByteInternalizedString(Vector<const uc16> str,
   String* answer = String::cast(result);
   answer->set_length(str.length());
   answer->set_hash_field(hash_field);
+
+  // TaintV8
+  answer->InitializeTaint();
 
   DCHECK_EQ(size, answer->Size());
 
@@ -709,3 +715,4 @@ AlwaysAllocateScope::~AlwaysAllocateScope() {
 }  // namespace v8
 
 #endif  // V8_HEAP_HEAP_INL_H_
+

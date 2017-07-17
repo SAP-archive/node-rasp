@@ -12109,6 +12109,9 @@ Handle<String> SeqString::Truncate(Handle<SeqString> string, int new_length) {
   // for the left-over space to avoid races with the sweeper thread.
   string->synchronized_set_length(new_length);
 
+  // TaintV8
+  string->InitializeTaint();
+
   return string;
 }
 
