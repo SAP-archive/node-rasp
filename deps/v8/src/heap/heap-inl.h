@@ -641,3 +641,4 @@ CodePageMemoryModificationScope::~CodePageMemoryModificationScope() {
 }  // namespace v8
 
 #endif  // V8_HEAP_HEAP_INL_H_
+
