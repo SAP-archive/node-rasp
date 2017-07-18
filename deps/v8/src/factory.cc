@@ -671,8 +671,7 @@ Handle<String> ConcatStringContent(Handle<StringType> result,
   String::WriteToFlat(*second, sink + first->length(), 0, second->length());
 
   // TaintV8
-  result->SetTaint(StringTaint::concat(first->GetTaint(), first->length(), second->GetTaint()));
-
+  result->InitializeTaint();
   return result;
 }
 
@@ -704,9 +703,8 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
     Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
 
     // TaintV8
-    StringTaint leftTaint = left->GetTaint();
-    StringTaint rightTaint = right->GetTaint();
-    result->SetTaint(StringTaint::concat(leftTaint.subtaint(0, 1), 1, rightTaint.subtaint(0, 1)));
+    result->InitializeTaint();
+
     return result;
   }
 
@@ -757,9 +755,8 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
       for (int i = 0; i < right_length; i++) *dest++ = src[i];
 
       // TaintV8
-      StringTaint leftTaint = left->GetTaint();
-      StringTaint rightTaint = right->GetTaint();
-      result->SetTaint(StringTaint::concat(leftTaint, left_length, rightTaint));
+      result->InitializeTaint();
+
       return result;
     }
 
@@ -841,11 +838,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
     Handle<String> result =  MakeOrFindTwoCharacterString(isolate(), c1, c2);
 
     // TaintV8
-    if (hasTaint) { 
-      result->SetTaint(StringTaint::substr(str->GetTaint(), begin, begin + 2));
-    } else {
-      result->InitializeTaint();
-    }
+    result->InitializeTaint();
 
     return result;
   }
@@ -859,11 +852,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       String::WriteToFlat(*str, dest, begin, end);
 
       // TaintV8
-      if (hasTaint) {
-        result->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
-      } else {
-        result->InitializeTaint();
-      }
+      result->InitializeTaint();
 
       return result;
     } else {
@@ -874,12 +863,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       String::WriteToFlat(*str, dest, begin, end);
 
       // TaintV8
-      if (hasTaint) {
-        result->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
-      } else {
-        result->InitializeTaint();
-      }
-
+      result->InitializeTaint();
       return result;
     }
   }
@@ -909,7 +893,6 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
 
   // TaintV8
   slice->InitializeTaint();
-  //slice->SetTaint(StringTaint::substr(str->GetTaint(), begin, end));
 
   return slice;
 }
