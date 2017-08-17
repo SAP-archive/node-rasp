@@ -2757,6 +2757,10 @@ TNode<String> CodeStubAssembler::AllocateSeqOneByteString(
   StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+  // TaintV8
+  StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return CAST(result);
 }
 
