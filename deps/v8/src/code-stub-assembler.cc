@@ -1953,6 +1953,11 @@ Node* CodeStubAssembler::AllocateSeqOneByteString(int length,
   StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+    
+  // TaintV8
+  StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return result;
 }
 
