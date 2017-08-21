@@ -2799,6 +2799,11 @@ TNode<String> CodeStubAssembler::AllocateSeqOneByteString(
     StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kHashFieldSlot,
                                    IntPtrConstant(String::kEmptyHashField),
                                    MachineType::PointerRepresentation());
+
+    // TaintV8
+    StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kTaintOffset,
+                                   IntPtrConstant(0),
+                                   MachineType::PointerRepresentation());
     var_result.Bind(result);
     Goto(&if_join);
   }
@@ -2837,6 +2842,10 @@ TNode<String> CodeStubAssembler::AllocateSeqTwoByteString(
   StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+  // TaintV8
+  StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return CAST(result);
 }
 
@@ -2868,6 +2877,11 @@ TNode<String> CodeStubAssembler::AllocateSeqTwoByteString(
                                    length, MachineRepresentation::kTagged);
     StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kHashFieldSlot,
                                    IntPtrConstant(String::kEmptyHashField),
+                                   MachineType::PointerRepresentation());
+
+    // TaintV8
+    StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kTaintOffset,
+                                   IntPtrConstant(0),
                                    MachineType::PointerRepresentation());
     var_result.Bind(result);
     Goto(&if_join);
@@ -2909,7 +2923,16 @@ TNode<String> CodeStubAssembler::AllocateSlicedString(
                                  MachineRepresentation::kTagged);
   StoreObjectFieldNoWriteBarrier(result, SlicedString::kOffsetOffset, offset,
                                  MachineRepresentation::kTagged);
+<<<<<<< HEAD
   return CAST(result);
+=======
+
+  // TaintV8
+  StoreObjectFieldNoWriteBarrier(result, SlicedString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
+  return result;
+>>>>>>> 9fa487d... [Taint] Initialize taint for further CSA allocated string types
 }
 
 TNode<String> CodeStubAssembler::AllocateSlicedOneByteString(
@@ -2937,6 +2960,12 @@ TNode<String> CodeStubAssembler::AllocateConsString(
   StoreObjectFieldNoWriteBarrier(result, ConsString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+  
+  // TaintV8
+  StoreObjectFieldNoWriteBarrier(result, ConsString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
+
   bool const new_space = !(flags & kPretenured);
   if (new_space) {
     StoreObjectFieldNoWriteBarrier(result, ConsString::kFirstOffset, first,
