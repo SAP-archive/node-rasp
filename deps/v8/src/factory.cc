@@ -558,6 +558,10 @@ Handle<StringClass> Factory::InternalizeExternalString(Handle<String> string) {
   Handle<StringClass> external_string = New<StringClass>(map, OLD_SPACE);
   external_string->set_length(cast_string->length());
   external_string->set_hash_field(cast_string->hash_field());
+
+  // Taint V8
+  external_string->InitializeTaint();
+
   external_string->set_resource(nullptr);
   isolate()->heap()->RegisterExternalString(*external_string);
   return external_string;
