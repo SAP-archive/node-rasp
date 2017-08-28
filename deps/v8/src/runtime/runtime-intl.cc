@@ -636,7 +636,12 @@ RUNTIME_FUNCTION(Runtime_StringToUpperCaseIntl) {
   DCHECK_EQ(args.length(), 1);
   CONVERT_ARG_HANDLE_CHECKED(String, s, 0);
   s = String::Flatten(s);
-  return ConvertToUpper(s, isolate);
+  Object* result = ConvertToUpper(s, isolate);
+
+  // TaintV8
+  String::cast(result)->SetTaint(s->GetTaint());
+
+  return result;
 }
 
 RUNTIME_FUNCTION(Runtime_StringLocaleConvertCase) {
