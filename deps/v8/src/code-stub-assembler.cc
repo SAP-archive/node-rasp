@@ -2923,16 +2923,12 @@ TNode<String> CodeStubAssembler::AllocateSlicedString(
                                  MachineRepresentation::kTagged);
   StoreObjectFieldNoWriteBarrier(result, SlicedString::kOffsetOffset, offset,
                                  MachineRepresentation::kTagged);
-<<<<<<< HEAD
-  return CAST(result);
-=======
 
   // TaintV8
   StoreObjectFieldNoWriteBarrier(result, SlicedString::kTaintOffset,
                                  IntPtrConstant(0),
                                  MachineType::PointerRepresentation());
-  return result;
->>>>>>> 9fa487d... [Taint] Initialize taint for further CSA allocated string types
+  return CAST(result);
 }
 
 TNode<String> CodeStubAssembler::AllocateSlicedOneByteString(
