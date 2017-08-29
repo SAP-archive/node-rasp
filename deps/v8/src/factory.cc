@@ -925,6 +925,9 @@ MaybeHandle<String> Factory::NewExternalStringFromOneByte(
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
 
+  // TaintV8
+  external_string->InitializeTaint();
+
   return external_string;
 }
 
@@ -956,6 +959,9 @@ MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
+
+  // TaintV8
+  external_string->InitializeTaint();
 
   return external_string;
 }
