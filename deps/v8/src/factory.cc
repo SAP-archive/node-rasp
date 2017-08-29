@@ -828,7 +828,8 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
   if (length <= 0) return empty_string();
 
   // TaintV8
-  bool hasTaint = false; //str->GetTaint().hasTaint();
+  StringTaint taint = str->GetTaint();
+  bool hasTaint = taint.hasTaint();
 
   if (length == 1 && !hasTaint) {
     return LookupSingleCharacterStringFromCode(str->Get(begin));
@@ -842,7 +843,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
     Handle<String> result =  MakeOrFindTwoCharacterString(isolate(), c1, c2);
 
     // TaintV8
-    result->InitializeTaint();
+    if (hasTaint) result->SetTaint(StringTaint::substr(taint, begin, end));
 
     return result;
   }
@@ -856,7 +857,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       String::WriteToFlat(*str, dest, begin, end);
 
       // TaintV8
-      result->InitializeTaint();
+      if (hasTaint) result->SetTaint(StringTaint::substr(taint, begin, end));
 
       return result;
     } else {
@@ -867,7 +868,8 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
       String::WriteToFlat(*str, dest, begin, end);
 
       // TaintV8
-      result->InitializeTaint();
+      if (hasTaint) result->SetTaint(StringTaint::substr(taint, begin, end));
+
       return result;
     }
   }
@@ -897,6 +899,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str,
 
   // TaintV8
   slice->InitializeTaint();
+  if (hasTaint) slice->SetTaint(StringTaint::substr(taint, begin, end));
 
   return slice;
 }
