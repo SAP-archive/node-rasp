@@ -4410,6 +4410,9 @@ Node* CodeStubAssembler::StringAdd(Node* context, Node* left, Node* right,
       done(this, &result), done_native(this, &result);
   Counters* counters = isolate()->counters();
 
+  // TaintV8
+  GotoIf(WordEqual(IntPtrConstant(0), IntPtrConstant(0)), &runtime);
+
   Node* left_length = LoadStringLength(left);
   GotoIf(WordNotEqual(IntPtrConstant(0), left_length), &check_right);
   result.Bind(right);
