@@ -774,6 +774,7 @@ Handle<SeqOneByteString> Factory::AllocateRawOneByteInternalizedString(
   Handle<SeqOneByteString> answer(SeqOneByteString::cast(result), isolate());
   answer->set_length(length);
   answer->set_hash_field(hash_field);
+  answer->InitializeTaint();
   DCHECK_EQ(size, answer->Size());
   return answer;
 }
@@ -789,6 +790,7 @@ Handle<String> Factory::AllocateTwoByteInternalizedString(
   Handle<SeqTwoByteString> answer(SeqTwoByteString::cast(result), isolate());
   answer->set_length(str.length());
   answer->set_hash_field(hash_field);
+  answer->InitializeTaint();
   DCHECK_EQ(size, answer->Size());
 
   // Fill in the characters.
@@ -822,6 +824,7 @@ Handle<String> Factory::AllocateInternalizedStringImpl(T t, int chars,
   Handle<String> answer(String::cast(result), isolate());
   answer->set_length(chars);
   answer->set_hash_field(hash_field);
+  answer->InitializeTaint();
   DCHECK_EQ(size, answer->Size());
 
   if (is_one_byte) {
@@ -919,6 +922,7 @@ Handle<StringClass> Factory::InternalizeExternalString(Handle<String> string) {
   external_string->set_length(cast_string->length());
   external_string->set_hash_field(cast_string->hash_field());
   external_string->set_resource(nullptr);
+  external_string->InitializeTaint();
   isolate()->heap()->RegisterExternalString(*external_string);
   return external_string;
 }
@@ -942,6 +946,7 @@ MaybeHandle<SeqOneByteString> Factory::NewRawOneByteString(
   Handle<SeqOneByteString> string(SeqOneByteString::cast(result), isolate());
   string->set_length(length);
   string->set_hash_field(String::kEmptyHashField);
+  string->InitializeTaint();
   DCHECK_EQ(size, string->Size());
   return string;
 }
@@ -960,6 +965,7 @@ MaybeHandle<SeqTwoByteString> Factory::NewRawTwoByteString(
   Handle<SeqTwoByteString> string(SeqTwoByteString::cast(result), isolate());
   string->set_length(length);
   string->set_hash_field(String::kEmptyHashField);
+  string->InitializeTaint();
   DCHECK_EQ(size, string->Size());
   return string;
 }
@@ -1139,6 +1145,7 @@ Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
   result->set_length(length);
   result->set_first(*left, mode);
   result->set_second(*right, mode);
+  result->InitializeTaint();
   return result;
 }
 
@@ -1220,6 +1227,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   slice->set_length(length);
   slice->set_parent(*str);
   slice->set_offset(offset);
+  slice->InitializeTaint();
   return slice;
 }
 
@@ -1243,6 +1251,7 @@ MaybeHandle<String> Factory::NewExternalStringFromOneByte(
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
+  external_string->InitializeTaint();
 
   return external_string;
 }
@@ -1275,6 +1284,7 @@ MaybeHandle<String> Factory::NewExternalStringFromTwoByte(
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
+  external_string->InitializeTaint();
 
   return external_string;
 }
@@ -1290,6 +1300,7 @@ Handle<ExternalOneByteString> Factory::NewNativeSourceString(
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
+  external_string->InitializeTaint();
 
   return external_string;
 }
