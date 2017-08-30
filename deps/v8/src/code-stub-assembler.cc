@@ -4041,6 +4041,10 @@ Node* CodeStubAssembler::SubString(Node* context, Node* string, Node* from,
   CSA_ASSERT(this, TaggedIsNotSmi(string));
   CSA_ASSERT(this, IsString(string));
 
+  // TaintV8
+  // Bail-out to runtime
+  GotoIf(IsString(string), &runtime);
+
   // Make sure that both from and to are non-negative smis.
 
   if (flags == SubStringFlags::NONE) {
@@ -4055,7 +4059,6 @@ Node* CodeStubAssembler::SubString(Node* context, Node* string, Node* from,
   Node* const string_length = LoadStringLength(string);
 
   // Begin dispatching based on substring length.
-
   Label original_string_or_invalid_length(this);
   GotoIf(SmiAboveOrEqual(substr_length, string_length),
          &original_string_or_invalid_length);
