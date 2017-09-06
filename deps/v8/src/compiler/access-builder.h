@@ -202,6 +202,9 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to String::length() field.
   static FieldAccess ForStringLength();
 
+  // Provides access to String::GetTaint() field.
+  static FieldAccess ForStringTaint();
+
   // Provides access to ConsString::first() field.
   static FieldAccess ForConsStringFirst();
 

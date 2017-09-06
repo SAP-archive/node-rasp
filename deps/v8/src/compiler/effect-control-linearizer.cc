@@ -2728,6 +2728,8 @@ Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
   __ StoreField(AccessBuilder::ForMap(), result, result_map);
   __ StoreField(AccessBuilder::ForNameHashField(), result,
                 jsgraph()->Int32Constant(Name::kEmptyHashField));
+  __ StoreField(AccessBuilder::ForStringTaint(), result,
+                 __ IntPtrConstant(0));
   __ StoreField(AccessBuilder::ForStringLength(), result, length);
   __ StoreField(AccessBuilder::ForConsStringFirst(), result, first);
   __ StoreField(AccessBuilder::ForConsStringSecond(), result, second);
