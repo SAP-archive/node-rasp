@@ -690,16 +690,16 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
   }
   int left_length = left->length();
   if (left_length == 0) {
-    right->InitializeTaint();
     return right;
   }
   int right_length = right->length();
   if (right_length == 0) {
-    left->InitializeTaint();
     return left;
   }
 
   int length = left_length + right_length;
+  StringTaint taint = StringTaint::concat(
+      left->GetTaint(), left_length, right->GetTaint());
 
   if (length == 2) {
     uint16_t c1 = left->Get(0);
@@ -707,7 +707,7 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
     Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
 
     // TaintV8
-    result->InitializeTaint();
+    result->SetTaint(taint);
 
     return result;
   }
@@ -759,7 +759,7 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
       for (int i = 0; i < right_length; i++) *dest++ = src[i];
 
       // TaintV8
-      result->InitializeTaint();
+      result->SetTaint(taint);
 
       return result;
     }
@@ -793,9 +793,10 @@ Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
   result->set_length(length);
   result->set_first(*left, mode);
   result->set_second(*right, mode);
-
+  
   // TaintV8
   result->InitializeTaint();
+  result->SetTaint(taint);
 
   return result;
 }
