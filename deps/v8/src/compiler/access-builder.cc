@@ -613,6 +613,15 @@ FieldAccess AccessBuilder::ForStringLength() {
 }
 
 // static
+FieldAccess AccessBuilder::ForStringTaint() {
+  FieldAccess access = {kTaggedBase,         String::kTaintOffset,
+                        Handle<Name>(),      MaybeHandle<Map>(),
+                        Type::String(),      MachineType::TaggedPointer(),
+                        kPointerWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForConsStringFirst() {
   FieldAccess access = {kTaggedBase,         ConsString::kFirstOffset,
                         Handle<Name>(),      MaybeHandle<Map>(),
