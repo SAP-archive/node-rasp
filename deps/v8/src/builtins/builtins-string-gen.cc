@@ -639,6 +639,7 @@ TF_BUILTIN(StringPrototypeCharAt, CodeStubAssembler) {
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* position = Parameter(Descriptor::kPosition);
   Node* context = Parameter(Descriptor::kContext);
+  Node* end; // TaintV8
 
   // Check that {receiver} is coercible to Object and convert it to a String.
   receiver = ToThisString(context, receiver, "String.prototype.charAt");
@@ -654,6 +655,9 @@ TF_BUILTIN(StringPrototypeCharAt, CodeStubAssembler) {
     // Determine the actual length of the {receiver} String.
     Node* receiver_length = LoadObjectField(receiver, String::kLengthOffset);
 
+    // TaintV8
+    end = SmiAdd(position, SmiConstant(Smi::FromInt(1)));
+
     // Return "" if the Smi {position} is outside the bounds of the {receiver}.
     Label if_positioninbounds(this);
     Branch(SmiAboveOrEqual(position, receiver_length), &return_emptystring,
@@ -666,10 +670,10 @@ TF_BUILTIN(StringPrototypeCharAt, CodeStubAssembler) {
   }
 
   // Load the character code at the {position} from the {receiver}.
-  Node* code = StringCharCodeAt(receiver, position);
+  //Node* code = StringCharCodeAt(receiver, position);
 
   // And return the single character string with only that {code}.
-  Node* result = StringFromCharCode(code);
+  Node* result = SubString(context, receiver, position, end);
   Return(result);
 }
 
