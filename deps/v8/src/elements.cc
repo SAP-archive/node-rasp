@@ -4198,8 +4198,11 @@ class StringWrapperElementsAccessor
     Handle<String> string(GetString(*holder), isolate);
     uint32_t length = static_cast<uint32_t>(string->length());
     if (entry < length) {
-      return isolate->factory()->LookupSingleCharacterStringFromCode(
-          String::Flatten(string)->Get(entry));
+      // TaintV8
+      Handle<String> result = isolate->factory()->
+        LookupSingleCharacterStringFromCode(String::Flatten(string)->Get(entry));
+      result->SetTaint(string->GetTaint().subtaint(entry, entry + 1));
+      return result;
     }
     return BackingStoreAccessor::GetImpl(isolate, holder->elements(),
                                          entry - length);
