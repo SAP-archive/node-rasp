@@ -763,7 +763,7 @@ RUNTIME_FUNCTION(Runtime_StringToArray) {
 
   Handle<FixedArray> elements;
   int position = 0;
-  /*if (s->IsFlat() && s->IsOneByteRepresentation()) {
+  if (s->IsFlat() && s->IsOneByteRepresentation()) {
     // Try using cached chars where possible.
     elements = isolate->factory()->NewUninitializedFixedArray(length);
 
@@ -781,10 +781,8 @@ RUNTIME_FUNCTION(Runtime_StringToArray) {
     }
   } else {
     elements = isolate->factory()->NewFixedArray(length);
-  }*/
-  elements = isolate->factory()->NewFixedArray(length);
+  }
   for (int i = position; i < length; ++i) {
-    // TaintV8
     Handle<String> str =
         isolate->factory()->LookupSingleCharacterStringFromCode(s->Get(i));
     str->SetTaint(s->GetTaint().subtaint(i, i+1));

@@ -971,7 +971,7 @@ MaybeHandle<SeqTwoByteString> Factory::NewRawTwoByteString(
 }
 
 Handle<String> Factory::LookupSingleCharacterStringFromCode(uint32_t code) {
-  if (code <= String::kMaxOneByteCharCodeU) {
+  /*if (code <= String::kMaxOneByteCharCodeU) {
     {
       DisallowHeapAllocation no_allocation;
       Object* value = single_character_string_cache()->get(code);
@@ -986,7 +986,7 @@ Handle<String> Factory::LookupSingleCharacterStringFromCode(uint32_t code) {
     single_character_string_cache()->set(code, *result);
     return result;
   }
-  DCHECK_LE(code, String::kMaxUtf16CodeUnitU);
+  DCHECK_LE(code, String::kMaxUtf16CodeUnitU);*/
 
   Handle<SeqTwoByteString> result = NewRawTwoByteString(1).ToHandleChecked();
   result->SeqTwoByteStringSet(0, static_cast<uint16_t>(code));
