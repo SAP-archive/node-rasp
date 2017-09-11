@@ -335,7 +335,7 @@ MUST_USE_RESULT Object* ConvertToUpper(Handle<String> s, Isolate* isolate) {
     } else {
       ToUpperWithSharpS(flat.ToUC16Vector(), result);
     }
-
+    
     return *result;
   }
 
@@ -344,7 +344,11 @@ MUST_USE_RESULT Object* ConvertToUpper(Handle<String> s, Isolate* isolate) {
 
 MUST_USE_RESULT Object* ConvertCase(Handle<String> s, bool is_upper,
                                     Isolate* isolate) {
-  return is_upper ? ConvertToUpper(s, isolate) : ConvertToLower(s, isolate);
+  Object* result = is_upper ? ConvertToUpper(s, isolate) : ConvertToLower(s, isolate);
+  // TODO: Push down to ConvertToUpper and ConvertToLower
+  String::cast(result)->InitializeTaint();
+  String::cast(result)->SetTaint(s->GetTaint());
+  return result;
 }
 
 ICUTimezoneCache::ICUTimezoneCache() : timezone_(nullptr) { Clear(); }

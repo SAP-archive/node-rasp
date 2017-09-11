@@ -17026,7 +17026,9 @@ Handle<String> StringTable::LookupKey(Isolate* isolate, StringTableKey* key) {
   table->ElementAdded();
 
   isolate->heap()->SetRootStringTable(*table);
-  return Handle<String>::cast(string);
+  Handle<String> result = Handle<String>::cast(string);
+  result->InitializeTaint();
+  return result;
 }
 
 namespace {

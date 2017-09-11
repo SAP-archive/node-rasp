@@ -675,7 +675,9 @@ Handle<String> ConcatStringContent(Handle<StringType> result,
   String::WriteToFlat(*second, sink + first->length(), 0, second->length());
 
   // TaintV8
-  result->InitializeTaint();
+  result->SetTaint(
+    StringTaint::concat(first->GetTaint(), first->length(), second->GetTaint()));
+
   return result;
 }
 
@@ -698,8 +700,9 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
   }
 
   int length = left_length + right_length;
+  // TaintV8
   StringTaint taint = StringTaint::concat(
-      left->GetTaint(), left_length, right->GetTaint());
+    left->GetTaint(), left_length, right->GetTaint());
 
   if (length == 2) {
     uint16_t c1 = left->Get(0);
@@ -785,7 +788,7 @@ Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
   Handle<ConsString> result =
       one_byte ? New<ConsString>(cons_one_byte_string_map(), NEW_SPACE)
                : New<ConsString>(cons_string_map(), NEW_SPACE);
-
+  
   DisallowHeapAllocation no_gc;
   WriteBarrierMode mode = result->GetWriteBarrierMode(no_gc);
 
@@ -793,10 +796,11 @@ Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
   result->set_length(length);
   result->set_first(*left, mode);
   result->set_second(*right, mode);
-  
+
   // TaintV8
   result->InitializeTaint();
-  result->SetTaint(taint);
+  result->SetTaint(
+    StringTaint::concat(left->GetTaint(), left->length(), right->GetTaint()));
 
   return result;
 }
@@ -978,6 +982,9 @@ Handle<ExternalOneByteString> Factory::NewNativeSourceString(
   external_string->set_length(static_cast<int>(length));
   external_string->set_hash_field(String::kEmptyHashField);
   external_string->set_resource(resource);
+
+  // TaintV8
+  external_string->InitializeTaint();
 
   return external_string;
 }
