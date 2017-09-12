@@ -1864,7 +1864,9 @@ TF_BUILTIN(StringIteratorPrototypeNext, StringBuiltinsAssembler) {
   {
     UnicodeEncoding encoding = UnicodeEncoding::UTF16;
     Node* ch = LoadSurrogatePairAt(string, length, position, encoding);
-    Node* value = StringFromCodePoint(ch, encoding);
+    // TaintV8
+    Node* value = SubString(context, string, position, 
+        SmiAdd(position, SmiConstant(Smi::FromInt(1))));
     var_value.Bind(value);
     Node* length = LoadObjectField(value, String::kLengthOffset);
     StoreObjectFieldNoWriteBarrier(iterator, JSStringIterator::kNextIndexOffset,
