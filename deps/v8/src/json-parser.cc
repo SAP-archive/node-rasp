@@ -756,6 +756,10 @@ Handle<String> JsonParser<seq_one_byte>::SlowScanJsonString(
             // char.
             position_ -= 6;  // Rewind position_ to \ in \uxxxx.
             Advance();
+
+            // TaintV8
+            seq_string->SetTaint(prefix->GetTaint().subtaint(start, position_ + 6));
+
             return SlowScanJsonString<SeqTwoByteString, uc16>(seq_string, 0,
                                                               count);
           }
@@ -766,6 +770,9 @@ Handle<String> JsonParser<seq_one_byte>::SlowScanJsonString(
       Advance();
     }
   }
+
+  // TaintV8
+  seq_string->SetTaint(source_->GetTaint().subtaint(start, start + count));
 
   DCHECK_EQ('"', c0_);
   // Advance past the last '"'.
@@ -852,6 +859,10 @@ Handle<String> JsonParser<seq_one_byte>::ScanJsonString() {
       entry = StringTable::NextProbe(entry, count++, capacity);
     }
     position_ = position;
+
+    // TaintV8
+    result->SetTaint(seq_source_->GetTaint().subtaint(position_ - length, position_ ));
+
     // Advance past the last '"'.
     AdvanceSkipWhitespace();
     return result;
@@ -879,6 +890,9 @@ Handle<String> JsonParser<seq_one_byte>::ScanJsonString() {
       factory()->NewRawOneByteString(length, pretenure_).ToHandleChecked();
   uint8_t* dest = SeqOneByteString::cast(*result)->GetChars();
   String::WriteToFlat(*source_, dest, beg_pos, position_);
+
+  // TaintV8
+  result->SetTaint(source_->GetTaint().subtaint(beg_pos, position_));
 
   DCHECK_EQ('"', c0_);
   // Advance past the last '"'.
