@@ -411,6 +411,12 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
   String::WriteToFlat(first, sink, 0, first_length);
   sink += first_length;
 
+  // TaintV8
+  StringTaint taint = EmptyTaint;
+  int taintLength = 1;
+  taint.insert(taintLength, first->GetTaint());
+  taintLength += first_length;
+
   for (int i = 1; i < array_length; i++) {
     DCHECK(sink + separator_length <= end);
     String::WriteToFlat(separator_raw, sink, 0, separator_length);
@@ -421,9 +427,18 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
     int element_length = element->length();
     DCHECK(sink + element_length <= end);
     String::WriteToFlat(element, sink, 0, element_length);
+
+    // TaintV8
+    taintLength += separator_length;
+    taint.insert(taintLength, element->GetTaint());
+    taintLength += element_length;
+    
     sink += element_length;
   }
   DCHECK(sink == end);
+
+  // TaintV8
+  answer->SetTaint(taint);
 
   // Use %_FastOneByteArrayJoin instead.
   DCHECK(!answer->IsOneByteRepresentation());
