@@ -912,8 +912,8 @@ Handle<String> JsonParser<seq_one_byte>::ScanJsonString() {
     }
     position_ = position;
 
-    // TaintV8
-    result->SetTaint(seq_source_->GetTaint().subtaint(position_ - length, position_ ));
+    // TaintV8 TODO: Fix when InternalizedOneByteString inits kTaintOffset
+    //result->SetTaint(seq_source_->GetTaint().subtaint(position_ - length, position_ ));
 
     // Advance past the last '"'.
     AdvanceSkipWhitespace();
