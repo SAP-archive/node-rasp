@@ -235,7 +235,6 @@ size_t Length(Local<Object> obj) {
   return ui->ByteLength();
 }
 
-
 MaybeLocal<Object> New(Isolate* isolate,
                        Local<String> string,
                        enum encoding enc) {
@@ -422,7 +421,8 @@ MaybeLocal<Object> New(Environment* env, char* data, size_t length) {
                        data,
                        length,
                        ArrayBufferCreationMode::kInternalized);
-  return Buffer::New(env, ab, 0, length).FromMaybe(Local<Object>());
+  MaybeLocal<Object> ui = Buffer::New(env, ab, 0, length).FromMaybe(Local<Object>());
+  return ui;
 }
 
 namespace {
