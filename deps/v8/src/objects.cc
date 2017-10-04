@@ -2592,6 +2592,10 @@ Handle<String> String::SlowFlatten(Handle<ConsString> cons,
   }
   cons->set_first(*result);
   cons->set_second(isolate->heap()->empty_string());
+
+  // TaintV8
+  result->SetTaint(cons->GetTaint()); 
+  
   DCHECK(result->IsFlat());
   return result;
 }
