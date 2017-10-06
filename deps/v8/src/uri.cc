@@ -168,6 +168,25 @@ bool IntoOneAndTwoByte(Handle<String> uri, bool is_uri,
   return true;
 }
 
+StringTaint DecodeTaint(Handle<String> uri) {
+  DisallowHeapAllocation no_gc;
+  String::FlatContent uri_content = uri->GetFlatContent();
+  StringTaint uriTaint = uri->GetTaint();
+  StringTaint resultTaint;
+
+  int uri_length = uri->length();
+  for (int k = 0, taintIndex = 0; k < uri_length; k++, taintIndex++) {
+    uc16 code = uri_content.Get(k);
+    if (code == '%') {
+      resultTaint.concat(uriTaint.subtaint(k, k+1), taintIndex);
+      k += 2;
+    } else {
+      resultTaint.concat(uriTaint.subtaint(k, k+1), taintIndex);
+    }
+  }
+  return resultTaint;
+}
+
 }  // anonymous namespace
 
 MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
@@ -181,8 +200,13 @@ MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
   }
 
   if (two_byte_buffer.is_empty()) {
-    return isolate->factory()->NewStringFromOneByte(
-        one_byte_buffer.ToConstVector());
+    // TaintV8
+    Handle<String> res;
+    ASSIGN_RETURN_ON_EXCEPTION(isolate, res,
+      isolate->factory()->NewStringFromOneByte(one_byte_buffer.ToConstVector()),
+      String);
+    res->SetTaint(DecodeTaint(uri));
+    return res;
   }
 
   Handle<SeqTwoByteString> result;
@@ -195,6 +219,9 @@ MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
             one_byte_buffer.length());
   CopyChars(result->GetChars() + one_byte_buffer.length(),
             two_byte_buffer.ToConstVector().start(), two_byte_buffer.length());
+  
+  // TaintV8
+  result->SetTaint(DecodeTaint(uri));
 
   return result;
 }
@@ -274,18 +301,23 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
   int uri_length = uri->length();
   List<uint8_t> buffer(uri_length);
 
+  // TaintV8
+  StringTaint taint;
+
   {
     DisallowHeapAllocation no_gc;
     String::FlatContent uri_content = uri->GetFlatContent();
 
-    for (int k = 0; k < uri_length; k++) {
+    for (int k = 0, taintIndex = 0; k < uri_length; k++, taintIndex++) {
       uc16 cc1 = uri_content.Get(k);
       if (unibrow::Utf16::IsLeadSurrogate(cc1)) {
         k++;
+        taintIndex++;
         if (k < uri_length) {
           uc16 cc2 = uri->Get(k);
           if (unibrow::Utf16::IsTrailSurrogate(cc2)) {
             EncodePair(cc1, cc2, &buffer);
+            taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
             continue;
           }
         }
@@ -293,8 +325,12 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
         if (IsUnescapePredicateInUriComponent(cc1) ||
             (is_uri && IsUriSeparator(cc1))) {
           buffer.Add(cc1);
+          taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
         } else {
           EncodeSingle(cc1, &buffer);
+          taint.append(TaintRange(taintIndex+0, taintIndex+3,
+                  TaintFlow(*(uri->GetTaint().at(k+0)))));
+          taintIndex += 2;
         }
         continue;
       }
@@ -304,7 +340,11 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
     }
   }
 
-  return isolate->factory()->NewStringFromOneByte(buffer.ToConstVector());
+  Handle<String> result;
+  ASSIGN_RETURN_ON_EXCEPTION(isolate, result, isolate->factory()
+      ->NewStringFromOneByte(buffer.ToConstVector()), String);
+  result->SetTaint(taint);
+  return result;
 }
 
 namespace {  // Anonymous namespace for Escape and Unescape
