@@ -332,20 +332,6 @@ v8::MaybeLocal<v8::Object> New(Environment* env,
 // Mixing operator new and free() is undefined behavior so don't do that.
 v8::MaybeLocal<v8::Object> New(Environment* env, char* data, size_t length);
 
-// TaintV8
-inline
-v8::Local<v8::Uint8Array> CreateBufferTaintArray(Environment* env) {
-  void* data = nullptr;
-
-  v8::Local<v8::ArrayBuffer> ab = v8::ArrayBuffer::New(env->isolate(), data, 0,
-                            v8::ArrayBufferCreationMode::kInternalized);
-
-  v8::Local<v8::Uint8Array> ui = v8::Uint8Array::New(ab, 0, 0);
-  /*SPREAD_BUFFER_ARG(ui, ts_obj);
-  memset(ts_obj_data, 0, 0);*/
-  return ui;
-}
-
 inline
 v8::MaybeLocal<v8::Uint8Array> New(Environment* env,
                                    v8::Local<v8::ArrayBuffer> ab,
@@ -354,10 +340,6 @@ v8::MaybeLocal<v8::Uint8Array> New(Environment* env,
   v8::Local<v8::Uint8Array> ui = v8::Uint8Array::New(ab, byte_offset, length);
   v8::Maybe<bool> mb =
       ui->SetPrototype(env->context(), env->buffer_prototype_object());
-  
-  // TaintV8
-  v8::Local<v8::Uint8Array> taint = CreateBufferTaintArray(env);
-  ui->Set(v8::String::NewFromUtf8(env->isolate(), "taint"), taint);
 
   if (mb.IsNothing())
     return v8::MaybeLocal<v8::Uint8Array>();
