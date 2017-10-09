@@ -2,8 +2,8 @@
 require('../common');
 var assert = require('assert');
 
+// assert for string taint
 assert.taintEqual = taintEqual;
-
 function taintEqual(string, expectedTaint) {
   var actualTaint = string.getTaint();
 
@@ -15,7 +15,8 @@ function taintEqual(string, expectedTaint) {
   });
 }
 
-(function() {
+// String set and remove complete taint
+(function () {
   var str = 'foo', strTaint;
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
@@ -28,7 +29,7 @@ function taintEqual(string, expectedTaint) {
 
   str = str.removeTaint();
   assert.strictEqual(str.isTainted(), false);
-  assert.deepEqual(str.getTaint(), []);
+  assert.taintEqual(str, []);
   
   str = strTaint.removeTaint();
   assert.strictEqual(str.isTainted(), false);
@@ -39,5 +40,55 @@ function taintEqual(string, expectedTaint) {
   strTaint = strTaint.removeTaint();
   assert.strictEqual(strTaint.isTainted(), false);
   assert.taintEqual(strTaint, []);
+})();
+
+// String.prototype.charAt
+(function() {
+  var str, character;
+  
+  str  = 'foo'.setTaint('bar');
+  assert.strictEqual(str.isTainted(), true);
+  assert.taintEqual(str, [{'begin': 0, 'end': 3}]);
+
+  character = str.charAt(0);
+  assert.strictEqual(character.isTainted(), true);
+  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  
+  character = str.charAt(1);
+  assert.strictEqual(character.isTainted(), true);
+  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  
+  character = str.charAt(2);
+  assert.strictEqual(character.isTainted(), true);
+  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  
+  str  = str.removeTaint();
+  assert.strictEqual(str.isTainted(), false);
+  assert.taintEqual(str, []);
+
+  character = str.charAt(0);
+  assert.strictEqual(character.isTainted(), false);
+  assert.taintEqual(character, []);
+  
+  character = str.charAt(1);
+  assert.strictEqual(character.isTainted(), false);
+  assert.taintEqual(character, []);
+  
+  character = str.charAt(2);
+  assert.strictEqual(character.isTainted(), false);
+  assert.taintEqual(character, []);
+
+  str = str + str.setTaint('foo') + str;
+  character = str.charAt(2);
+  assert.strictEqual(character.isTainted(), false);
+  assert.taintEqual(character, []);
+  
+  character = str.charAt(3);
+  assert.strictEqual(character.isTainted(), true);
+  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  
+  character = str.charAt(6);
+  assert.strictEqual(character.isTainted(), false);
+  assert.taintEqual(character, []);
 })();
 
