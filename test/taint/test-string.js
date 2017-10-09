@@ -2,6 +2,11 @@
 require('../common');
 var assert = require('assert');
 
+const stringASCII_3 = 'foo';
+const stringUTF8_3  = '😃!';
+
+const stringSet = [stringASCII_3, stringUTF8_3];
+
 // assert for string taint
 assert.taintEqual = taintEqual;
 function taintEqual(string, expectedTaint) {
@@ -15,9 +20,16 @@ function taintEqual(string, expectedTaint) {
   });
 }
 
+stringSet.forEach((string) => {
+  testSetAndRemoveTaint(string);
+  testStringConcatenation(string);
+  testStringPrototypeCharAt(string);
+});
+
+
 // String set and remove complete taint
-(function () {
-  var str = 'foo', strTaint;
+function testSetAndRemoveTaint(string) {
+  var str = string, strTaint;
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
 
@@ -40,11 +52,11 @@ function taintEqual(string, expectedTaint) {
   strTaint = strTaint.removeTaint();
   assert.strictEqual(strTaint.isTainted(), false);
   assert.taintEqual(strTaint, []);
-})();
+};
 
 // String concatenation
-(function() {
-  var str = 'foo', strTaint = 'bar'.setTaint('baz'), strCon;
+function testStringConcatenation(string) {
+  var str = string, strTaint = string.setTaint('baz'), strCon;
   
   strCon = strTaint + str;
   assert.strictEqual(strCon.isTainted(), true);
@@ -65,13 +77,13 @@ function taintEqual(string, expectedTaint) {
   strCon = str + str;
   assert.strictEqual(strCon.isTainted(), false);
   assert.taintEqual(strCon, []);
-})();
+};
 
 // String.prototype.charAt
-(function() {
+function testStringPrototypeCharAt(string) {
   var str, character;
   
-  str  = 'foo'.setTaint('bar');
+  str = string.setTaint('bar');
   assert.strictEqual(str.isTainted(), true);
   assert.taintEqual(str, [{'begin': 0, 'end': 3}]);
 
@@ -115,5 +127,5 @@ function taintEqual(string, expectedTaint) {
   character = str.charAt(6);
   assert.strictEqual(character.isTainted(), false);
   assert.taintEqual(character, []);
-})();
+};
 
