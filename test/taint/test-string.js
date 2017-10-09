@@ -42,6 +42,31 @@ function taintEqual(string, expectedTaint) {
   assert.taintEqual(strTaint, []);
 })();
 
+// String concatenation
+(function() {
+  var str = 'foo', strTaint = 'bar'.setTaint('baz'), strCon;
+  
+  strCon = strTaint + str;
+  assert.strictEqual(strCon.isTainted(), true);
+  assert.taintEqual(strCon, [{'begin': 0, 'end': 3}]);
+  
+  strCon = str + strCon;
+  assert.strictEqual(strCon.isTainted(), true);
+  assert.taintEqual(strCon, [{'begin': 3, 'end': 6}]);
+  
+  strCon = strTaint + strTaint;
+  assert.strictEqual(strCon.isTainted(), true);
+  assert.taintEqual(strCon, [{'begin': 0, 'end': 6}]);
+  
+  strCon = str + strTaint + str;
+  assert.strictEqual(strCon.isTainted(), true);
+  assert.taintEqual(strCon, [{'begin': 3, 'end': 6}]);
+  
+  strCon = str + str;
+  assert.strictEqual(strCon.isTainted(), false);
+  assert.taintEqual(strCon, []);
+})();
+
 // String.prototype.charAt
 (function() {
   var str, character;
