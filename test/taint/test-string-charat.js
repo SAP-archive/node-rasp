@@ -24,72 +24,6 @@ function taintEqual(string, expectedTaint) {
 }
 
 stringSet.forEach((string) => {
-  testSetAndRemoveTaint(string);
-  testStringConcatenation(string);
-  testStringPrototypeCharAt(string);
-});
-
-
-// String set and remove complete taint
-function testSetAndRemoveTaint(string) {
-  const len = string.length;
-  let str = string,
-    strTaint;
-
-  assert.strictEqual(str.isTainted(), false);
-  assert.taintEqual(str, []);
-
-  strTaint = str.setTaint('bar');
-  assert.strictEqual(str.isTainted(), false);
-  assert.taintEqual(str, []);
-  assert.strictEqual(strTaint.isTainted(), true);
-  assert.taintEqual(strTaint, [{'begin': 0, 'end': len}]);
-
-  str = str.removeTaint();
-  assert.strictEqual(str.isTainted(), false);
-  assert.taintEqual(str, []);
-
-  str = strTaint.removeTaint();
-  assert.strictEqual(str.isTainted(), false);
-  assert.taintEqual(str, []);
-  assert.strictEqual(strTaint.isTainted(), true);
-  assert.taintEqual(strTaint, [{'begin': 0, 'end': len}]);
-
-  strTaint = strTaint.removeTaint();
-  assert.strictEqual(strTaint.isTainted(), false);
-  assert.taintEqual(strTaint, []);
-}
-
-// String concatenation
-function testStringConcatenation(string) {
-  const len = string.length;
-  const str = string,
-    strTaint = string.setTaint('baz');
-  let strCon;
-
-  strCon = strTaint + str;
-  assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': 0, 'end': len}]);
-
-  strCon = str + strCon;
-  assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': len, 'end': len + len}]);
-
-  strCon = strTaint + strTaint;
-  assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': 0, 'end': len + len}]);
-
-  strCon = str + strTaint + str;
-  assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': len, 'end': len + len}]);
-
-  strCon = str + str;
-  assert.strictEqual(strCon.isTainted(), false);
-  assert.taintEqual(strCon, []);
-}
-
-// String.prototype.charAt
-function testStringPrototypeCharAt(string) {
   const len = string.length;
   let str = string.setTaint('bar'),
     character;
@@ -137,4 +71,4 @@ function testStringPrototypeCharAt(string) {
   character = str.charAt(len + len);
   assert.strictEqual(character.isTainted(), false);
   assert.taintEqual(character, []);
-}
+});
