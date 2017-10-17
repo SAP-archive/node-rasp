@@ -2,19 +2,6 @@
 require('../common');
 const assert = require('assert');
 
-// assert for string taint
-assert.taintEqual = taintEqual;
-function taintEqual(string, expectedTaint) {
-  const actualTaint = string.getTaint();
-
-  assert.strictEqual(actualTaint.length, expectedTaint.length);
-
-  expectedTaint.forEach(function(range, i) {
-    assert.strictEqual(actualTaint[i].begin, range.begin);
-    assert.strictEqual(actualTaint[i].end, range.end);
-  });
-}
-
 (() => {
   const str = 'The morning is upon us.'.setTaint('bar');
   let slice;
