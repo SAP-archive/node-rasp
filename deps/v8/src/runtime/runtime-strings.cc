@@ -611,7 +611,7 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
 
   // TaintV8
   StringTaint taint = EmptyTaint;
-  int taintLength = 1;
+  int taintLength = 0;
   taint.insert(taintLength, first->GetTaint());
   taintLength += first_length;
 
@@ -627,6 +627,7 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
     String::WriteToFlat(element, sink, 0, element_length);
 
     // TaintV8
+    taint.insert(taintLength, separator->GetTaint());
     taintLength += separator_length;
     taint.insert(taintLength, element->GetTaint());
     taintLength += element_length;
