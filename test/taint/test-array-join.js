@@ -6,7 +6,7 @@ const array1 = ['foo'.setTaint('bar')];
 const array2 = [42, 'foo'.setTaint('bar')];
 const array3 = ['foo'.setTaint('bar'), 'baz'.setTaint('foo')];
 const array4 = ['foo'.setTaint('bar'), 'some', 'baz'.setTaint('foo')];
-const array5 = ['f' + 'o'.setTaint('bar') + 'o', 'some'];
+const array5 = ['f' + 'o'.setTaint('bar') + 'a', 'some'];
 
 (() => {
   let string;
@@ -18,10 +18,10 @@ const array5 = ['f' + 'o'.setTaint('bar') + 'o', 'some'];
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [{'begin': 0, 'end': 3}]);
 
-  string = array2.join('"');
+  string = array2.join('&');
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [{'begin': 3, 'end': 6}]);
-  string = array2.join('"'.setTaint('x'));
+  string = array2.join('&'.setTaint('x'));
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [
     {'begin': 2, 'end': 3},
