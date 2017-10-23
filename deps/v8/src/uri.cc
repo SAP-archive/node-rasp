@@ -318,7 +318,7 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
           uc16 cc2 = uri->Get(k);
           if (unibrow::Utf16::IsTrailSurrogate(cc2)) {
             EncodePair(cc1, cc2, &buffer);
-            //taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
+            taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
             continue;
           }
         }
@@ -329,8 +329,9 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
           //taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
         } else {
           EncodeSingle(cc1, &buffer);
-          /*taint.append(TaintRange(taintIndex+0, taintIndex+3,
-                  TaintFlow(*(uri->GetTaint().at(k+0)))));*/
+          StringTaint subTaint = uri->GetTaint().subtaint(k, k+1);
+          subTaint.setNewEnd(0, 2);
+          taint.concat(subTaint, taintIndex);
           taintIndex += 2;
         }
         continue;
