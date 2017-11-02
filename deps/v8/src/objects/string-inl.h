@@ -377,8 +377,7 @@ const StringTaint& String::GetTaint() {
   }	
 }
 
-// TODO: Fix WeakCallbackInfo / WeakCallbackData was removed
-static void FinalizeTaintedString(const v8::WeakCallbackInfo<v8::Value>& data) {
+static void FinalizeTaintedString(const v8::WeakCallbackInfo<void>& data) {
   String** p = reinterpret_cast<String**>(data.GetParameter());
   String* str = *p;
   str->ClearTaint();
@@ -400,7 +399,8 @@ void String::SetTaint(StringTaint value){
     Heap* heap = GetHeap();
     Isolate* isolate = heap->isolate();
     Handle<Object> wrapper = isolate->global_handles()->Create(this);
-    //GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(), FinalizeTaintedString);
+    GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(),
+      FinalizeTaintedString, v8::WeakCallbackType::kFinalizer);
   }
 
   ptr = reinterpret_cast<intptr_t>(new StringTaint(std::move(value)));
