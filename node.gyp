@@ -29,6 +29,7 @@
       'lib/internal/bootstrap/cache.js',
       'lib/internal/bootstrap/loaders.js',
       'lib/internal/bootstrap/node.js',
+      'lib/taint/taint-node.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
