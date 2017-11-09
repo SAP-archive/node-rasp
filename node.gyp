@@ -26,6 +26,7 @@
     'node_intermediate_lib_type%': 'static_library',
     'library_files': [
       'lib/taint/taint-node.js',
+      'lib/taint/_mongoose.js',
       'lib/internal/bootstrap_node.js',
       'lib/async_hooks.js',
       'lib/assert.js',
