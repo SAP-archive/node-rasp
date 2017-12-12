@@ -4387,6 +4387,9 @@ AllocationResult Heap::AllocateSymbol() {
   Symbol::cast(result)->set_name(undefined_value());
   Symbol::cast(result)->set_flags(0);
 
+  // TaintV8
+  Symbol::cast(result)->InitializeTaint(); 
+
   DCHECK(!Symbol::cast(result)->is_private());
   return result;
 }
