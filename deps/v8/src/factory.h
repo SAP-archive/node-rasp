@@ -166,7 +166,11 @@ class V8_EXPORT_PRIVATE Factory final {
   // Internalized strings are created in the old generation (data space).
   Handle<String> InternalizeString(Handle<String> string) {
     if (string->IsInternalizedString()) return string;
-    return StringTable::LookupString(isolate(), string);
+    // TaintV8
+    StringTaint taint = string->GetTaint();
+    Handle<String> result = StringTable::LookupString(isolate(), string);
+    result->SetTaint(taint);
+    return result;
   }
 
   Handle<Name> InternalizeName(Handle<Name> name) {
