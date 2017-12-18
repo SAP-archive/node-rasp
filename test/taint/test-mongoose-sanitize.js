@@ -12,7 +12,8 @@ const _mongoose = require('../../lib/taint/_mongoose.js');
   const mod = {
     'Model': {
       'find': operation,
-      'findOne': operation
+      'findOne': operation,
+      'count': operation
     },
     'Query': {
       'base': {
@@ -23,6 +24,7 @@ const _mongoose = require('../../lib/taint/_mongoose.js');
 
   _mongoose.instrument(mod);
 
+  // module.Model.find
   const param1 = {};
   param1['foo'] = '123';
   assert.deepStrictEqual(mod.Model.find(param1), [{'foo': '123'}]);
@@ -48,4 +50,16 @@ const _mongoose = require('../../lib/taint/_mongoose.js');
   param6['bar'] = param5;
   assert.deepStrictEqual(mod.Model.find(param6),
     [{'foo': '123', 'bar': {'ne': '123'}}]);
+
+  // module.Model.count
+  const param7 = {};
+  param7['$ne'.setTaint('bar')] = '123';
+  assert.deepStrictEqual(mod.Model.find(param7),
+    [{'ne': '123'}]);
+
+  // module.Model.count
+  const param8 = {};
+  param8['$ne'.setTaint('bar')] = '123';
+  assert.deepStrictEqual(mod.Query.base.findOne(param8),
+    [{'ne': '123'}]);
 })();
