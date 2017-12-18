@@ -182,6 +182,7 @@ DEFINE_METHODS(
     setTaint(taint, operation_args) {
       CHECK_OBJECT_COERCIBLE(this, "String.prototype.setTaint");
       if (IS_UNDEFINED(operation_args)) operation_args = [];
+      if (IS_UNDEFINED(taint)) taint = "";
       return %StringSetTaint(TO_STRING(this), operation_args, taint);
     }
 
