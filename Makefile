@@ -256,6 +256,9 @@ test-cov: all
 test-taint: all
 	$(PYTHON) tools/test.py --mode=release taint -J
 
+test-taint-failing: all
+	$(PYTHON) tools/test.py --mode=release taint-failing -J
+
 test-parallel: all
 	$(PYTHON) tools/test.py --mode=release parallel -J
 
