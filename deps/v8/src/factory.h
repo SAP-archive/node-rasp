@@ -175,7 +175,11 @@ class V8_EXPORT_PRIVATE Factory final {
 
   Handle<Name> InternalizeName(Handle<Name> name) {
     if (name->IsUniqueName()) return name;
-    return StringTable::LookupString(isolate(), Handle<String>::cast(name));
+    // TaintV8
+    StringTaint taint = name->GetTaint();
+    Handle<Name> result =  StringTable::LookupString(isolate(), Handle<String>::cast(name));
+    result->SetTaint(taint);
+    return result;
   }
 
   // String creation functions.  Most of the string creation functions take
