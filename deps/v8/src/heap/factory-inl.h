@@ -83,7 +83,10 @@ Handle<String> Factory::InternalizeString(Handle<String> string) {
 
 Handle<Name> Factory::InternalizeName(Handle<Name> name) {
   if (name->IsUniqueName()) return name;
-  return StringTable::LookupString(isolate(), Handle<String>::cast(name));
+  StringTaint taint = name->GetTaint();
+  Handle<Name> result = StringTable::LookupString(isolate(), Handle<String>::cast(name));
+  name->SetTaint(taint);
+  return result;
 }
 
 Handle<String> Factory::NewSubString(Handle<String> str, int begin, int end) {
