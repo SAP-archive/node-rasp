@@ -30,7 +30,7 @@
       'lib/internal/bootstrap/loaders.js',
       'lib/internal/bootstrap/node.js',
       'lib/taint/taint-node.js',
-      'lib/taint/_mongoose.js',
+      'lib/taint/_mongodb-core.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
