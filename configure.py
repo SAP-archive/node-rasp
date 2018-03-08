@@ -203,6 +203,27 @@ shared_optgroup.add_option('--shared-http-parser-libpath',
     dest='shared_http_parser_libpath',
     help='a directory to search for the shared http_parser DLL')
 
+shared_optgroup.add_option('--shared-libpg-query',
+    action='store_true',
+    dest='shared_libpg_query',
+    help='link to a shared libpg_query DLL instead of static linking')
+
+shared_optgroup.add_option('--shared-libpg-query-includes',
+    action='store',
+    dest='shared_libpg_query_includes',
+    help='directory containing libpg_query header files')
+
+shared_optgroup.add_option('--shared-libpg-query-libname',
+    action='store',
+    dest='shared_libpg_query_libname',
+    default='libpg_query',
+    help='alternative lib name to link to [default: %default]')
+
+shared_optgroup.add_option('--shared-libpg-query-libpath',
+    action='store',
+    dest='shared_http_parser_libpath',
+    help='a directory to search for the shared libpg_query DLL')
+
 shared_optgroup.add_option('--shared-libuv',
     action='store_true',
     dest='shared_libuv',
@@ -1588,6 +1609,7 @@ configure_library('http_parser', output)
 configure_library('libuv', output)
 configure_library('libcares', output)
 configure_library('nghttp2', output)
+configure_library('libpg_query', output)
 # stay backwards compatible with shared cares builds
 output['variables']['node_shared_cares'] = \
     output['variables'].pop('node_shared_libcares')
