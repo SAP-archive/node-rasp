@@ -14,6 +14,7 @@
     'node_module_version%': '',
     'node_shared_zlib%': 'false',
     'node_shared_http_parser%': 'false',
+    'node_shared_libpg_query%': 'false',
     'node_shared_cares%': 'false',
     'node_shared_libuv%': 'false',
     'node_shared_nghttp2%': 'false',
