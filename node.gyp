@@ -25,7 +25,6 @@
     'node_lib_target_name%': 'node_lib',
     'node_intermediate_lib_type%': 'static_library',
     'library_files': [
-      'lib/_pathTraversalCheck.js',
       'lib/taint/taint-node.js',
       'lib/taint/logger.js',
       'lib/taint/_mongodb-core.js',
