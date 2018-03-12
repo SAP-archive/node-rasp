@@ -196,6 +196,10 @@
         }],
       ],
     }],
+    
+    [ 'node_shared_libpg_query=="false"', {
+      'dependencies': [ 'deps/libpg_query/libpg_query.gyp:libpg_query' ],
+    }],
 
     [ 'node_shared_nghttp2=="false"', {
       'dependencies': [ 'deps/nghttp2/nghttp2.gyp:nghttp2' ],
