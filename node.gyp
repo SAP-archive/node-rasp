@@ -378,6 +378,7 @@
         'src/util.h',
         'src/util-inl.h',
         'deps/http_parser/http_parser.h',
+        'deps/libpg_query/pg_query.h',
         'deps/v8/include/v8.h',
         # javascript files to make for an even more pleasant IDE experience
         '<@(library_files)',
