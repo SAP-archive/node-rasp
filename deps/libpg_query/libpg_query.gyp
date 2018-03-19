@@ -43,7 +43,7 @@
         'src/postgres/include/utils',
       ],
       'direct_dependent_settings': {
-         'include_dirs': [ '.' ],
+         'include_dirs': [ '.', 'protobuf/' ],
        },
       'sources': [
         'src/pg_query.c',
