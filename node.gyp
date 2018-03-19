@@ -312,6 +312,7 @@
         'src/node_watchdog.cc',
         'src/node_zlib.cc',
         'src/node_i18n.cc',
+        'src/pg_lexer.cc',
         'src/pipe_wrap.cc',
         'src/process_wrap.cc',
         'src/signal_wrap.cc',
