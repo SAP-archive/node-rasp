@@ -34,7 +34,7 @@
       'lib/taint/logger.js',
       'lib/taint/_mongodb-core.js',
       'lib/_pathTraversalCheck.js',
-      'lib/sqli.js',
+      'lib/taint/pg_lexer.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
