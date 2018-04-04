@@ -122,7 +122,7 @@ test: $(TESTS)
 	test/parse
 	test/scan
 	# Output-based tests
-	test/parse_plpgsql
+	#test/parse_plpgsql
 	diff -Naur test/plpgsql_samples.expected.json test/plpgsql_samples.actual.json
 
 test/complex: test/complex.c $(ARLIB)
