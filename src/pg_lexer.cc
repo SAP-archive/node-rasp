@@ -37,7 +37,7 @@ NODE_EXTERN Local<Array> HasInjection(Environment* env, const char* data) {
     ranges = Array::New(env->isolate(), scan_output->n_tokens);
     Local<String> beginKey = String::NewFromUtf8(env->isolate(), "begin");
     Local<String> endKey = String::NewFromUtf8(env->isolate(), "end");
-    Local<String> typeKey = String::NewFromUtf8(env->isolate(), "type");
+    Local<String> tokenKey = String::NewFromUtf8(env->isolate(), "token");
     for (j = 0; j < scan_output->n_tokens; j++) {
       scan_token = scan_output->tokens[j];
       Local<Object> range = Object::New(env->isolate());
@@ -46,8 +46,8 @@ NODE_EXTERN Local<Array> HasInjection(Environment* env, const char* data) {
 
       range->Set(beginKey, Integer::New(env->isolate(), scan_token->start));
       range->Set(endKey, Integer::New(env->isolate(), scan_token->end));
-      range->Set(typeKey, Integer::New(env->isolate(),
-                 scan_token->keyword_kind));
+      range->Set(tokenKey, Integer::New(env->isolate(),
+                 scan_token->token));
 
       ranges->Set(j, range);
     }
