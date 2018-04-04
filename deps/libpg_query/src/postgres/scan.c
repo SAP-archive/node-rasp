@@ -1,51 +1,3 @@
-/*--------------------------------------------------------------------
- * Symbols referenced in this file:
- * - scanner_init
- * - core_yylex_init
- * - core_yyalloc
- * - yy_init_globals
- * - core_yyset_extra
- * - backslash_quote
- * - escape_string_warning
- * - standard_conforming_strings
- * - core_yy_scan_buffer
- * - core_yy_switch_to_buffer
- * - core_yyensure_buffer_stack
- * - core_yyrealloc
- * - core_yy_load_buffer_state
- * - yy_fatal_error
- * - fprintf_to_ereport
- * - core_yylex
- * - core_yy_create_buffer
- * - core_yy_init_buffer
- * - core_yy_flush_buffer
- * - core_yyrestart
- * - yy_start_state_list
- * - yy_transition
- * - addlitchar
- * - litbufdup
- * - addlit
- * - litbuf_udeescape
- * - hexval
- * - check_unicode_value
- * - check_uescapechar
- * - check_escape_warning
- * - is_utf16_surrogate_first
- * - is_utf16_surrogate_second
- * - addunicode
- * - surrogate_pair_to_codepoint
- * - check_string_escape_warning
- * - unescape_single_char
- * - process_integer_literal
- * - yy_get_previous_state
- * - yy_try_NUL_trans
- * - yy_get_next_buffer
- * - scanner_errposition
- * - scanner_yyerror
- * - scanner_finish
- *--------------------------------------------------------------------
- */
-
 #line 2 "scan.c"
 #line 2 "scan.l"
 /*-------------------------------------------------------------------------
@@ -137,7 +89,6 @@ typedef int16_t flex_int16_t;
 typedef uint16_t flex_uint16_t;
 typedef int32_t flex_int32_t;
 typedef uint32_t flex_uint32_t;
-typedef uint64_t flex_uint64_t;
 #else
 typedef signed char flex_int8_t;
 typedef short int flex_int16_t;
@@ -261,11 +212,6 @@ typedef void* yyscan_t;
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
 #endif
 
-#ifndef YY_TYPEDEF_YY_SIZE_T
-#define YY_TYPEDEF_YY_SIZE_T
-typedef size_t yy_size_t;
-#endif
-
 #define EOB_ACT_CONTINUE_SCAN 0
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
@@ -288,6 +234,11 @@ typedef size_t yy_size_t;
 
 #define unput(c) yyunput( c, yyg->yytext_ptr , yyscanner )
 
+#ifndef YY_TYPEDEF_YY_SIZE_T
+#define YY_TYPEDEF_YY_SIZE_T
+typedef size_t yy_size_t;
+#endif
+
 #ifndef YY_STRUCT_YY_BUFFER_STATE
 #define YY_STRUCT_YY_BUFFER_STATE
 struct yy_buffer_state
@@ -305,7 +256,7 @@ struct yy_buffer_state
 	/* Number of characters read into yy_ch_buf, not including EOB
 	 * characters.
 	 */
-	yy_size_t yy_n_chars;
+	int yy_n_chars;
 
 	/* Whether we "own" the buffer - i.e., we know we created it,
 	 * and can realloc() it to grow it, and should free() it to
@@ -384,7 +335,7 @@ static void core_yy_init_buffer (YY_BUFFER_STATE b,FILE *file ,yyscan_t yyscanne
 
 YY_BUFFER_STATE core_yy_scan_buffer (char *base,yy_size_t size ,yyscan_t yyscanner );
 YY_BUFFER_STATE core_yy_scan_string (yyconst char *yy_str ,yyscan_t yyscanner );
-YY_BUFFER_STATE core_yy_scan_bytes (yyconst char *bytes,yy_size_t len ,yyscan_t yyscanner );
+YY_BUFFER_STATE core_yy_scan_bytes (yyconst char *bytes,int len ,yyscan_t yyscanner );
 
 void *core_yyalloc (yy_size_t ,yyscan_t yyscanner );
 void *core_yyrealloc (void *,yy_size_t ,yyscan_t yyscanner );
@@ -435,7 +386,7 @@ static void yy_fatal_error (yyconst char msg[] ,yyscan_t yyscanner );
  */
 #define YY_DO_BEFORE_ACTION \
 	yyg->yytext_ptr = yy_bp; \
-	yyleng = (yy_size_t) (yy_cp - yy_bp); \
+	yyleng = (size_t) (yy_cp - yy_bp); \
 	yyg->yy_hold_char = *yy_cp; \
 	*yy_cp = '\0'; \
 	yyg->yy_c_buf_p = yy_cp;
@@ -8594,12 +8545,9 @@ fprintf_to_ereport(const char *fmt, const char *msg)
  * as such, changing their values can induce very unintuitive behavior.
  * But we shall have to live with it until we can remove these variables.
  */
-__thread int			backslash_quote = BACKSLASH_QUOTE_SAFE_ENCODING;
-
-__thread bool		escape_string_warning = true;
-
-__thread bool		standard_conforming_strings = true;
-
+int			backslash_quote = BACKSLASH_QUOTE_SAFE_ENCODING;
+bool		escape_string_warning = true;
+bool		standard_conforming_strings = true;
 
 /*
  * Set the type of YYSTYPE.
@@ -8811,7 +8759,7 @@ extern void core_yyset_column(int column_no, yyscan_t yyscanner);
  * Note that xcstart must appear before operator, as explained above!
  *  Also whitespace (comment) must appear before operator.
  */
-#line 8764 "scan.c"
+#line 8763 "scan.c"
 
 #define INITIAL 0
 #define xb 1
@@ -8852,8 +8800,8 @@ struct yyguts_t
     size_t yy_buffer_stack_max; /**< capacity of stack. */
     YY_BUFFER_STATE * yy_buffer_stack; /**< Stack as an array. */
     char yy_hold_char;
-    yy_size_t yy_n_chars;
-    yy_size_t yyleng_r;
+    int yy_n_chars;
+    int yyleng_r;
     char *yy_c_buf_p;
     int yy_init;
     int yy_start;
@@ -8910,7 +8858,7 @@ FILE *core_yyget_out (yyscan_t yyscanner );
 
 void core_yyset_out  (FILE * out_str ,yyscan_t yyscanner );
 
-yy_size_t core_yyget_leng (yyscan_t yyscanner );
+int core_yyget_leng (yyscan_t yyscanner );
 
 char *core_yyget_text (yyscan_t yyscanner );
 
@@ -8977,7 +8925,7 @@ static int input (yyscan_t yyscanner );
 	if ( YY_CURRENT_BUFFER_LVALUE->yy_is_interactive ) \
 		{ \
 		int c = '*'; \
-		yy_size_t n; \
+		int n; \
 		for ( n = 0; n < max_size && \
 			     (c = getc( yyin )) != EOF && c != '\n'; ++n ) \
 			buf[n] = (char) c; \
@@ -9065,7 +9013,7 @@ YY_DECL
 #line 396 "scan.l"
 
 
-#line 9018 "scan.c"
+#line 9017 "scan.c"
 
     yylval = yylval_param;
 
@@ -10297,7 +10245,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 	else
 		{
-			yy_size_t num_to_read =
+			int num_to_read =
 			YY_CURRENT_BUFFER_LVALUE->yy_buf_size - number_to_move - 1;
 
 		while ( num_to_read <= 0 )
@@ -10311,7 +10259,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 			if ( b->yy_is_our_buffer )
 				{
-				yy_size_t new_size = b->yy_buf_size * 2;
+				int new_size = b->yy_buf_size * 2;
 
 				if ( new_size <= 0 )
 					b->yy_buf_size += b->yy_buf_size / 8;
@@ -10342,7 +10290,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		/* Read in more data. */
 		YY_INPUT( (&YY_CURRENT_BUFFER_LVALUE->yy_ch_buf[number_to_move]),
-			yyg->yy_n_chars, num_to_read );
+			yyg->yy_n_chars, (size_t) num_to_read );
 
 		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
 		}
@@ -10418,7 +10366,6 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 	yy_current_state += yy_trans_info->yy_nxt;
 	yy_is_jam = (yy_trans_info->yy_verify != yy_c);
 
-	(void) yyg;
 	return yy_is_jam ? 0 : yy_current_state;
 }
 
@@ -10447,7 +10394,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 
 		else
 			{ /* need more input */
-			yy_size_t offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
+			int offset = yyg->yy_c_buf_p - yyg->yytext_ptr;
 			++yyg->yy_c_buf_p;
 
 			switch ( yy_get_next_buffer( yyscanner ) )
@@ -10471,7 +10418,7 @@ static int yy_get_next_buffer (yyscan_t yyscanner)
 				case EOB_ACT_END_OF_FILE:
 					{
 					if ( core_yywrap(yyscanner ) )
-						return 0;
+						return EOF;
 
 					if ( ! yyg->yy_did_buffer_switch_on_eof )
 						YY_NEW_FILE;
@@ -10595,8 +10542,21 @@ static void core_yy_load_buffer_state  (yyscan_t yyscanner)
  * @param b a buffer created with core_yy_create_buffer()
  * @param yyscanner The scanner object.
  */
-   
+    void core_yy_delete_buffer (YY_BUFFER_STATE  b , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
+	if ( ! b )
+		return;
+
+	if ( b == YY_CURRENT_BUFFER ) /* Not sure if we should pop here. */
+		YY_CURRENT_BUFFER_LVALUE = (YY_BUFFER_STATE) 0;
+
+	if ( b->yy_is_our_buffer )
+		core_yyfree((void *) b->yy_ch_buf ,yyscanner );
+
+	core_yyfree((void *) b ,yyscanner );
+}
 
 /* Initializes or reinitializes a buffer.
  * This function is sometimes called more than once on the same buffer,
@@ -10661,20 +10621,60 @@ static void core_yy_load_buffer_state  (yyscan_t yyscanner)
  *  @param new_buffer The new state.
  *  @param yyscanner The scanner object.
  */
+void core_yypush_buffer_state (YY_BUFFER_STATE new_buffer , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	if (new_buffer == NULL)
+		return;
 
+	core_yyensure_buffer_stack(yyscanner);
+
+	/* This block is copied from core_yy_switch_to_buffer. */
+	if ( YY_CURRENT_BUFFER )
+		{
+		/* Flush out information for old buffer. */
+		*yyg->yy_c_buf_p = yyg->yy_hold_char;
+		YY_CURRENT_BUFFER_LVALUE->yy_buf_pos = yyg->yy_c_buf_p;
+		YY_CURRENT_BUFFER_LVALUE->yy_n_chars = yyg->yy_n_chars;
+		}
+
+	/* Only push if top exists. Otherwise, replace top. */
+	if (YY_CURRENT_BUFFER)
+		yyg->yy_buffer_stack_top++;
+	YY_CURRENT_BUFFER_LVALUE = new_buffer;
+
+	/* copied from core_yy_switch_to_buffer. */
+	core_yy_load_buffer_state(yyscanner );
+	yyg->yy_did_buffer_switch_on_eof = 1;
+}
 
 /** Removes and deletes the top of the stack, if present.
  *  The next element becomes the new top.
  *  @param yyscanner The scanner object.
  */
+void core_yypop_buffer_state (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+	if (!YY_CURRENT_BUFFER)
+		return;
 
+	core_yy_delete_buffer(YY_CURRENT_BUFFER ,yyscanner);
+	YY_CURRENT_BUFFER_LVALUE = NULL;
+	if (yyg->yy_buffer_stack_top > 0)
+		--yyg->yy_buffer_stack_top;
+
+	if (YY_CURRENT_BUFFER) {
+		core_yy_load_buffer_state(yyscanner );
+		yyg->yy_did_buffer_switch_on_eof = 1;
+	}
+}
 
 /* Allocates the stack if it does not exist.
  *  Guarantees space for at least one push.
  */
 static void core_yyensure_buffer_stack (yyscan_t yyscanner)
 {
-	yy_size_t num_to_alloc;
+	int num_to_alloc;
     struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
 	if (!yyg->yy_buffer_stack) {
@@ -10759,7 +10759,11 @@ YY_BUFFER_STATE core_yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yy
  * @note If you want to scan bytes that may contain NUL values, then use
  *       core_yy_scan_bytes() instead.
  */
-
+YY_BUFFER_STATE core_yy_scan_string (yyconst char * yystr , yyscan_t yyscanner)
+{
+    
+	return core_yy_scan_bytes(yystr,strlen(yystr) ,yyscanner);
+}
 
 /** Setup the input buffer state to scan the given bytes. The next call to core_yylex() will
  * scan from a @e copy of @a bytes.
@@ -10768,7 +10772,35 @@ YY_BUFFER_STATE core_yy_scan_buffer  (char * base, yy_size_t  size , yyscan_t yy
  * @param yyscanner The scanner object.
  * @return the newly allocated buffer state object.
  */
+YY_BUFFER_STATE core_yy_scan_bytes  (yyconst char * yybytes, int  _yybytes_len , yyscan_t yyscanner)
+{
+	YY_BUFFER_STATE b;
+	char *buf;
+	yy_size_t n;
+	int i;
+    
+	/* Get memory for full buffer, including space for trailing EOB's. */
+	n = _yybytes_len + 2;
+	buf = (char *) core_yyalloc(n ,yyscanner );
+	if ( ! buf )
+		YY_FATAL_ERROR( "out of dynamic memory in core_yy_scan_bytes()" );
 
+	for ( i = 0; i < _yybytes_len; ++i )
+		buf[i] = yybytes[i];
+
+	buf[_yybytes_len] = buf[_yybytes_len+1] = YY_END_OF_BUFFER_CHAR;
+
+	b = core_yy_scan_buffer(buf,n ,yyscanner);
+	if ( ! b )
+		YY_FATAL_ERROR( "bad buffer in core_yy_scan_bytes()" );
+
+	/* It's okay to grow etc. this buffer, and we should throw it
+	 * away when we're done.
+	 */
+	b->yy_is_our_buffer = 1;
+
+	return b;
+}
 
 #ifndef YY_EXIT_FAILURE
 #define YY_EXIT_FAILURE 2
@@ -10802,38 +10834,74 @@ static void yy_fatal_error (yyconst char* msg , yyscan_t yyscanner)
 /** Get the user-defined data for this scanner.
  * @param yyscanner The scanner object.
  */
-
+YY_EXTRA_TYPE core_yyget_extra  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yyextra;
+}
 
 /** Get the current line number.
  * @param yyscanner The scanner object.
  */
-
+int core_yyget_lineno  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    
+        if (! YY_CURRENT_BUFFER)
+            return 0;
+    
+    return yylineno;
+}
 
 /** Get the current column number.
  * @param yyscanner The scanner object.
  */
-
+int core_yyget_column  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    
+        if (! YY_CURRENT_BUFFER)
+            return 0;
+    
+    return yycolumn;
+}
 
 /** Get the input stream.
  * @param yyscanner The scanner object.
  */
-
+FILE *core_yyget_in  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yyin;
+}
 
 /** Get the output stream.
  * @param yyscanner The scanner object.
  */
-
+FILE *core_yyget_out  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yyout;
+}
 
 /** Get the length of the current token.
  * @param yyscanner The scanner object.
  */
-
+int core_yyget_leng  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yyleng;
+}
 
 /** Get the current token.
  * @param yyscanner The scanner object.
  */
 
-
+char *core_yyget_text  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yytext;
+}
 
 /** Set the user-defined data. This data is never touched by the scanner.
  * @param user_defined The data to be associated with this scanner.
@@ -10849,13 +10917,31 @@ void core_yyset_extra (YY_EXTRA_TYPE  user_defined , yyscan_t yyscanner)
  * @param line_number
  * @param yyscanner The scanner object.
  */
+void core_yyset_lineno (int  line_number , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
+        /* lineno is only valid if an input buffer exists. */
+        if (! YY_CURRENT_BUFFER )
+           yy_fatal_error( "core_yyset_lineno called with no buffer" , yyscanner); 
+    
+    yylineno = line_number;
+}
 
 /** Set the current column.
  * @param line_number
  * @param yyscanner The scanner object.
  */
+void core_yyset_column (int  column_no , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
+        /* column is only valid if an input buffer exists. */
+        if (! YY_CURRENT_BUFFER )
+           yy_fatal_error( "core_yyset_column called with no buffer" , yyscanner); 
+    
+    yycolumn = column_no;
+}
 
 /** Set the input stream. This does not discard the current
  * input buffer.
@@ -10863,23 +10949,55 @@ void core_yyset_extra (YY_EXTRA_TYPE  user_defined , yyscan_t yyscanner)
  * @param yyscanner The scanner object.
  * @see core_yy_switch_to_buffer
  */
+void core_yyset_in (FILE *  in_str , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    yyin = in_str ;
+}
 
+void core_yyset_out (FILE *  out_str , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    yyout = out_str ;
+}
 
+int core_yyget_debug  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yy_flex_debug;
+}
 
-
-
-
-
+void core_yyset_debug (int  bdebug , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    yy_flex_debug = bdebug ;
+}
 
 /* Accessor methods for yylval and yylloc */
 
+YYSTYPE * core_yyget_lval  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yylval;
+}
 
+void core_yyset_lval (YYSTYPE *  yylval_param , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    yylval = yylval_param;
+}
 
-
-
-
+YYLTYPE *core_yyget_lloc  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    return yylloc;
+}
     
-
+void core_yyset_lloc (YYLTYPE *  yylloc_param , yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
+    yylloc = yylloc_param;
+}
     
 /* User-visible API */
 
@@ -10917,7 +11035,33 @@ int core_yylex_init(yyscan_t* ptr_yy_globals)
  * the yyextra field.
  */
 
+int core_yylex_init_extra(YY_EXTRA_TYPE yy_user_defined,yyscan_t* ptr_yy_globals )
 
+{
+    struct yyguts_t dummy_yyguts;
+
+    core_yyset_extra (yy_user_defined, &dummy_yyguts);
+
+    if (ptr_yy_globals == NULL){
+        errno = EINVAL;
+        return 1;
+    }
+	
+    *ptr_yy_globals = (yyscan_t) core_yyalloc ( sizeof( struct yyguts_t ), &dummy_yyguts );
+	
+    if (*ptr_yy_globals == NULL){
+        errno = ENOMEM;
+        return 1;
+    }
+    
+    /* By setting to 0xAA, we expose bugs in
+    yy_init_globals. Leave at 0x00 for releases. */
+    memset(*ptr_yy_globals,0x00,sizeof(struct yyguts_t));
+    
+    core_yyset_extra (yy_user_defined, *ptr_yy_globals);
+    
+    return yy_init_globals ( *ptr_yy_globals );
+}
 
 static int yy_init_globals (yyscan_t yyscanner)
 {
@@ -10953,7 +11097,34 @@ static int yy_init_globals (yyscan_t yyscanner)
 }
 
 /* core_yylex_destroy is for both reentrant and non-reentrant scanners. */
+int core_yylex_destroy  (yyscan_t yyscanner)
+{
+    struct yyguts_t * yyg = (struct yyguts_t*)yyscanner;
 
+    /* Pop the buffer stack, destroying each element. */
+	while(YY_CURRENT_BUFFER){
+		core_yy_delete_buffer(YY_CURRENT_BUFFER ,yyscanner );
+		YY_CURRENT_BUFFER_LVALUE = NULL;
+		core_yypop_buffer_state(yyscanner);
+	}
+
+	/* Destroy the stack itself. */
+	core_yyfree(yyg->yy_buffer_stack ,yyscanner);
+	yyg->yy_buffer_stack = NULL;
+
+    /* Destroy the start condition stack. */
+        core_yyfree(yyg->yy_start_stack ,yyscanner );
+        yyg->yy_start_stack = NULL;
+
+    /* Reset the globals. This is important in a non-reentrant scanner so the next time
+     * core_yylex() is called, initialization will occur. */
+    yy_init_globals( yyscanner);
+
+    /* Destroy the main struct (reentrant only). */
+    core_yyfree ( yyscanner , yyscanner );
+    yyscanner = NULL;
+    return 0;
+}
 
 /*
  * Internal utility routines.
@@ -10981,7 +11152,7 @@ static int yy_flex_strlen (yyconst char * s , yyscan_t yyscanner)
 
 #define YYTABLES_NAME "yytables"
 
-#line 1046 "scan.l"
+#line 1051 "scan.l"
 
 
 
@@ -11490,6 +11661,25 @@ check_escape_warning(core_yyscan_t yyscanner)
 	yyextra->warn_on_first_escape = false;		/* warn only once per string */
 }
 
+/* Const that would be replaced by ? if run through pg_stat_statements
+	 Note: This reduces to a node and returns a ParamRef if its ? */
+
+Iconst_or_Normalized: Iconst  																			{ $$ = makeIntConst($1, @1); }
+			| '?'																												{ $$ = makeParamRef( 0, @1); }
+		;
+
+Sconst_or_Normalized: Sconst  																	 		{ $$ = makeStringConst($1, @1); }
+			| '?'																												{ $$ = makeParamRef( 0, @1); }
+		;
+
+Flat_Sconst_or_Normalized: Sconst  																	 { $$ = makeStringConst($1, @1); }
+			| '?'																												{ $$ = makeParamRef( 0, @1); }
+		;
+
+NonReservedWord_or_Sconst_or_Normalized: NonReservedWord_or_Sconst	{ $$ = makeStringConst($1, @1); }
+			| '?'																												{ $$ = makeParamRef( 0, @1); }
+		;
+
 /*
  * Interface functions to make flex use palloc() instead of malloc().
  * It'd be better to make these static, but flex insists otherwise.
@@ -11510,5 +11700,10 @@ core_yyrealloc(void *ptr, yy_size_t bytes, core_yyscan_t yyscanner)
 		return palloc(bytes);
 }
 
-
+void
+core_yyfree(void *ptr, core_yyscan_t yyscanner)
+{
+	if (ptr)
+		pfree(ptr);
+}
 
