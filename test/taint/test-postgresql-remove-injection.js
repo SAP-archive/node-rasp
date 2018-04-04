@@ -7,11 +7,13 @@ const tId = 'foo'.setTaint('bar');
 const tId2 = 'baz'.setTaint('bar');
 const literalInj = '\' OR 1=1;--'.setTaint('bar');
 const idInj = ' OR 1=1;--'.setTaint('bar');
-//const multiIdInj = 'foo, evil'.setTaint('bar');
+const multiIdInj = 'foo, evil'.setTaint('bar');
 const commentInj = '--'.setTaint('bar');
 const spaceCommentInj = ' --'.setTaint('bar');
 const cCommentStart = '/* '.setTaint('bar');
 const cCommentEnd = '*/ '.setTaint('bar');
+const piggyBackInj = '; DROP foo-- '.setTaint('bar');
+const funcInj = 'CHaR(75)'.setTaint('bar');
 
 const q0 = 'SELECT * FROM table WHERE foo=\'bar\';';
 deepStrictEqual(removeAllInjections(q0), { injected: false });
@@ -37,7 +39,13 @@ deepStrictEqual(removeAllInjections(q6), { injected: false });
 const q7 = 'SELECT ' + tId + ', ' + tId2 + ' FROM table WHERE foo=\'bar\';';
 deepStrictEqual(removeAllInjections(q7), { injected: false });
 
-// Sub-select
+/* Multiple identifier injection */
+const q7a = 'SELECT ' + multiIdInj + ' FROM table WHERE foo=\'bar\';';
+const r7a = 'SELECT  FROM table WHERE foo=\'bar\';';
+deepStrictEqual(removeAllInjections(q7a),
+                {injected: true, query: r7a, vectors: [multiIdInj]});
+
+/* Sub-selects */
 const q8 = 'SELECT foo FROM (' + q7 + ') WHERE foo=\'bar\';';
 deepStrictEqual(removeAllInjections(q8), { injected: false });
 
@@ -71,6 +79,7 @@ const r52 = 'SELECT foo FROM (' + r50 + ') WHERE foo=bar;';
 deepStrictEqual(removeAllInjections(q52),
                 {injected: true, query: r52, vectors: [literalInj]});
 
+/* Multi param injection */
 const q53 = 'SELECT * FROM table WHERE foo=\'' + literalInj +
             '\' OR baz=\'' + literalInj + '\';';
 const r53 = 'SELECT * FROM table WHERE foo=\'\' OR baz=\'\';';
@@ -82,6 +91,7 @@ const r54 = 'SELECT foo FROM (' + r50 + ') WHERE foo=abc.;';
 deepStrictEqual(removeAllInjections(q54),
                 {injected: true, query: r54, vectors: [literalInj, idInj]});
 
+/* Comment injections */
 const q55 = 'SELECT * FROM table WHERE foo=abc' + spaceCommentInj + ' OR f=a;';
 const r55 = 'SELECT * FROM table WHERE foo=abc OR f=a;';
 deepStrictEqual(removeAllInjections(q55),
@@ -98,6 +108,21 @@ const r57 = 'SELECT * FROM t WHERE f=a OR g=b;';
 deepStrictEqual(removeAllInjections(q57),
                 {injected: true, query: r57,
                  vectors: [cCommentStart, cCommentEnd]});
-/*const query1 = 'SELECT * FROM table WHERE foo=\'bar\';'.setTaint('bar');
-deepStrictEqual(removeInjection(query1, []),
-                       {query:''});*/
+
+/* Piggyback query injections */
+const q58 = 'SELECT * FROM t WHERE foo=' + piggyBackInj + ';';
+const r58 = 'SELECT * FROM t WHERE foo=;';
+deepStrictEqual(removeAllInjections(q58),
+                {injected: true, query: r58, vectors: [piggyBackInj]});
+
+/* Creating literals with functions and without ' */
+const q59 = 'SELECT ' + funcInj + ' FROM t;';
+const r59 = 'SELECT  FROM t;';
+deepStrictEqual(removeAllInjections(q59),
+                {injected: true, query: r59, vectors: [funcInj]});
+
+/* Complete query injection */
+const q100 = 'SELECT * FROM table WHERE foo=abc OR f=a;'.setTaint('bar');
+const r100 = '';
+deepStrictEqual(removeAllInjections(q100),
+                {injected: true, query: r100, vectors: [q100]});
