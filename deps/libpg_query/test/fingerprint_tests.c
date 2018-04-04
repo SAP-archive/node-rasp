@@ -85,8 +85,6 @@ const char* tests[] = {
   "0242fed093117245ef78fbfef8b7433d23e15deb82",
   "CLOSE cursor_123",
   "02746b7bf7ec5d162462a8851f28c527553260e6c0",
-  "-- nothing",
-  "02da39a3ee5e6b4b0d3255bfef95601890afd80709",
   "CREATE FOREIGN TABLE ft1 () SERVER no_server",
   "02086f531f62abde7c63eeecd70f52f227009cc40a",
   "UPDATE x SET a = 1, b = 2",
