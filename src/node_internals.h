@@ -91,6 +91,7 @@ struct sockaddr;
     V(fs_event_wrap)                                                          \
     V(http2)                                                                  \
     V(http_parser)                                                            \
+    V(pg_lexer)                                                            \
     V(inspector)                                                              \
     V(js_stream)                                                              \
     V(module_wrap)                                                            \
