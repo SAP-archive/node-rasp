@@ -1552,7 +1552,9 @@ IGNORED_SUITES = [
   'internet',
   'pummel',
   'tick-processor',
-  'v8-updates'
+  'v8-updates',
+  'taint',
+  'taint-failing'
 ]
 
 
