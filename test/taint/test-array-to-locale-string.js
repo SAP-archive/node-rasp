@@ -13,28 +13,28 @@ const array5 = ['f' + 'o'.setTaint('bar') + 'a', 'some'];
 
   string = array1.toLocaleString('lt-LT');
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 0, 'end': 2}]);
+  assert.taintEqual(string, [{ 'begin': 0, 'end': 2 }]);
 
   string = array2.toLocaleString();
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 3, 'end': 6}]);
+  assert.taintEqual(string, [{ 'begin': 3, 'end': 6 }]);
 
   string = array3.toLocaleString();
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [
-    {'begin': 0, 'end': 3},
-    {'begin': 4, 'end': 7}
+    { 'begin': 0, 'end': 3 },
+    { 'begin': 4, 'end': 7 }
   ]);
 
   string = array4.toLocaleString();
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [
-    {'begin': 0, 'end': 3},
-    {'begin': 9, 'end': 12}
+    { 'begin': 0, 'end': 3 },
+    { 'begin': 9, 'end': 12 }
   ]);
 
   string = array5.toLocaleString();
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 1, 'end': 2}]);
+  assert.taintEqual(string, [{ 'begin': 1, 'end': 2 }]);
 
 })();

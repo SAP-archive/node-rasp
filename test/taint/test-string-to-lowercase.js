@@ -16,23 +16,23 @@ stringSet.forEach((string) => {
     lowercase;
 
   assert.strictEqual(str.isTainted(), true);
-  assert.taintEqual(str, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);
 
   lowercase = str.toLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(lowercase, [{ 'begin': 0, 'end': len }]);
 
   lowercase = str.toLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(lowercase, [{ 'begin': 0, 'end': len }]);
 
   str = string + str.setTaint('foo');
   lowercase = str.toLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(lowercase, [{ 'begin': len, 'end': len + len }]);
 
   str = str + string;
   lowercase = str.toLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(lowercase, [{ 'begin': len, 'end': len + len }]);
 });
