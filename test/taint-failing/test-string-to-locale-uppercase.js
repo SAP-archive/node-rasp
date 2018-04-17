@@ -10,17 +10,17 @@ const assert = require('assert');
 
   uppercase = str1.toLocaleUpperCase();
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': 0, 'end': 6}]);
+  assert.taintEqual(uppercase, [{ 'begin': 0, 'end': 6 }]);
 
   uppercase = str2.toLocaleUpperCase('lt-LT');
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(uppercase, [{ 'begin': 0, 'end': 1 }]);
 
   uppercase = str.toLocaleUpperCase('lt');
   assert.strictEqual(uppercase.isTainted(), true);
   assert.taintEqual(uppercase, [
-    {'begin': 0, 'end': 6},
-    {'begin': 9, 'end': 10}
+    { 'begin': 0, 'end': 6 },
+    { 'begin': 9, 'end': 10 }
   ]);
 
 })();

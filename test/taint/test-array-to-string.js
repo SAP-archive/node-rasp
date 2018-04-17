@@ -13,28 +13,28 @@ const array5 = ['f' + 'o'.setTaint('bar') + 'a', 'some'];
 
   string = array1.toString();
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 0, 'end': 3}]);
+  assert.taintEqual(string, [{ 'begin': 0, 'end': 3 }]);
 
   string = array2.toString();
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 3, 'end': 6}]);
+  assert.taintEqual(string, [{ 'begin': 3, 'end': 6 }]);
 
   string = array3.toString();
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [
-    {'begin': 0, 'end': 3},
-    {'begin': 4, 'end': 7}
+    { 'begin': 0, 'end': 3 },
+    { 'begin': 4, 'end': 7 }
   ]);
 
   string = array4.toString();
   assert.strictEqual(string.isTainted(), true);
   assert.taintEqual(string, [
-    {'begin': 0, 'end': 3},
-    {'begin': 9, 'end': 12}
+    { 'begin': 0, 'end': 3 },
+    { 'begin': 9, 'end': 12 }
   ]);
 
   string = array5.toString();
   assert.strictEqual(string.isTainted(), true);
-  assert.taintEqual(string, [{'begin': 1, 'end': 2}]);
+  assert.taintEqual(string, [{ 'begin': 1, 'end': 2 }]);
 
 })();

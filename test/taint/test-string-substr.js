@@ -17,26 +17,26 @@ stringSet.forEach((string) => {
 
   substr = str.substr(0);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len }]);
 
   substr = str.substr(1);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len - 1}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len - 1 }]);
 
   substr = str.substr(-1);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': 1 }]);
 
   substr = str.substr(0, len);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len }]);
 
   substr = str.substr(len - 1, 1);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': 1 }]);
 
   str = string + str.setTaint('foo');
   substr = str.substr(len - 1, 2);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 1, 'end': 2}]);
+  assert.taintEqual(substr, [{ 'begin': 1, 'end': 2 }]);
 });
