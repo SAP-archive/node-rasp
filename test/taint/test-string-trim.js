@@ -13,17 +13,17 @@ stringSet.forEach((string) => {
 
   let trimmed = str.trim();
   assert.strictEqual(trimmed.isTainted(), true);
-  assert.taintEqual(trimmed, [{'begin': 0, 'end': len - 3}]);
+  assert.taintEqual(trimmed, [{ 'begin': 0, 'end': len - 3 }]);
 
   trimmed = str.trim();
   assert.strictEqual(trimmed.isTainted(), true);
-  assert.taintEqual(trimmed, [{'begin': 0, 'end': len - 3}]);
+  assert.taintEqual(trimmed, [{ 'begin': 0, 'end': len - 3 }]);
 
   trimmed = str.trimLeft();
   assert.strictEqual(trimmed.isTainted(), true);
-  assert.taintEqual(trimmed, [{'begin': 0, 'end': len - 2}]);
+  assert.taintEqual(trimmed, [{ 'begin': 0, 'end': len - 2 }]);
 
   trimmed = str.trimRight();
   assert.strictEqual(trimmed.isTainted(), true);
-  assert.taintEqual(trimmed, [{'begin': 0, 'end': len - 1}]);
+  assert.taintEqual(trimmed, [{ 'begin': 0, 'end': len - 1 }]);
 });

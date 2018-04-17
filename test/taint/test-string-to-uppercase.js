@@ -16,23 +16,23 @@ stringSet.forEach((string) => {
     uppercase;
 
   assert.strictEqual(str.isTainted(), true);
-  assert.taintEqual(str, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);
 
   uppercase = str.toUpperCase();
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(uppercase, [{ 'begin': 0, 'end': len }]);
 
   uppercase = str.toUpperCase();
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(uppercase, [{ 'begin': 0, 'end': len }]);
 
   str = string + str.setTaint('foo');
   uppercase = str.toUpperCase();
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(uppercase, [{ 'begin': len, 'end': len + len }]);
 
   str = str + string;
   uppercase = str.toUpperCase();
   assert.strictEqual(uppercase.isTainted(), true);
-  assert.taintEqual(uppercase, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(uppercase, [{ 'begin': len, 'end': len + len }]);
 });

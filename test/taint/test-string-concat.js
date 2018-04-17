@@ -18,19 +18,19 @@ stringSet.forEach((string) => {
 
   strCon = strTaint.concat(str);
   assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(strCon, [{ 'begin': 0, 'end': len }]);
 
   strCon = str.concat(strCon);
   assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(strCon, [{ 'begin': len, 'end': len + len }]);
 
   strCon = strTaint.concat(strTaint);
   assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': 0, 'end': len + len}]);
+  assert.taintEqual(strCon, [{ 'begin': 0, 'end': len + len }]);
 
   strCon = str.concat(strTaint, str);
   assert.strictEqual(strCon.isTainted(), true);
-  assert.taintEqual(strCon, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(strCon, [{ 'begin': len, 'end': len + len }]);
 
   strCon = str.concat(str);
   assert.strictEqual(strCon.isTainted(), false);

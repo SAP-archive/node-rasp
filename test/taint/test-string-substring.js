@@ -17,22 +17,22 @@ stringSet.forEach((string) => {
 
   substr = str.substring(0);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len }]);
 
   substr = str.substring(1);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len - 1}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len - 1 }]);
 
   substr = str.substring(0, len);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': len }]);
 
   substr = str.substring(len - 1, len);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(substr, [{ 'begin': 0, 'end': 1 }]);
 
   str = string + str.setTaint('foo');
   substr = str.substring(len - 1, len + 1);
   assert.strictEqual(substr.isTainted(), true);
-  assert.taintEqual(substr, [{'begin': 1, 'end': 2}]);
+  assert.taintEqual(substr, [{ 'begin': 1, 'end': 2 }]);
 });

@@ -10,17 +10,17 @@ const assert = require('assert');
 
   lowercase = str1.toLocaleLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': 0, 'end': 6}]);
+  assert.taintEqual(lowercase, [{ 'begin': 0, 'end': 6 }]);
 
   lowercase = str2.toLocaleLowerCase('en-US');
   assert.strictEqual(lowercase.isTainted(), true);
-  assert.taintEqual(lowercase, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(lowercase, [{ 'begin': 0, 'end': 1 }]);
 
   lowercase = str.toLocaleLowerCase('tr');
   assert.strictEqual(lowercase.isTainted(), true);
   assert.taintEqual(lowercase, [
-    {'begin': 0, 'end': 6},
-    {'begin': 9, 'end': 10}
+    { 'begin': 0, 'end': 6 },
+    { 'begin': 9, 'end': 10 }
   ]);
 
 })();

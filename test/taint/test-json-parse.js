@@ -11,16 +11,16 @@ const assert = require('assert');
   key = Object.keys(parsed)[0];
   value = parsed.foo;
   assert.strictEqual(key.isTainted(), true);
-  assert.taintEqual(key, [{'begin': 0, 'end': 3}]);
+  assert.taintEqual(key, [{ 'begin': 0, 'end': 3 }]);
   assert.strictEqual(value.isTainted(), true);
-  assert.taintEqual(value, [{'begin': 0, 'end': 3}]);
+  assert.taintEqual(value, [{ 'begin': 0, 'end': 3 }]);
 
   parsed = JSON.parse(str2);
   key = Object.keys(parsed)[0];
   value = parsed.foo;
   assert.strictEqual(key.isTainted(), true);
-  assert.taintEqual(key, [{'begin': 1, 'end': 3}]);
+  assert.taintEqual(key, [{ 'begin': 1, 'end': 3 }]);
   assert.strictEqual(value.isTainted(), true);
-  assert.taintEqual(value, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(value, [{ 'begin': 0, 'end': 1 }]);
 
 })();

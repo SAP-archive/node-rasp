@@ -9,14 +9,14 @@ const assert = require('assert');
   obj['foo1'] = 'bar'.setTaint('baz');
   stringified = JSON.stringify(obj);
   assert.strictEqual(stringified.isTainted(), true);
-  assert.taintEqual(stringified, [{'begin': 9, 'end': 12}]);
+  assert.taintEqual(stringified, [{ 'begin': 9, 'end': 12 }]);
 
   obj['foo2'.setTaint('baz')] = 'bar';
   stringified = JSON.stringify(obj);
   assert.strictEqual(stringified.isTainted(), true);
   assert.taintEqual(stringified, [
-    {'begin': 9, 'end': 12},
-    {'begin': 15, 'end': 19}
+    { 'begin': 9, 'end': 12 },
+    { 'begin': 15, 'end': 19 }
   ]);
 
 })();

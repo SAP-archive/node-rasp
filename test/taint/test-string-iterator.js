@@ -17,12 +17,12 @@ stringSet.forEach((string) => {
   for (let i = 0; i < str.length; i++) {
     const v = strIter.next().value;
     assert.strictEqual(v.isTainted(), true);
-    assert.taintEqual(v, [{'begin': 0, 'end': 1}]);
+    assert.taintEqual(v, [{ 'begin': 0, 'end': 1 }]);
   }
 
   for (const v of str) {
     assert.strictEqual(v.isTainted(), true);
-    assert.taintEqual(v, [{'begin': 0, 'end': 1}]);
+    assert.taintEqual(v, [{ 'begin': 0, 'end': 1 }]);
   }
 
 
@@ -34,7 +34,7 @@ stringSet.forEach((string) => {
       assert.taintEqual(v, []);
     } else {
       assert.strictEqual(v.isTainted(), true);
-      assert.taintEqual(v, [{'begin': 0, 'end': 1}]);
+      assert.taintEqual(v, [{ 'begin': 0, 'end': 1 }]);
     }
     i++;
   }

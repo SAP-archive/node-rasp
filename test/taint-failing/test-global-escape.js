@@ -12,25 +12,25 @@ const str4 = '<script>';
 
   escaped = escape(str1.setTaint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
-  assert.taintEqual(escaped, [{'begin': 0, 'end': 6}]);
+  assert.taintEqual(escaped, [{ 'begin': 0, 'end': 6 }]);
 
   escaped = escape(str2.setTaint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
-  assert.taintEqual(escaped, [{'begin': 0, 'end': 9}]);
+  assert.taintEqual(escaped, [{ 'begin': 0, 'end': 9 }]);
 
   escaped = escape(str3.setTaint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
-  assert.taintEqual(escaped, [{'begin': 0, 'end': 6}]);
+  assert.taintEqual(escaped, [{ 'begin': 0, 'end': 6 }]);
 
   escaped = escape(str4.setTaint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
-  assert.taintEqual(escaped, [{'begin': 0, 'end': 12}]);
+  assert.taintEqual(escaped, [{ 'begin': 0, 'end': 12 }]);
 
   escaped = escape(str2 + str4.setTaint('foo') + str3 + str4.setTaint('baz'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [
-    {'begin': 9, 'end': 21},
-    {'begin': 27, 'end': 39}
+    { 'begin': 9, 'end': 21 },
+    { 'begin': 27, 'end': 39 }
   ]);
 
 })();
