@@ -16,17 +16,17 @@ stringSet.forEach((string) => {
   let result = str.toString();
 
   assert.strictEqual(result.isTainted(), true);
-  assert.taintEqual(result, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(result, [{ 'begin': 0, 'end': len }]);
 
   str = string + str.setTaint('foo');
   result = str.toString();
   assert.strictEqual(result.isTainted(), true);
-  assert.taintEqual(result, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(result, [{ 'begin': len, 'end': len + len }]);
 
   str = str + string;
   result = str.toString();
   assert.strictEqual(result.isTainted(), true);
-  assert.taintEqual(result, [{'begin': len, 'end': len + len}]);
+  assert.taintEqual(result, [{ 'begin': len, 'end': len + len }]);
 
   result = string.toString();
   assert.strictEqual(result.isTainted(), false);

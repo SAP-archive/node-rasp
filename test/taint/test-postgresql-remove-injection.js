@@ -43,7 +43,7 @@ deepStrictEqual(removeAllInjections(q7), { injected: false });
 const q7a = 'SELECT ' + multiIdInj + ' FROM table WHERE foo=\'bar\';';
 const r7a = 'SELECT  FROM table WHERE foo=\'bar\';';
 deepStrictEqual(removeAllInjections(q7a),
-                {injected: true, query: r7a, vectors: [multiIdInj]});
+                { injected: true, query: r7a, vectors: [multiIdInj] });
 
 /* Sub-selects */
 const q8 = 'SELECT foo FROM (' + q7 + ') WHERE foo=\'bar\';';
@@ -67,62 +67,63 @@ deepStrictEqual(removeAllInjections(q12), { injected: false });
 const q50 = 'SELECT * FROM table WHERE foo=\'' + literalInj + '\';';
 const r50 = 'SELECT * FROM table WHERE foo=\'\';';
 deepStrictEqual(removeAllInjections(q50),
-                {injected: true, query: r50, vectors: [literalInj]});
+                { injected: true, query: r50, vectors: [literalInj] });
 
 const q51 = 'SELECT * FROM table WHERE foo=' + idInj + ';';
 const r51 = 'SELECT * FROM table WHERE foo=;';
 deepStrictEqual(removeAllInjections(q51),
-                {injected: true, query: r51, vectors: [idInj]});
+                { injected: true, query: r51, vectors: [idInj] });
 
 const q52 = 'SELECT foo FROM (' + q50 + ') WHERE foo=bar;';
 const r52 = 'SELECT foo FROM (' + r50 + ') WHERE foo=bar;';
 deepStrictEqual(removeAllInjections(q52),
-                {injected: true, query: r52, vectors: [literalInj]});
+                { injected: true, query: r52, vectors: [literalInj] });
 
 /* Multi param injection */
 const q53 = 'SELECT * FROM table WHERE foo=\'' + literalInj +
             '\' OR baz=\'' + literalInj + '\';';
 const r53 = 'SELECT * FROM table WHERE foo=\'\' OR baz=\'\';';
-deepStrictEqual(removeAllInjections(q53), {injected: true, query: r53,
-                                           vectors: [literalInj, literalInj]});
+deepStrictEqual(removeAllInjections(q53),
+                { injected: true, query: r53,
+                  vectors: [literalInj, literalInj] });
 
 const q54 = 'SELECT foo FROM (' + q50 + ') WHERE foo=abc.' + idInj + ';';
 const r54 = 'SELECT foo FROM (' + r50 + ') WHERE foo=abc.;';
 deepStrictEqual(removeAllInjections(q54),
-                {injected: true, query: r54, vectors: [literalInj, idInj]});
+                { injected: true, query: r54, vectors: [literalInj, idInj] });
 
 /* Comment injections */
 const q55 = 'SELECT * FROM table WHERE foo=abc' + spaceCommentInj + ' OR f=a;';
 const r55 = 'SELECT * FROM table WHERE foo=abc OR f=a;';
 deepStrictEqual(removeAllInjections(q55),
-                {injected: true, query: r55, vectors: [spaceCommentInj]});
+                { injected: true, query: r55, vectors: [spaceCommentInj] });
 
 const q56 = 'SELECT * FROM table WHERE foo=abc' + commentInj + ' OR f=a;';
 const r56 = 'SELECT * FROM table WHERE foo=abc OR f=a;';
 deepStrictEqual(removeAllInjections(q56),
-                {injected: true, query: r56, vectors: [commentInj]});
+                { injected: true, query: r56, vectors: [commentInj] });
 
 const q57 = 'SELECT * FROM t WHERE f=a' + cCommentStart +
             ' OR g=b' + cCommentEnd + ';';
 const r57 = 'SELECT * FROM t WHERE f=a OR g=b;';
 deepStrictEqual(removeAllInjections(q57),
-                {injected: true, query: r57,
-                 vectors: [cCommentStart, cCommentEnd]});
+                { injected: true, query: r57,
+                  vectors: [cCommentStart, cCommentEnd] });
 
 /* Piggyback query injections */
 const q58 = 'SELECT * FROM t WHERE foo=' + piggyBackInj + ';';
 const r58 = 'SELECT * FROM t WHERE foo=;';
 deepStrictEqual(removeAllInjections(q58),
-                {injected: true, query: r58, vectors: [piggyBackInj]});
+                { injected: true, query: r58, vectors: [piggyBackInj] });
 
 /* Creating literals with functions and without ' */
 const q59 = 'SELECT ' + funcInj + ' FROM t;';
 const r59 = 'SELECT  FROM t;';
 deepStrictEqual(removeAllInjections(q59),
-                {injected: true, query: r59, vectors: [funcInj]});
+                { injected: true, query: r59, vectors: [funcInj] });
 
 /* Complete query injection */
 const q100 = 'SELECT * FROM table WHERE foo=abc OR f=a;'.setTaint('bar');
 const r100 = '';
 deepStrictEqual(removeAllInjections(q100),
-                {injected: true, query: r100, vectors: [q100]});
+                { injected: true, query: r100, vectors: [q100] });

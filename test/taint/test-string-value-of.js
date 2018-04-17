@@ -10,17 +10,17 @@ const assert = require('assert');
 
   value = str1.valueOf();
   assert.strictEqual(value.isTainted(), true);
-  assert.taintEqual(value, [{'begin': 0, 'end': 6}]);
+  assert.taintEqual(value, [{ 'begin': 0, 'end': 6 }]);
 
   value = str2.valueOf();
   assert.strictEqual(value.isTainted(), true);
-  assert.taintEqual(value, [{'begin': 0, 'end': 2}]);
+  assert.taintEqual(value, [{ 'begin': 0, 'end': 2 }]);
 
   value = str.valueOf();
   assert.strictEqual(value.isTainted(), true);
   assert.taintEqual(value, [
-    {'begin': 0, 'end': 6},
-    {'begin': 9, 'end': 11}
+    { 'begin': 0, 'end': 6 },
+    { 'begin': 9, 'end': 11 }
   ]);
 
 })();

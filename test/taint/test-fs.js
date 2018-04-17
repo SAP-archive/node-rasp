@@ -144,8 +144,8 @@ fs.mkdir('test', (err) => {
 
       fs.truncate('../'.setTaint('bar') + 'test/' +
                   '../../..'.setTaint('bar') + '/test2.txt', 15, (err) => {
-                    assert.strictEqual(err, null);
-                  });
+        assert.strictEqual(err, null);
+      });
 
       assert.throws(() => {
         fs.truncateSync('../test.txt', 15);

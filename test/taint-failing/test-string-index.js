@@ -29,19 +29,19 @@ stringSet.forEach((string) => {
     character;
 
   assert.strictEqual(str.isTainted(), true);
-  assert.taintEqual(str, [{'begin': 0, 'end': len}]);
+  assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);
 
   character = str[0];
   assert.strictEqual(character.isTainted(), true);
-  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(character, [{ 'begin': 0, 'end': 1 }]);
 
   character = str[1];
   assert.strictEqual(character.isTainted(), true);
-  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(character, [{ 'begin': 0, 'end': 1 }]);
 
   character = str[2];
   assert.strictEqual(character.isTainted(), true);
-  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(character, [{ 'begin': 0, 'end': 1 }]);
 
   str = str.removeTaint();
   assert.strictEqual(str.isTainted(), false);
@@ -66,7 +66,7 @@ stringSet.forEach((string) => {
 
   character = str[len];
   assert.strictEqual(character.isTainted(), true);
-  assert.taintEqual(character, [{'begin': 0, 'end': 1}]);
+  assert.taintEqual(character, [{ 'begin': 0, 'end': 1 }]);
 
   character = str[len + len];
   assert.strictEqual(character.isTainted(), false);
