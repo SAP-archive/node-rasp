@@ -627,6 +627,9 @@ Reduction JSTypedLowering::ReduceCreateConsString(Node* node) {
       simplified()->StoreField(AccessBuilder::ForNameHashField()), value,
       jsgraph()->Constant(Name::kEmptyHashField), effect, control);
   effect = graph()->NewNode(
+      simplified()->StoreField(AccessBuilder::ForNameTaintField()), value,
+      jsgraph()->Constant(0), effect, control);
+  effect = graph()->NewNode(
       simplified()->StoreField(AccessBuilder::ForStringLength()), value, length,
       effect, control);
   effect = graph()->NewNode(

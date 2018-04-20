@@ -614,6 +614,15 @@ FieldAccess AccessBuilder::ForNameHashField() {
 }
 
 // static
+FieldAccess AccessBuilder::ForNameTaintField() {
+  FieldAccess access = {kTaggedBase,        Name::kTaintOffset,
+                        Handle<Name>(),     MaybeHandle<Map>(),
+                        Type::Any(),        MachineType::TaggedPointer(),
+                        kNoWriteBarrier};
+  return access;
+}
+
+// static
 FieldAccess AccessBuilder::ForStringLength() {
   FieldAccess access = {kTaggedBase,
                         String::kLengthOffset,
