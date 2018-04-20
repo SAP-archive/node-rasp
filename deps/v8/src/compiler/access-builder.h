@@ -199,11 +199,11 @@ class V8_EXPORT_PRIVATE AccessBuilder final
   // Provides access to Name::hash_field() field.
   static FieldAccess ForNameHashField();
 
+  // Provides access to Name::GetTaint() field.
+  static FieldAccess ForNameTaint();
+
   // Provides access to String::length() field.
   static FieldAccess ForStringLength();
-
-  // Provides access to String::GetTaint() field.
-  static FieldAccess ForStringTaint();
 
   // Provides access to ConsString::first() field.
   static FieldAccess ForConsStringFirst();
