@@ -3978,10 +3978,9 @@ AllocationResult Heap::AllocateRawOneByteString(int length,
   result->set_map_after_allocation(one_byte_string_map(), SKIP_WRITE_BARRIER);
   String::cast(result)->set_length(length);
   String::cast(result)->set_hash_field(String::kEmptyHashField);
-  DCHECK_EQ(size, HeapObject::cast(result)->Size());
-
   // TaintV8
   String::cast(result)->InitializeTaint();
+  DCHECK_EQ(size, HeapObject::cast(result)->Size());
 
   return result;
 }
@@ -4005,10 +4004,9 @@ AllocationResult Heap::AllocateRawTwoByteString(int length,
   result->set_map_after_allocation(string_map(), SKIP_WRITE_BARRIER);
   String::cast(result)->set_length(length);
   String::cast(result)->set_hash_field(String::kEmptyHashField);
-  DCHECK_EQ(size, HeapObject::cast(result)->Size());
-
-  // TaintV8
+    // TaintV8
   String::cast(result)->InitializeTaint();
+  DCHECK_EQ(size, HeapObject::cast(result)->Size());
 
   return result;
 }
