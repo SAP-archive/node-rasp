@@ -2460,7 +2460,7 @@ void ProcessArgv(std::vector<std::string>* args,
   }
 
   if (per_process_opts->print_version) {
-    printf("%s\n", NODE_VERSION);
+    printf("%s %s\n", NODE_VERSION, TAINT_VERSION);
     exit(0);
   }
 
