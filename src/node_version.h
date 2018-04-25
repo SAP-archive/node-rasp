@@ -26,6 +26,10 @@
 #define NODE_MINOR_VERSION 14
 #define NODE_PATCH_VERSION 0
 
+#define TAINT_MAJOR_VERSION 0
+#define TAINT_MINOR_VERSION 1
+#define TAINT_PATCH_VERSION 0
+
 #define NODE_VERSION_IS_LTS 1
 #define NODE_VERSION_LTS_CODENAME "Dubnium"
 
@@ -58,12 +62,18 @@
                               NODE_STRINGIFY(NODE_MINOR_VERSION) "." \
                               NODE_STRINGIFY(NODE_PATCH_VERSION)     \
                               NODE_TAG
+
+# define TAINT_VERSION_STRING  NODE_STRINGIFY(TAINT_MAJOR_VERSION) "." \
+                               NODE_STRINGIFY(TAINT_MINOR_VERSION) "." \
+                               NODE_STRINGIFY(TAINT_PATCH_VERSION)
+
 #ifndef NODE_EXE_VERSION
 # define NODE_EXE_VERSION NODE_VERSION_STRING
 #endif
 
 #define NODE_VERSION "v" NODE_VERSION_STRING
 
+#define TAINT_VERSION "v" TAINT_VERSION_STRING
 
 #define NODE_VERSION_AT_LEAST(major, minor, patch) \
   (( (major) < NODE_MAJOR_VERSION) \
