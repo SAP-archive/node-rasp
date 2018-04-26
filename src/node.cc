@@ -1707,6 +1707,11 @@ void SetupProcessObject(Environment* env,
                     "version",
                     FIXED_ONE_BYTE_STRING(env->isolate(), NODE_VERSION));
 
+  // process.taintVersion
+  READONLY_PROPERTY(process,
+                    "taintVersion",
+                    FIXED_ONE_BYTE_STRING(env->isolate(), TAINT_VERSION));
+
   // process.versions
   Local<Object> versions = Object::New(env->isolate());
   READONLY_PROPERTY(process, "versions", versions);
