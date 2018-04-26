@@ -2639,6 +2639,11 @@ void SetupProcessObject(Environment* env,
                     "version",
                     FIXED_ONE_BYTE_STRING(env->isolate(), NODE_VERSION));
 
+  // process.taintVersion
+  READONLY_PROPERTY(process,
+                    "taintVersion",
+                    FIXED_ONE_BYTE_STRING(env->isolate(), TAINT_VERSION));
+
   // process.moduleLoadList
   READONLY_PROPERTY(process,
                     "moduleLoadList",
