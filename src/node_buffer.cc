@@ -421,7 +421,8 @@ MaybeLocal<Object> New(Environment* env, char* data, size_t length) {
                        data,
                        length,
                        ArrayBufferCreationMode::kInternalized);
-  MaybeLocal<Object> ui = Buffer::New(env, ab, 0, length).FromMaybe(Local<Object>());
+  MaybeLocal<Object> ui =
+      Buffer::New(env, ab, 0, length).FromMaybe(Local<Object>());
   return ui;
 }
 
