@@ -762,12 +762,12 @@ TF_BUILTIN(StringPrototypeGetTaint, CodeStubAssembler) {
   Return(CallRuntime(Runtime::kStringGetTaint, context, receiver));
 }
 
-TF_BUILTIN(StringPrototypeSetTaint, CodeStubAssembler) {
+TF_BUILTIN(StringPrototypeTaint, CodeStubAssembler) {
   Node* context = Parameter(Descriptor::kContext);
   Node* receiver = Parameter(Descriptor::kReceiver);
   Node* taint = Parameter(Descriptor::kTaint);
 
-  Return(CallRuntime(Runtime::kStringSetTaint, context, receiver, taint));
+  Return(CallRuntime(Runtime::kStringTaint, context, receiver, taint));
 }
 
 TF_BUILTIN(StringPrototypeRemoveTaint, CodeStubAssembler) {

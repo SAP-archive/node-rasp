@@ -12,7 +12,7 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.setTaint('bar'),
+  let str = string.taint('bar'),
     lowercase;
 
   assert.strictEqual(str.isTainted(), true);
@@ -26,7 +26,7 @@ stringSet.forEach((string) => {
   assert.strictEqual(lowercase.isTainted(), true);
   assert.taintEqual(lowercase, [{ 'begin': 0, 'end': len }]);
 
-  str = string + str.setTaint('foo');
+  str = string + str.taint('foo');
   lowercase = str.toLowerCase();
   assert.strictEqual(lowercase.isTainted(), true);
   assert.taintEqual(lowercase, [{ 'begin': len, 'end': len + len }]);

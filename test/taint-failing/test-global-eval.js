@@ -2,10 +2,10 @@
 require('../common');
 const assert = require('assert');
 
-const str1 = 'var x = "foo";'.setTaint('baz');
-const str2 = 'var y = {"foo": "bar"}'.setTaint('baz');
+const str1 = 'var x = "foo";'.taint('baz');
+const str2 = 'var y = {"foo": "bar"}'.taint('baz');
 const str3 =
-  'var z = {"foo": "b' + 'a'.setTaint('baz') + 'r"}';
+  'var z = {"foo": "b' + 'a'.taint('baz') + 'r"}';
 
 (() => {
   eval(str1);

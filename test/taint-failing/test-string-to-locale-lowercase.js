@@ -3,8 +3,8 @@ require('../common');
 const assert = require('assert');
 
 ((string) => {
-  const str1 = 'abc123'.setTaint('bar');
-  const str2 = '\u0130'.setTaint('bar');
+  const str1 = 'abc123'.taint('bar');
+  const str2 = '\u0130'.taint('bar');
   const str = str1 + 'bar' + str2;
   let lowercase;
 

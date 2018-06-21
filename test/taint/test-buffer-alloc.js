@@ -3,33 +3,33 @@ require('../common');
 const assert = require('assert');
 
 // ASCII
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 const strAsciiTaintLen = strAsciiTaint.length;
 const bufAsciiTaintLen = Buffer.from(strAsciiTaint).length;
 
 // UTF8
-const strUtf8Taint = '😃㻖'.setTaint('abc');
+const strUtf8Taint = '😃㻖'.taint('abc');
 const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
                                                .toString('utf8').length;
 const bufUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8').length;
 
 // UTF16
 const strUtf16Taint = Buffer.from(strUtf8Taint, 'utf8').toString('utf16le')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 const strUtf16TaintLen = Buffer.from(strUtf8Taint, 'utf8')
                                                .toString('utf16le').length;
 const bufUtf16TaintLen = Buffer.from(strUtf16Taint, 'utf16le').length;
 
 // HEX
 const strHexTaint = Buffer.from(strAsciiTaint, 'ascii').toString('hex')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 const strHexTaintLen = Buffer.from(strAsciiTaint, 'ascii')
                                                 .toString('hex').length;
 const bufHexTaintLen = Buffer.from(strHexTaint, 'hex').length;
 
 // HEX UNICODE
 const strHexUnicodeTaint = Buffer.from(strUtf8Taint, 'utf8').toString('hex')
-                                                            .setTaint('abc');
+                                                            .taint('abc');
 const strHexUnicodeTaintLen = Buffer.from(strUtf8Taint, 'utf8')
                                                      .toString('hex').length;
 const bufHexUnicodeTaintLen = Buffer.from(strHexUnicodeTaint, 'hex').length;

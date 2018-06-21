@@ -5,7 +5,7 @@ const assert = require('assert');
 const abc = 'abc123';
 
 ((string) => {
-  let str = string.setTaint('bar');
+  let str = string.taint('bar');
   let repeated;
 
   repeated = str.repeat(0);
@@ -24,7 +24,7 @@ const abc = 'abc123';
   assert.strictEqual(repeated.isTainted(), true);
   assert.taintEqual(repeated, [{ 'begin': 0, 'end': 6000 }]);
 
-  str = string + string.setTaint('bar');
+  str = string + string.taint('bar');
   repeated = str.repeat(3);
   assert.strictEqual(repeated.isTainted(), true);
   assert.taintEqual(repeated, [

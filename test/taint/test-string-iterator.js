@@ -11,7 +11,7 @@ const stringSet = [stringASCII_3, stringUTF8_3,
                    stringASCII_300, stringUTF8_300];
 
 stringSet.forEach((string) => {
-  let str = string.setTaint('bar');
+  let str = string.taint('bar');
   const strIter = str[Symbol.iterator]();
 
   for (let i = 0; i < str.length; i++) {

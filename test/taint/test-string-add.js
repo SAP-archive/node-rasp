@@ -13,7 +13,7 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 stringSet.forEach((string) => {
   const len = string.length;
   const str = string,
-    strTaint = string.setTaint('baz');
+    strTaint = string.taint('baz');
   let strCon;
 
   strCon = strTaint + str;

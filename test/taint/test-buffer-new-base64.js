@@ -4,7 +4,7 @@ const assert = require('assert');
 
 // ASCII
 const strAscii = 'This string is not tainted!';
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 
 const strAsciiLen = strAscii.length;
 const strAsciiTaintLen = strAsciiTaint.length;
@@ -12,12 +12,12 @@ const strAsciiTaintLen = strAsciiTaint.length;
 // BASE64
 const strBase64 = Buffer.from(strAscii, 'ascii').toString('base64');
 const strBase64Taint = Buffer.from(strAsciiTaint, 'ascii').toString('base64')
-                                                          .setTaint('abc');
+                                                          .taint('abc');
 
 const strBase64Len = Buffer.from(strAscii, 'ascii').toString('base64')
                                                                    .length;
 const strBase64TaintLen = Buffer.from(strAsciiTaint, 'ascii')
-                                .toString('base64').setTaint('abc').length;
+                                .toString('base64').taint('abc').length;
 
 const bufBase64Len = Buffer.from(strBase64, 'base64').length;
 const bufBase64TaintLen = Buffer.from(strBase64Taint, 'base64').length;
@@ -109,7 +109,7 @@ taintEnd = taintStart + strAsciiTaintLen * 2;
 // assert.taintEqual(resultString, [{'begin': taintStart, 'end': taintEnd}]);
 
 // Test 40: Concatenated base64 string: Two different tainted string
-helpString = strAscii + strAsciiTaint + strAsciiTaint.setTaint('different');
+helpString = strAscii + strAsciiTaint + strAsciiTaint.taint('different');
 helpString = helpString + strAscii;
 helpStringEncoded = Buffer.from(helpString, 'ascii').toString('base64');
 const buf40 = new Buffer(helpStringEncoded, 'base64');

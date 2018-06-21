@@ -4,7 +4,7 @@ const assert = require('assert');
 
 // UTF8
 const strUtf8 = '😃㻖';
-const strUtf8Taint = strUtf8.setTaint('abc');
+const strUtf8Taint = strUtf8.taint('abc');
 
 const strUtf8Len = Buffer.from(strUtf8, 'utf8').toString('utf8').length;
 const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -13,7 +13,7 @@ const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
 // HEX UNICODE
 const strHexUnicode = Buffer.from(strUtf8, 'utf8').toString('hex');
 const strHexUnicodeTaint = Buffer.from(strUtf8Taint, 'utf8').toString('hex')
-                                                            .setTaint('abc');
+                                                            .taint('abc');
 
 const strHexUnicodeLen = Buffer.from(strUtf8, 'utf8').toString('hex').length;
 const strHexUnicodeTaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -99,7 +99,7 @@ assert.taintEqual(resultString, [{ 'begin': taintStart, 'end': taintEnd }]);
 
 // Concatenated hex string: Two different tainted string
 const buf05 = Buffer.from(strHexUnicode + strHexUnicodeTaint
-      .setTaint('different') + strHexUnicodeTaint + strHexUnicode, 'hex');
+      .taint('different') + strHexUnicodeTaint + strHexUnicode, 'hex');
 taintStart = bufHexUnicodeLen;
 taintEnd = taintStart + bufHexUnicodeTaintLen;
 taintStart2 = taintEnd;

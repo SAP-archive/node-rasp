@@ -509,7 +509,7 @@ namespace internal {
   F(StringTrim, 2, 1)                     \
   F(StringIsTainted, 1, 1)                \
   F(StringGetTaint, 1, 1)                 \
-  F(StringSetTaint, 3, 1)                 \
+  F(StringTaint, 3, 1)                 \
   F(StringRemoveTaint, 1, 1)
 
 #define FOR_EACH_INTRINSIC_SYMBOL(F)       \

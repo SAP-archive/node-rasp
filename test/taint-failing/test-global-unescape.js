@@ -10,24 +10,24 @@ const str4 = '%3Cscript%3E';
 (() => {
   let unescaped;
 
-  unescaped = unescape(str1.setTaint('foo'));
+  unescaped = unescape(str1.taint('foo'));
   assert.strictEqual(unescaped.isTainted(), true);
   assert.taintEqual(unescaped, [{ 'begin': 0, 'end': 6 }]);
 
-  unescaped = unescape(str2.setTaint('foo'));
+  unescaped = unescape(str2.taint('foo'));
   assert.strictEqual(unescaped.isTainted(), true);
   assert.taintEqual(unescaped, [{ 'begin': 0, 'end': 3 }]);
 
-  unescaped = unescape(str3.setTaint('foo'));
+  unescaped = unescape(str3.taint('foo'));
   assert.strictEqual(unescaped.isTainted(), true);
   assert.taintEqual(unescaped, [{ 'begin': 0, 'end': 1 }]);
 
-  unescaped = unescape(str4.setTaint('foo'));
+  unescaped = unescape(str4.taint('foo'));
   assert.strictEqual(unescaped.isTainted(), true);
   assert.taintEqual(unescaped, [{ 'begin': 0, 'end': 8 }]);
 
   unescaped = unescape(
-    str2 + str4.setTaint('foo') + str3 + str4.setTaint('baz'));
+    str2 + str4.taint('foo') + str3 + str4.taint('baz'));
   assert.strictEqual(unescaped.isTainted(), true);
   assert.taintEqual(unescaped, [
     { 'begin': 3, 'end': 11 },

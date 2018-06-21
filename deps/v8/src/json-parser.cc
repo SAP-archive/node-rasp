@@ -794,7 +794,7 @@ Handle<String> JsonParser<seq_one_byte>::SlowScanJsonString(
             Advance();
 
             // TaintV8
-            seq_string->SetTaint(prefix->GetTaint().subtaint(start, position_ + 6));
+            seq_string->Taint(prefix->GetTaint().subtaint(start, position_ + 6));
 
             return SlowScanJsonString<SeqTwoByteString, uc16>(seq_string, 0,
                                                               count);
@@ -808,7 +808,7 @@ Handle<String> JsonParser<seq_one_byte>::SlowScanJsonString(
   }
 
   // TaintV8
-  seq_string->SetTaint(source_->GetTaint().subtaint(start, start + count));
+  seq_string->Taint(source_->GetTaint().subtaint(start, start + count));
 
   DCHECK_EQ('"', c0_);
   // Advance past the last '"'.
@@ -913,7 +913,7 @@ Handle<String> JsonParser<seq_one_byte>::ScanJsonString() {
     position_ = position;
 
     // TaintV8 TODO: Fix when InternalizedOneByteString inits kTaintOffset
-    //result->SetTaint(seq_source_->GetTaint().subtaint(position_ - length, position_ ));
+    //result->Taint(seq_source_->GetTaint().subtaint(position_ - length, position_ ));
 
     // Advance past the last '"'.
     AdvanceSkipWhitespace();
@@ -944,7 +944,7 @@ Handle<String> JsonParser<seq_one_byte>::ScanJsonString() {
   String::WriteToFlat(*source_, dest, beg_pos, position_);
 
   // TaintV8
-  result->SetTaint(source_->GetTaint().subtaint(beg_pos, position_));
+  result->Taint(source_->GetTaint().subtaint(beg_pos, position_));
 
   DCHECK_EQ('"', c0_);
   // Advance past the last '"'.

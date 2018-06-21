@@ -6,12 +6,12 @@ const assert = require('assert');
   const obj = {};
   let stringified;
 
-  obj.foo1 = 'bar'.setTaint('baz');
+  obj.foo1 = 'bar'.taint('baz');
   stringified = JSON.stringify(obj);
   assert.strictEqual(stringified.isTainted(), true);
   assert.taintEqual(stringified, [{ 'begin': 9, 'end': 12 }]);
 
-  obj['foo2'.setTaint('baz')] = 'bar';
+  obj['foo2'.taint('baz')] = 'bar';
   stringified = JSON.stringify(obj);
   assert.strictEqual(stringified.isTainted(), true);
   assert.taintEqual(stringified, [

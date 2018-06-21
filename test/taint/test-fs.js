@@ -12,10 +12,10 @@ readFile, access, watch, truncate, chmod, and stat
 (including corresponding sync functions)
 */
 
-fs.mkdir('../test2'.setTaint('bar'), (err) => {
+fs.mkdir('../test2'.taint('bar'), (err) => {
   assert.strictEqual(fs.existsSync('../test2'), false);
   assert.strictEqual(fs.existsSync('test2'), true);
-  fs.rmdir('../test2'.setTaint('bar'), (err) => {
+  fs.rmdir('../test2'.taint('bar'), (err) => {
     assert.ifError(err);
     assert.strictEqual(err, null);
     assert.strictEqual(fs.existsSync('test2'), false);
@@ -31,17 +31,17 @@ fs.mkdir('test', (err) => {
         assert.deepStrictEqual(data, Buffer.from(content));
       });
 
-      fs.readFile('./test.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('./test.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from(content));
       });
 
-      fs.readFile('../test.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('../test.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from(content));
       });
 
-      fs.readFile('../../../test.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('../../../test.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from(content));
       });
@@ -51,23 +51,23 @@ fs.mkdir('test', (err) => {
         assert.deepStrictEqual(data, Buffer.from('Hello Node.js 2'));
       });
 
-      fs.readFile('test/../test2.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('test/../test2.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from('Hello Node.js 2'));
       });
 
-      fs.readFile('test/../../../test2.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('test/../../../test2.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from('Hello Node.js 2'));
       });
 
-      fs.readFile('../test/../../../test2.txt'.setTaint('bar'), (err, data) => {
+      fs.readFile('../test/../../../test2.txt'.taint('bar'), (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from('Hello Node.js 2'));
       });
 
-      fs.readFile('../'.setTaint('bar') + 'test/' +
-                  '../../..'.setTaint('bar') + '/test2.txt', (err, data) => {
+      fs.readFile('../'.taint('bar') + 'test/' +
+                  '../../..'.taint('bar') + '/test2.txt', (err, data) => {
         assert.ifError(err);
         assert.deepStrictEqual(data, Buffer.from('Hello Node.js 2'));
       });
@@ -80,7 +80,7 @@ fs.mkdir('test', (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.access('../../../test.txt'.setTaint('bar'), (err) => {
+      fs.access('../../../test.txt'.taint('bar'), (err) => {
         assert.strictEqual(err, null);
       });
 
@@ -88,20 +88,20 @@ fs.mkdir('test', (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.access('test/../test2.txt'.setTaint('bar'), (err) => {
+      fs.access('test/../test2.txt'.taint('bar'), (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.access('test/../../../test2.txt'.setTaint('bar'), (err) => {
+      fs.access('test/../../../test2.txt'.taint('bar'), (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.access('../test/../../../test2.txt'.setTaint('bar'), (err) => {
+      fs.access('../test/../../../test2.txt'.taint('bar'), (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.access('../'.setTaint('bar') + 'test/' +
-                '../../..'.setTaint('bar'), (err) => {
+      fs.access('../'.taint('bar') + 'test/' +
+                '../../..'.taint('bar'), (err) => {
         assert.strictEqual(err, null);
       });
 
@@ -118,11 +118,11 @@ fs.mkdir('test', (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('../test.txt'.setTaint('bar'), 13, (err) => {
+      fs.truncate('../test.txt'.taint('bar'), 13, (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('../../../test.txt'.setTaint('bar'), 13, (err) => {
+      fs.truncate('../../../test.txt'.taint('bar'), 13, (err) => {
         assert.strictEqual(err, null);
       });
 
@@ -130,20 +130,20 @@ fs.mkdir('test', (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('test/../test2.txt'.setTaint('bar'), 15, (err) => {
+      fs.truncate('test/../test2.txt'.taint('bar'), 15, (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('test/../../../test2.txt'.setTaint('bar'), 15, (err) => {
+      fs.truncate('test/../../../test2.txt'.taint('bar'), 15, (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('../test/../../../test2.txt'.setTaint('bar'), 15, (err) => {
+      fs.truncate('../test/../../../test2.txt'.taint('bar'), 15, (err) => {
         assert.strictEqual(err, null);
       });
 
-      fs.truncate('../'.setTaint('bar') + 'test/' +
-                  '../../..'.setTaint('bar') + '/test2.txt', 15, (err) => {
+      fs.truncate('../'.taint('bar') + 'test/' +
+                  '../../..'.taint('bar') + '/test2.txt', 15, (err) => {
         assert.strictEqual(err, null);
       });
 
@@ -151,7 +151,7 @@ fs.mkdir('test', (err) => {
         fs.truncateSync('../test.txt', 15);
       }, error);
 
-      fs.chmod('../test.txt'.setTaint('bar'), '00020', (err) => {
+      fs.chmod('../test.txt'.taint('bar'), '00020', (err) => {
         assert.ifError(err);
         assert.strictEqual(err, null);
       });
@@ -160,7 +160,7 @@ fs.mkdir('test', (err) => {
         fs.chmodSync('../test.txt', '00020');
       }, error);
 
-      fs.stat('../test.txt'.setTaint('bar'), (err, stats) => {
+      fs.stat('../test.txt'.taint('bar'), (err, stats) => {
         assert.ifError(err);
         assert.strictEqual(err, null);
       });

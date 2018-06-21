@@ -631,7 +631,7 @@ RUNTIME_FUNCTION(Runtime_StringToLowerCaseIntl) {
   Object* result = ConvertToLower(s, isolate);
 
   // TaintV8
-  String::cast(result)->SetTaint(s->GetTaint());
+  String::cast(result)->Taint(s->GetTaint());
 
   return result;
 }
@@ -644,7 +644,7 @@ RUNTIME_FUNCTION(Runtime_StringToUpperCaseIntl) {
   Object* result = ConvertToUpper(s, isolate);
 
   // TaintV8
-  String::cast(result)->SetTaint(s->GetTaint());
+  String::cast(result)->Taint(s->GetTaint());
 
   return result;
 }

@@ -4,7 +4,7 @@ const assert = require('assert');
 
 // ASCII
 const strAscii = 'This string is not tainted!';
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 
 const strAsciiLen = strAscii.length;
 const strAsciiTaintLen = strAsciiTaint.length;
@@ -53,7 +53,7 @@ assert.strictEqual(resultString.isTainted(), true);
 assert.taintEqual(resultString, [{ 'begin': taintStart, 'end': taintEnd }]);
 
 // Two different tainted strings
-const buf05 = Buffer.from(strAscii + strAsciiTaint.setTaint('different') +
+const buf05 = Buffer.from(strAscii + strAsciiTaint.taint('different') +
                                     strAsciiTaint + strAscii, 'ascii');
 taintStart = strAsciiLen;
 taintEnd = taintStart + strAsciiTaintLen;

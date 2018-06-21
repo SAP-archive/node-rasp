@@ -7,8 +7,8 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 ((string) => {
   const len = string.length;
   let str =
-    string.setTaint('bar') +
-    string.toLowerCase().setTaint('bar');
+    string.taint('bar') +
+    string.toLowerCase().taint('bar');
   let parts;
 
   parts = str.split('');
@@ -23,7 +23,7 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     assert.taintEqual(part, [{ 'begin': 0, 'end': len - 3 }]);
   });
 
-  str = string + string.toLowerCase().setTaint('bar');
+  str = string + string.toLowerCase().taint('bar');
   parts = str.split('XYZabc');
   assert.strictEqual(parts[0].isTainted(), false);
   assert.taintEqual(parts[0], []);

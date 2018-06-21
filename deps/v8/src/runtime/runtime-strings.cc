@@ -439,7 +439,7 @@ RUNTIME_FUNCTION(Runtime_StringBuilderJoin) {
   DCHECK(sink == end);
 
   // TaintV8
-  answer->SetTaint(taint);
+  answer->Taint(taint);
 
   // Use %_FastOneByteArrayJoin instead.
   DCHECK(!answer->IsOneByteRepresentation());
@@ -541,7 +541,7 @@ RUNTIME_FUNCTION(Runtime_StringGetTaint) {
   return *result;
 }
 
-RUNTIME_FUNCTION(Runtime_StringSetTaint) {
+RUNTIME_FUNCTION(Runtime_StringTaint) {
   HandleScope scope(isolate);
   DCHECK(args.length() == 2);
   CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
@@ -566,7 +566,7 @@ RUNTIME_FUNCTION(Runtime_StringSetTaint) {
 
   std::vector<std::u16string> operations_args(0);
 
-  result->SetTaint(StringTaint(0, str->length(), TaintSource(buf, operations_args)));
+  result->Taint(StringTaint(0, str->length(), TaintSource(buf, operations_args)));
   Malloced::Delete(buf);
   return *result;
 }
@@ -801,7 +801,7 @@ RUNTIME_FUNCTION(Runtime_StringToArray) {
   for (int i = position; i < length; ++i) {
     Handle<String> str =
         isolate->factory()->LookupSingleCharacterStringFromCode(s->Get(i));
-    str->SetTaint(s->GetTaint().subtaint(i, i+1));
+    str->Taint(s->GetTaint().subtaint(i, i+1));
     elements->set(i, *str);
   }
 

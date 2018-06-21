@@ -18,7 +18,7 @@ stringSet.forEach((string) => {
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
 
-  strTaint = str.setTaint('bar');
+  strTaint = str.taint('bar');
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
   assert.strictEqual(strTaint.isTainted(), true);
