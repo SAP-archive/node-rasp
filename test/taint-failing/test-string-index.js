@@ -43,7 +43,7 @@ stringSet.forEach((string) => {
   assert.strictEqual(character.isTainted(), true);
   assert.taintEqual(character, [{ 'begin': 0, 'end': 1 }]);
 
-  str = str.removeTaint();
+  str = str.untaint();
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
 

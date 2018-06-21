@@ -24,17 +24,17 @@ stringSet.forEach((string) => {
   assert.strictEqual(strTaint.isTainted(), true);
   assert.taintEqual(strTaint, [{ 'begin': 0, 'end': len }]);
 
-  str = str.removeTaint();
+  str = str.untaint();
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
 
-  str = strTaint.removeTaint();
+  str = strTaint.untaint();
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);
   assert.strictEqual(strTaint.isTainted(), true);
   assert.taintEqual(strTaint, [{ 'begin': 0, 'end': len }]);
 
-  strTaint = strTaint.removeTaint();
+  strTaint = strTaint.untaint();
   assert.strictEqual(strTaint.isTainted(), false);
   assert.taintEqual(strTaint, []);
 });

@@ -571,7 +571,7 @@ RUNTIME_FUNCTION(Runtime_StringTaint) {
   return *result;
 }
 
-RUNTIME_FUNCTION(Runtime_StringRemoveTaint) {
+RUNTIME_FUNCTION(Runtime_StringUntaint) {
   HandleScope scope(isolate);
   DCHECK(args.length() == 1);
   CONVERT_ARG_HANDLE_CHECKED(String, str, 0);
