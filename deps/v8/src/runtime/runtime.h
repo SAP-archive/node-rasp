@@ -510,7 +510,7 @@ namespace internal {
   F(StringIsTainted, 1, 1)                \
   F(StringGetTaint, 1, 1)                 \
   F(StringTaint, 3, 1)                 \
-  F(StringRemoveTaint, 1, 1)
+  F(StringUntaint, 1, 1)
 
 #define FOR_EACH_INTRINSIC_SYMBOL(F)       \
   F(CreatePrivateFieldSymbol, 0, 1)        \

@@ -47,7 +47,7 @@ const abc = 'abc123';
     { 'begin': 10, 'end': 12 }
   ]);
 
-  str = str.removeTaint() + str;
+  str = str.untaint() + str;
   replaced = str.replace(/c1/, 'replaced'.taint('baz'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
