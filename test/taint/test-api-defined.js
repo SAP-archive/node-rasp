@@ -6,7 +6,7 @@ const assert = require('assert');
 assert.strictEqual(typeof ''.isTainted, 'function');
 assert.strictEqual(typeof ''.getTaint, 'function');
 assert.strictEqual(typeof ''.taint, 'function');
-assert.strictEqual(typeof ''.removeTaint, 'function');
+assert.strictEqual(typeof ''.untaint, 'function');
 
 // Check availability of process.taintVersion
 assert(process.taintVersion.match(/v[0-9]+\.[0-9]+\.[0-9]+/g));
