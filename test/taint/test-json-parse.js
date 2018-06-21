@@ -3,8 +3,8 @@ require('../common');
 const assert = require('assert');
 
 ((string) => {
-  const str1 = '{"foo":"bar"}'.setTaint('baz');
-  const str2 = '{"f' + 'oo":"b'.setTaint('baz') + 'ar"}';
+  const str1 = '{"foo":"bar"}'.taint('baz');
+  const str2 = '{"f' + 'oo":"b'.taint('baz') + 'ar"}';
   let parsed, key, value;
 
   parsed = JSON.parse(str1);

@@ -77,7 +77,7 @@ Handle<String> Factory::InternalizeString(Handle<String> string) {
   if (string->IsInternalizedString()) return string;
   //StringTaint taint = string->GetTaint();
   Handle<String> result = StringTable::LookupString(isolate(), string);
-  //result->SetTaint(taint);
+  //result->Taint(taint);
   return result;
 }
 
@@ -85,7 +85,7 @@ Handle<Name> Factory::InternalizeName(Handle<Name> name) {
   if (name->IsUniqueName()) return name;
   StringTaint taint = name->GetTaint();
   Handle<Name> result = StringTable::LookupString(isolate(), Handle<String>::cast(name));
-  name->SetTaint(taint);
+  name->Taint(taint);
   return result;
 }
 

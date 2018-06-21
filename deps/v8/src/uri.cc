@@ -207,7 +207,7 @@ MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
     ASSIGN_RETURN_ON_EXCEPTION(
       isolate, result, isolate->factory()->NewStringFromOneByte(Vector<const uint8_t>(
         one_byte_buffer.data(), static_cast<int>(one_byte_buffer.size()))), String);
-    //result->SetTaint(DecodeTaint(uri));
+    //result->Taint(DecodeTaint(uri));
     return result;
   }
 
@@ -221,7 +221,7 @@ MaybeHandle<String> Uri::Decode(Isolate* isolate, Handle<String> uri,
   CopyChars(result->GetChars(), one_byte_buffer.data(), one_byte_buffer.size());
   CopyChars(result->GetChars() + one_byte_buffer.size(), two_byte_buffer.data(),
             two_byte_buffer.size());
-  //result->SetTaint(DecodeTaint(uri));
+  //result->Taint(DecodeTaint(uri));
 
   return result;
 }
@@ -346,7 +346,7 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
   ASSIGN_RETURN_ON_EXCEPTION(
       isolate, result, isolate->factory()->NewStringFromOneByte(Vector<const uint8_t>(
         buffer.data(), static_cast<int>(buffer.size()))), String);
-  //result->SetTaint(taint);
+  //result->Taint(taint);
   return result;
 }
 

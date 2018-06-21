@@ -3,7 +3,7 @@ require('../common');
 const assert = require('assert');
 
 (() => {
-  const str = 'The morning is upon us.'.setTaint('bar');
+  const str = 'The morning is upon us.'.taint('bar');
   let slice;
 
   assert.strictEqual(str.isTainted(), true);
@@ -29,7 +29,7 @@ const assert = require('assert');
 
 (() => {
   const str =
-    'The ' + 'morning is '.setTaint('bar') + 'upon us.';
+    'The ' + 'morning is '.taint('bar') + 'upon us.';
   let slice;
 
   assert.strictEqual(str.isTainted(), true);
@@ -55,7 +55,7 @@ const assert = require('assert');
 
 (() => {
   const str =
-    'The ' + 'morning 😃.'.setTaint('foo') + 'upon 😃.';
+    'The ' + 'morning 😃.'.taint('foo') + 'upon 😃.';
   let slice;
 
   assert.strictEqual(str.isTainted(), true);

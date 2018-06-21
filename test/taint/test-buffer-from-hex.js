@@ -4,7 +4,7 @@ const assert = require('assert');
 
 // ASCII
 const strAscii = 'This string is not tainted!';
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 
 const strAsciiLen = strAscii.length;
 const strAsciiTaintLen = strAsciiTaint.length;
@@ -12,7 +12,7 @@ const strAsciiTaintLen = strAsciiTaint.length;
 // HEX
 const strHex = Buffer.from(strAscii, 'ascii').toString('hex');
 const strHexTaint = Buffer.from(strAsciiTaint, 'ascii').toString('hex')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 const strHexLen = Buffer.from(strAscii, 'ascii').toString('hex').length;
 const strHexTaintLen = Buffer.from(strAsciiTaint, 'ascii')
                                                 .toString('hex').length;
@@ -91,7 +91,7 @@ taintEnd = taintStart + strAsciiTaintLen * 2;
 assert.taintEqual(resultString, [{ 'begin': taintStart, 'end': taintEnd }]);
 
 // Concatenated hex string: Two different tainted string
-const buf05 = Buffer.from(strHex + strHexTaint.setTaint('different') +
+const buf05 = Buffer.from(strHex + strHexTaint.taint('different') +
                                   strHexTaint + strHex, 'hex');
 taintStart = bufHexLen;
 taintEnd = taintStart + bufHexTaintLen;

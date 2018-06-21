@@ -100,7 +100,7 @@ MaybeHandle<Object> JsonStringifier::Stringify(Handle<Object> object,
   if (result == SUCCESS) {
     Handle<String> result = builder_.Finish().ToHandleChecked();
     // TaintV8
-    result->SetTaint(resultTaint);
+    result->Taint(resultTaint);
     return result;
   }
   DCHECK(result == EXCEPTION);

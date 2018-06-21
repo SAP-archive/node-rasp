@@ -6,8 +6,8 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 ((string) => {
   let str =
-    string.setTaint('bar') +
-    string.toLowerCase().setTaint('bar');
+    string.taint('bar') +
+    string.toLowerCase().taint('bar');
   let matches;
 
   matches = str.match(/[A-E]/gi);
@@ -22,7 +22,7 @@ const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     assert.taintEqual(match, [{ 'begin': 0, 'end': 3 }]);
   });
 
-  str = string + string.toLowerCase().setTaint('bar');
+  str = string + string.toLowerCase().taint('bar');
   matches = str.match(/XYZabc/g);
   matches.forEach((match) => {
     assert.strictEqual(match.isTainted(), true);

@@ -12,7 +12,7 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.setTaint('bar'),
+  let str = string.taint('bar'),
     character;
 
   assert.strictEqual(str.isTainted(), true);
@@ -46,7 +46,7 @@ stringSet.forEach((string) => {
   assert.strictEqual(character.isTainted(), false);
   assert.taintEqual(character, []);
 
-  str = str + str.setTaint('foo') + str;
+  str = str + str.taint('foo') + str;
   character = str.charAt(2);
   assert.strictEqual(character.isTainted(), false);
   assert.taintEqual(character, []);

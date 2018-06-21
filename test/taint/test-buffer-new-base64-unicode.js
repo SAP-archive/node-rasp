@@ -4,7 +4,7 @@ const assert = require('assert');
 
 // UTF8
 const strUtf8 = '😃㻖';
-const strUtf8Taint = strUtf8.setTaint('abc');
+const strUtf8Taint = strUtf8.taint('abc');
 
 const strUtf8Len = Buffer.from(strUtf8, 'utf8').toString('utf8').length;
 const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -14,12 +14,12 @@ const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
 // BASE64 UNICODE
 const strBase64Unicode = Buffer.from(strUtf8, 'utf8').toString('base64');
 const strBase64UnicodeTaint = Buffer.from(strUtf8Taint, 'utf8')
-                                       .toString('base64').setTaint('abc');
+                                       .toString('base64').taint('abc');
 
 const strBase64UnicodeLen = Buffer.from(strUtf8, 'utf8')
                                        .toString('base64').length;
 const strBase64UnicodeTaintLen = Buffer.from(strUtf8Taint, 'utf8')
-                                .toString('base64').setTaint('abc').length;
+                                .toString('base64').taint('abc').length;
 
 const bufBase64UnicodeLen = Buffer.from(strBase64Unicode, 'base64').length;
 const bufBase64UnicodeTaintLen = Buffer.from(strBase64Unicode, 'base64')
@@ -104,7 +104,7 @@ taintEnd = taintStart + strUtf8TaintLen * 2;
 // assert.taintEqual(resultString, [{'begin': taintStart, 'end': taintEnd}]);
 
 // Test 46: Concatenated base64 string: Two different tainted string
-helpString = strUtf8 + strUtf8Taint + strUtf8Taint.setTaint('different');
+helpString = strUtf8 + strUtf8Taint + strUtf8Taint.taint('different');
 helpString = helpString + strUtf8;
 helpStringEncoded = Buffer.from(helpString, 'utf8').toString('base64');
 const buf46 = new Buffer(helpStringEncoded, 'base64');

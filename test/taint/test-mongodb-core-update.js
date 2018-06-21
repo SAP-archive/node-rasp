@@ -33,7 +33,7 @@ const _mongodb_core = require('../../lib/taint/_mongodb-core.js');
                          ['', { 'q': { 'foo': '123' } }]);
 
   const param2 = {};
-  param2['foo'.setTaint('bar')] = '123';
+  param2['foo'.taint('bar')] = '123';
   assert.deepStrictEqual(update('', { 'q': param2 }),
                          ['', { 'q': { 'foo': '123' } }]);
 
@@ -45,31 +45,31 @@ const _mongodb_core = require('../../lib/taint/_mongodb-core.js');
                          ['', { 'q': { 'bar': { '$ne': '123' } } }]);
 
   const selector2 = {};
-  selector2['$ne'.setTaint('bar')] = '123';
+  selector2['$ne'.taint('bar')] = '123';
   const param4 = {};
   param4.bar = selector2;
   assert.deepStrictEqual(update('', { 'q': param4 }),
                          ['', { 'q': { 'bar': '123' } }]);
 
   const selector3 = {};
-  selector3['$gt'.setTaint('bar')] = '123';
+  selector3['$gt'.taint('bar')] = '123';
   const param5 = {};
-  param5['foo'.setTaint('bar')] = '123';
+  param5['foo'.taint('bar')] = '123';
   param5.bar = selector3;
   assert.deepStrictEqual(update('', { 'q': param5 }),
                          ['', { 'q': { 'foo': '123', 'bar': '123' } }]);
 
   const selector4 = {};
-  selector4['$gt'.setTaint('bar')] = '123';
+  selector4['$gt'.taint('bar')] = '123';
   const param6 = {};
-  param6['foo'.setTaint('bar')] = '123';
+  param6['foo'.taint('bar')] = '123';
   param6.bar = selector4;
   assert.deepStrictEqual(update('', { 'q': param6 }),
                          ['', { 'q': { 'foo': '123', 'bar': '123' } }]);
 
   // Selector without property
   const selector5 = {};
-  selector5['$lt'.setTaint('bar')] = '123';
+  selector5['$lt'.taint('bar')] = '123';
   assert.deepStrictEqual(update('', { 'q': selector5 }),
                          ['', { 'q': '123' }]);
 

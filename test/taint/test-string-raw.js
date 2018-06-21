@@ -3,8 +3,8 @@ require('../common');
 const assert = require('assert');
 
 ((string) => {
-  const name1 = 'Bob'.setTaint('bar');
-  const name2 = 'A' + 'lic'.setTaint('bar') + 'e';
+  const name1 = 'Bob'.taint('bar');
+  const name2 = 'A' + 'lic'.taint('bar') + 'e';
   let raw;
 
   raw = String.raw`Hi ${name1}`;
@@ -15,7 +15,7 @@ const assert = require('assert');
   assert.strictEqual(raw.isTainted(), true);
   assert.taintEqual(raw, [{ 'begin': 5, 'end': 8 }]);
 
-  raw = String.raw({ raw: name2 }, 0, 'baz'.setTaint('foo'), 2);
+  raw = String.raw({ raw: name2 }, 0, 'baz'.taint('foo'), 2);
   assert.strictEqual(raw.isTainted(), true);
   assert.taintEqual(raw, [
     { 'begin': 2, 'end': 3 },

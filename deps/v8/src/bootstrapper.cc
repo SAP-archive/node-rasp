@@ -2048,8 +2048,8 @@ void Genesis::InitializeGlobal(Handle<JSGlobalObject> global_object,
     SimpleInstallFunction(prototype, "getTaint",
                           Builtins::kStringPrototypeGetTaint, 0, true);
     
-    SimpleInstallFunction(prototype, "setTaint",
-                          Builtins::kStringPrototypeSetTaint, 1, true);
+    SimpleInstallFunction(prototype, "taint",
+                          Builtins::kStringPrototypeTaint, 1, true);
 
     SimpleInstallFunction(prototype, "removeTaint",
                           Builtins::kStringPrototypeRemoveTaint, 0, true);

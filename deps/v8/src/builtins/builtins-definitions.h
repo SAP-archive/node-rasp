@@ -1075,7 +1075,7 @@ namespace internal {
                                                                                \
   TFJ(StringPrototypeIsTainted, 0)                                             \
   TFJ(StringPrototypeGetTaint, 0)                                              \
-  TFJ(StringPrototypeSetTaint, 1, kTaint)                                      \
+  TFJ(StringPrototypeTaint, 1, kTaint)                                      \
   TFJ(StringPrototypeRemoveTaint, 0)                                           \
                                                                                \
   /* StringIterator */                                                         \
