@@ -138,7 +138,7 @@ static void FinalizeTaintedString(const v8::WeakCallbackInfo<void>& data) {
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
 }
 
-void Name::SetTaint(StringTaint value){
+void Name::Taint(StringTaint value){
   if (!value.hasTaint()) {
     return ClearTaint();
   }

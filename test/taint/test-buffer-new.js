@@ -4,13 +4,13 @@ const assert = require('assert');
 
 // ASCII
 const strAscii = 'This string is not tainted!';
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 const strAsciiLen = strAscii.length;
 const strAsciiTaintLen = strAsciiTaint.length;
 
 // UTF8
 const strUtf8 = '😃㻖';
-const strUtf8Taint = strUtf8.setTaint('abc');
+const strUtf8Taint = strUtf8.taint('abc');
 
 const strUtf8Len = Buffer.from(strUtf8, 'utf8').toString('utf8').length;
 const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -22,7 +22,7 @@ const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
 // HEX
 const strHex = Buffer.from(strAscii, 'ascii').toString('hex');
 const strHexTaint = Buffer.from(strAsciiTaint, 'ascii').toString('hex')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 const strHexLen = Buffer.from(strAscii, 'ascii').toString('hex').length;
 const strHexTaintLen = Buffer.from(strAsciiTaint, 'ascii')
                                                 .toString('hex').length;
@@ -32,7 +32,7 @@ const bufHexTaintLen = Buffer.from(strHexTaint, 'hex').length;
 // HEX UNICODE
 const strHexUnicode = Buffer.from(strUtf8, 'utf8').toString('hex');
 const strHexUnicodeTaint = Buffer.from(strUtf8Taint, 'utf8').toString('hex')
-                                                            .setTaint('abc');
+                                                            .taint('abc');
 
 const strHexUnicodeLen = Buffer.from(strUtf8, 'utf8').toString('hex').length;
 const strHexUnicodeTaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -44,12 +44,12 @@ const bufHexUnicodeTaintLen = Buffer.from(strHexUnicodeTaint, 'hex').length;
 // BASE64
 const strBase64 = Buffer.from(strAscii, 'ascii').toString('base64');
 const strBase64Taint = Buffer.from(strAsciiTaint, 'ascii').toString('base64')
-                                                          .setTaint('abc');
+                                                          .taint('abc');
 
 const strBase64Len = Buffer.from(strAscii, 'ascii').toString('base64')
                                                                    .length;
 const strBase64TaintLen = Buffer.from(strAsciiTaint, 'ascii')
-                                .toString('base64').setTaint('abc').length;
+                                .toString('base64').taint('abc').length;
 
 const bufBase64Len = Buffer.from(strBase64, 'base64').length;
 const bufBase64TaintLen = Buffer.from(strBase64Taint, 'base64').length;
@@ -57,12 +57,12 @@ const bufBase64TaintLen = Buffer.from(strBase64Taint, 'base64').length;
 // BASE64 UNICODE
 const strBase64Unicode = Buffer.from(strUtf8, 'utf8').toString('base64');
 const strBase64UnicodeTaint = Buffer.from(strUtf8Taint, 'utf8')
-                                       .toString('base64').setTaint('abc');
+                                       .toString('base64').taint('abc');
 
 const strBase64UnicodeLen = Buffer.from(strUtf8, 'utf8')
                                        .toString('base64').length;
 const strBase64UnicodeTaintLen = Buffer.from(strUtf8Taint, 'utf8')
-                                .toString('base64').setTaint('abc').length;
+                                .toString('base64').taint('abc').length;
 
 const bufBase64UnicodeLen = Buffer.from(strBase64Unicode, 'base64').length;
 const bufBase64UnicodeTaintLen = Buffer.from(strBase64Unicode, 'base64')
@@ -71,7 +71,7 @@ const bufBase64UnicodeTaintLen = Buffer.from(strBase64Unicode, 'base64')
 // UTF16LE
 const strUtf16 = Buffer.from(strUtf8, 'utf8').toString('utf16le');
 const strUtf16Taint = Buffer.from(strUtf8Taint, 'utf8').toString('utf16le')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 let resultString;
 let taintEnd;
 let taintEnd2;
@@ -201,7 +201,7 @@ taintEnd = taintStart + strAsciiTaintLen * 2;
 assert.taintEqual(resultString, [{ 'begin': taintStart, 'end': taintEnd }]);
 
 // Test 28: Concatenated hex string: Two different tainted string
-const buf28 = new Buffer(strHex + strHexTaint.setTaint('different') +
+const buf28 = new Buffer(strHex + strHexTaint.taint('different') +
                                   strHexTaint + strHex, 'hex');
 taintStart = bufHexLen;
 taintEnd = taintStart + bufHexTaintLen;
@@ -348,7 +348,7 @@ taintEnd = taintStart + strUtf8TaintLen * 2;
 
 // Test 34: Concatenated hex string: Two different tainted string
 const buf34 = new Buffer(strHexUnicode + strHexUnicodeTaint
-             .setTaint('different') + strHexUnicodeTaint + strHexUnicode,
+             .taint('different') + strHexUnicodeTaint + strHexUnicode,
                          'hex');
 taintStart = bufHexUnicodeLen;
 taintEnd = taintStart + bufHexUnicodeTaintLen;
@@ -507,7 +507,7 @@ taintEnd = taintStart + strAsciiTaintLen * 2;
 // assert.taintEqual(resultString, [{'begin': taintStart, 'end': taintEnd}]);
 
 // Test 40: Concatenated base64 string: Two different tainted string
-helpString = strAscii + strAsciiTaint + strAsciiTaint.setTaint('different');
+helpString = strAscii + strAsciiTaint + strAsciiTaint.taint('different');
 helpString = helpString + strAscii;
 helpStringEncoded = Buffer.from(helpString, 'ascii').toString('base64');
 const buf40 = new Buffer(helpStringEncoded, 'base64');
@@ -678,7 +678,7 @@ taintEnd = taintStart + strUtf8TaintLen * 2;
 // assert.taintEqual(resultString, [{'begin': taintStart, 'end': taintEnd}]);
 
 // Test 46: Concatenated base64 string: Two different tainted string
-helpString = strUtf8 + strUtf8Taint + strUtf8Taint.setTaint('different');
+helpString = strUtf8 + strUtf8Taint + strUtf8Taint.taint('different');
 helpString = helpString + strUtf8;
 helpStringEncoded = Buffer.from(helpString, 'utf8').toString('base64');
 const buf46 = new Buffer(helpStringEncoded, 'base64');

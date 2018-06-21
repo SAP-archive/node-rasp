@@ -10,23 +10,23 @@ const str4 = '<script>';
 (() => {
   let escaped;
 
-  escaped = escape(str1.setTaint('foo'));
+  escaped = escape(str1.taint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [{ 'begin': 0, 'end': 6 }]);
 
-  escaped = escape(str2.setTaint('foo'));
+  escaped = escape(str2.taint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [{ 'begin': 0, 'end': 9 }]);
 
-  escaped = escape(str3.setTaint('foo'));
+  escaped = escape(str3.taint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [{ 'begin': 0, 'end': 6 }]);
 
-  escaped = escape(str4.setTaint('foo'));
+  escaped = escape(str4.taint('foo'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [{ 'begin': 0, 'end': 12 }]);
 
-  escaped = escape(str2 + str4.setTaint('foo') + str3 + str4.setTaint('baz'));
+  escaped = escape(str2 + str4.taint('foo') + str3 + str4.taint('baz'));
   assert.strictEqual(escaped.isTainted(), true);
   assert.taintEqual(escaped, [
     { 'begin': 9, 'end': 21 },

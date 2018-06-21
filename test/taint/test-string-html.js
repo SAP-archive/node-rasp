@@ -3,15 +3,15 @@ require('../common');
 const assert = require('assert');
 
 ((string) => {
-  const str1 = 'abc123'.setTaint('bar');
-  const str2 = 'a' + 'bc1'.setTaint('bar') + '23';
+  const str1 = 'abc123'.taint('bar');
+  const str2 = 'a' + 'bc1'.taint('bar') + '23';
   let html;
 
   html = str1.anchor();
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [{ 'begin': 20, 'end': 26 }]);
 
-  html = str1.anchor('foo'.setTaint('baz'));
+  html = str1.anchor('foo'.taint('baz'));
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [
     { 'begin': 9, 'end': 12 },
@@ -22,7 +22,7 @@ const assert = require('assert');
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [{ 'begin': 21, 'end': 24 }]);
 
-  html = str2.anchor('foo'.setTaint('baz'));
+  html = str2.anchor('foo'.taint('baz'));
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [
     { 'begin': 9, 'end': 12 },
@@ -33,7 +33,7 @@ const assert = require('assert');
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [{ 'begin': 20, 'end': 26 }]);
 
-  html = str1.link('foo'.setTaint('baz'));
+  html = str1.link('foo'.taint('baz'));
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [
     { 'begin': 9, 'end': 12 },
@@ -44,7 +44,7 @@ const assert = require('assert');
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [{ 'begin': 21, 'end': 24 }]);
 
-  html = str2.link('foo'.setTaint('baz'));
+  html = str2.link('foo'.taint('baz'));
   assert.strictEqual(html.isTainted(), true);
   assert.taintEqual(html, [
     { 'begin': 9, 'end': 12 },

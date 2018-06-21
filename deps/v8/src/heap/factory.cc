@@ -1068,7 +1068,7 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
     uint16_t c1 = left->Get(0);
     uint16_t c2 = right->Get(0);
     Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
-    result->SetTaint(taint);
+    result->Taint(taint);
     return result;
   }
 
@@ -1118,7 +1118,7 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
                 : Handle<SeqOneByteString>::cast(right)->GetChars();
       for (int i = 0; i < right_length; i++) *dest++ = src[i];
 
-      result->SetTaint(taint);
+      result->Taint(taint);
       return result;
     }
 
@@ -1128,13 +1128,13 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
                : ConcatStringContent<uc16>(
                      NewRawTwoByteString(length).ToHandleChecked(), left,
                      right);
-    result->SetTaint(taint);
+    result->Taint(taint);
     return result;
   }
 
   bool one_byte = (is_one_byte || is_one_byte_data_in_two_byte_string);
   Handle<String> result = NewConsString(left, right, length, one_byte);
-  result->SetTaint(taint);
+  result->Taint(taint);
   return result;
 }
 

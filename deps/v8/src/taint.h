@@ -542,9 +542,9 @@ class TaintableString {
     StringTaint& Taint() { return taint_; }
 
     // Set the taint information directly.
-    void setTaint(const StringTaint& new_taint) { taint_ = new_taint; }
+    void taint(const StringTaint& new_taint) { taint_ = new_taint; }
     void AssignTaint(const StringTaint& new_taint) { taint_ = new_taint; }
-    void setTaint(StringTaint&& new_taint) { taint_ = new_taint; }
+    void taint(StringTaint&& new_taint) { taint_ = new_taint; }
     void AssignTaint(StringTaint&& new_taint) { taint_ = new_taint; }
 
     // Remove all taint information associated with this string.

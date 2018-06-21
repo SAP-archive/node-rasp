@@ -4,12 +4,12 @@ const assert = require('assert');
 
 // UTF8
 const strUtf8 = '😃㻖';
-const strUtf8Taint = strUtf8.setTaint('abc');
+const strUtf8Taint = strUtf8.taint('abc');
 
 // UTF16LE
 const strUtf16 = Buffer.from(strUtf8, 'utf8').toString('utf16le');
 const strUtf16Taint = Buffer.from(strUtf8Taint, 'utf8').toString('utf16le')
-                                                       .setTaint('abc');
+                                                       .taint('abc');
 
 const strUtf16Len = Buffer.from(strUtf8, 'utf8').toString('utf16le').length;
 const strUtf16TaintLen = Buffer.from(strUtf8Taint, 'utf8')
@@ -66,7 +66,7 @@ assert.strictEqual(resultString.isTainted(), true);
 assert.taintEqual(resultString, [{ 'begin': taintStart, 'end': taintEnd }]);
 
 // Concatenated Utf16 string: Two different tainted strings
-const buf05 = new Buffer(strUtf16 + strUtf16Taint.setTaint('different') +
+const buf05 = new Buffer(strUtf16 + strUtf16Taint.taint('different') +
                                    strUtf16Taint + strUtf16, 'utf16le');
 taintStart = bufUtf16Len;
 taintEnd = taintStart + bufUtf16TaintLen;

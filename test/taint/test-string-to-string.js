@@ -12,13 +12,13 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.setTaint('bar');
+  let str = string.taint('bar');
   let result = str.toString();
 
   assert.strictEqual(result.isTainted(), true);
   assert.taintEqual(result, [{ 'begin': 0, 'end': len }]);
 
-  str = string + str.setTaint('foo');
+  str = string + str.taint('foo');
   result = str.toString();
   assert.strictEqual(result.isTainted(), true);
   assert.taintEqual(result, [{ 'begin': len, 'end': len + len }]);

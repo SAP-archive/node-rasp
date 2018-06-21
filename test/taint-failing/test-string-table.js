@@ -2,7 +2,7 @@
 require('../common');
 const assert = require('assert');
 
-const str1 = 'abc'.setTaint('foo');
+const str1 = 'abc'.taint('foo');
 const str2 = 'cba';
 
 const char1 = str1[1];

@@ -3,15 +3,15 @@ require('../common');
 const assert = require('assert');
 
 const str1 = 'This is a tainted string!';
-const str1Taint = str1.setTaint('baz');
+const str1Taint = str1.taint('baz');
 
 const str2 = 'This is not a tainted string!';
 
 const str3 = '😃!!!';
-const str3Taint = str3.setTaint('abc');
+const str3Taint = str3.taint('abc');
 
 const str4 = '7468697320697320612074c3a97374';
-const str4Taint = str4.setTaint('abc');
+const str4Taint = str4.taint('abc');
 
 let resultString;
 let taintEnd;
@@ -29,7 +29,7 @@ assert.strictEqual(resultString.isTainted(), true);
 assert.taintEqual(resultString, [{ 'begin': len2, 'end': taintEnd }]);
 
 // Test 14: Allocate buffer with tainted hex literal
-const buf14 = Buffer.alloc(11, 'aGVsbG8gd29ybGQ='.setTaint('abc'), 'base64');
+const buf14 = Buffer.alloc(11, 'aGVsbG8gd29ybGQ='.taint('abc'), 'base64');
 taintEnd = 11;
 assert.taintEqual(buf14, [{ 'begin': 0, 'end': taintEnd }]);
 resultString = buf14.toString();

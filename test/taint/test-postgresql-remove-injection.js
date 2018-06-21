@@ -3,17 +3,17 @@ require('../common');
 const { deepStrictEqual } = require('assert');
 const { removeAllInjections } = require('../../lib/taint/pg_lexer.js');
 
-const tId = 'foo'.setTaint('bar');
-const tId2 = 'baz'.setTaint('bar');
-const literalInj = '\' OR 1=1;--'.setTaint('bar');
-const idInj = ' OR 1=1;--'.setTaint('bar');
-const multiIdInj = 'foo, evil'.setTaint('bar');
-const commentInj = '--'.setTaint('bar');
-const spaceCommentInj = ' --'.setTaint('bar');
-const cCommentStart = '/* '.setTaint('bar');
-const cCommentEnd = '*/ '.setTaint('bar');
-const piggyBackInj = '; DROP foo-- '.setTaint('bar');
-const funcInj = 'CHaR(75)'.setTaint('bar');
+const tId = 'foo'.taint('bar');
+const tId2 = 'baz'.taint('bar');
+const literalInj = '\' OR 1=1;--'.taint('bar');
+const idInj = ' OR 1=1;--'.taint('bar');
+const multiIdInj = 'foo, evil'.taint('bar');
+const commentInj = '--'.taint('bar');
+const spaceCommentInj = ' --'.taint('bar');
+const cCommentStart = '/* '.taint('bar');
+const cCommentEnd = '*/ '.taint('bar');
+const piggyBackInj = '; DROP foo-- '.taint('bar');
+const funcInj = 'CHaR(75)'.taint('bar');
 
 const q0 = 'SELECT * FROM table WHERE foo=\'bar\';';
 deepStrictEqual(removeAllInjections(q0), { injected: false });
@@ -123,7 +123,7 @@ deepStrictEqual(removeAllInjections(q59),
                 { injected: true, query: r59, vectors: [funcInj] });
 
 /* Complete query injection */
-const q100 = 'SELECT * FROM table WHERE foo=abc OR f=a;'.setTaint('bar');
+const q100 = 'SELECT * FROM table WHERE foo=abc OR f=a;'.taint('bar');
 const r100 = '';
 deepStrictEqual(removeAllInjections(q100),
                 { injected: true, query: r100, vectors: [q100] });

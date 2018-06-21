@@ -3,13 +3,13 @@ require('../common');
 const assert = require('assert');
 
 // ASCII
-const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 const strAsciiTaintLen = strAsciiTaint.length;
 const bufAsciiTaintLen = Buffer.from(strAsciiTaint).length;
 
 // UTF8
 const strUtf8 = '😃㻖';
-const strUtf8Taint = strUtf8.setTaint('abc');
+const strUtf8Taint = strUtf8.taint('abc');
 const strUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8')
                                                .toString('utf8').length;
 const bufUtf8TaintLen = Buffer.from(strUtf8Taint, 'utf8').length;

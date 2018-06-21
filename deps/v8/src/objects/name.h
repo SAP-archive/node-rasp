@@ -78,7 +78,7 @@ class Name : public HeapObject {
 
   // TaintV8
   inline const StringTaint& GetTaint();
-  inline void SetTaint(StringTaint value);
+  inline void Taint(StringTaint value);
   inline void ClearTaint();
   inline void InitializeTaint();
 

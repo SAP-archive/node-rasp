@@ -4,14 +4,14 @@ const assert = require('assert');
 
 // ASCII
 // const strAscii = 'This is not a tainted string!';
-// const strAsciiTaint = 'This is a tainted string!'.setTaint('baz');
+// const strAsciiTaint = 'This is a tainted string!'.taint('baz');
 // const strAsciiTaintLen = strAsciiTaint.length;
 // const bufAsciiTaintLen = Buffer.from(strAsciiTaint).length;
 
 let resultString;
 
 // Concat two simple examples
-const buf01_a = Buffer.from('test'.setTaint());
+const buf01_a = Buffer.from('test'.taint());
 const buf01_b = Buffer.from('abcd');
 const buf01 = Buffer.concat([buf01_a, buf01_b], 8);
 assert.taintEqual(buf01, [{ 'begin': 0, 'end': 4 }]);

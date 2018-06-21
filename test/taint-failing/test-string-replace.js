@@ -5,7 +5,7 @@ const assert = require('assert');
 const abc = 'abc123';
 
 ((string) => {
-  let str = string.setTaint('bar');
+  let str = string.taint('bar');
   let replaced;
 
   replaced = str.replace('123', '321');
@@ -24,14 +24,14 @@ const abc = 'abc123';
   assert.strictEqual(replaced.isTainted(), false);
   assert.taintEqual(replaced, []);
 
-  replaced = str.replace('abc', 'ABC'.setTaint('bar'));
+  replaced = str.replace('abc', 'ABC'.taint('bar'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
     { 'begin': 0, 'end': 3 },
     { 'begin': 3, 'end': 6 }
   ]);
 
-  replaced = str.replace('bc12', 'replaced'.setTaint('bar'));
+  replaced = str.replace('bc12', 'replaced'.taint('bar'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
     { 'begin': 0, 'end': 1 },
@@ -39,7 +39,7 @@ const abc = 'abc123';
     { 'begin': 9, 'end': 10 }
   ]);
 
-  replaced = str.replace('c1', 'replaced'.setTaint('baz'));
+  replaced = str.replace('c1', 'replaced'.taint('baz'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
     { 'begin': 0, 'end': 2 },
@@ -48,14 +48,14 @@ const abc = 'abc123';
   ]);
 
   str = str.removeTaint() + str;
-  replaced = str.replace(/c1/, 'replaced'.setTaint('baz'));
+  replaced = str.replace(/c1/, 'replaced'.taint('baz'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
     { 'begin': 2, 'end': 10 },
     { 'begin': 12, 'end': 18 }
   ]);
 
-  replaced = str.replace(/c1/g, 'replaced'.setTaint('baz'));
+  replaced = str.replace(/c1/g, 'replaced'.taint('baz'));
   assert.strictEqual(replaced.isTainted(), true);
   assert.taintEqual(replaced, [
     { 'begin': 2, 'end': 10 },

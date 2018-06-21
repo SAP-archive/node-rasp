@@ -9,7 +9,7 @@ const stringSet = [stringASCII_3, stringUTF8_3];
 
 stringSet.forEach((string) => {
   const len = string.length;
-  const str = string.setTaint('bar');
+  const str = string.taint('bar');
 
   let trimmed = str.trim();
   assert.strictEqual(trimmed.isTainted(), true);

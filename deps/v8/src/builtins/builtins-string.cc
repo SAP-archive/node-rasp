@@ -489,7 +489,7 @@ BUILTIN(StringPrototypeToLocaleLowerCase) {
   Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_lower_mapping());
 
   // TaintV8
-  String::cast(result)->SetTaint(string->GetTaint());
+  String::cast(result)->Taint(string->GetTaint());
   return result;
 }
 
@@ -499,7 +499,7 @@ BUILTIN(StringPrototypeToLocaleUpperCase) {
   Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_upper_mapping());
 
   // TaintV8
-  String::cast(result)->SetTaint(string->GetTaint());
+  String::cast(result)->Taint(string->GetTaint());
   return result;
 }
 
@@ -509,7 +509,7 @@ BUILTIN(StringPrototypeToLowerCase) {
   Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_lower_mapping());
   
   // TaintV8
-  String::cast(result)->SetTaint(string->GetTaint());
+  String::cast(result)->Taint(string->GetTaint());
   return result;
 }
 
@@ -519,7 +519,7 @@ BUILTIN(StringPrototypeToUpperCase) {
   Object* result = ConvertCase(string, isolate, isolate->runtime_state()->to_upper_mapping());
 
   // TaintV8
-  String::cast(result)->SetTaint(string->GetTaint());
+  String::cast(result)->Taint(string->GetTaint());
   return result;
 }
 #endif  // !V8_INTL_SUPPORT

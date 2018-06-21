@@ -4201,7 +4201,7 @@ class StringWrapperElementsAccessor
       // TaintV8
       Handle<String> result = isolate->factory()->
         LookupSingleCharacterStringFromCode(String::Flatten(string)->Get(entry));
-      result->SetTaint(string->GetTaint().subtaint(entry, entry + 1));
+      result->Taint(string->GetTaint().subtaint(entry, entry + 1));
       return result;
     }
     return BackingStoreAccessor::GetImpl(isolate, holder->elements(),
