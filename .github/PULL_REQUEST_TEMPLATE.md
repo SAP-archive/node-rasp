@@ -1,16 +1,12 @@
-<!--
-Thank you for your pull request. Please provide a description above and review
-the requirements below.
+<!-- Please provide a description and review the requirements below -->
 
-Bug fixes and new features should include tests and possibly benchmarks.
-
-Contributors guide: https://github.com/nodejs/node/blob/master/CONTRIBUTING.md
--->
+##### Description
+<!-- Description goes here -->
 
 ##### Checklist
 <!-- Remove items that do not apply. For completed items, change [ ] to [x]. -->
 
 - [ ] `make -j4 test` (UNIX), or `vcbuild test` (Windows) passes
-- [ ] tests and/or benchmarks are included
-- [ ] documentation is changed or added
-- [ ] commit message follows [commit guidelines](https://github.com/nodejs/node/blob/master/doc/guides/contributing/pull-requests.md#commit-message-guidelines)
+- [ ] `make -j4 test-taint` (UNIX) or `vcbuild test-taint` (Windows) passes
+- [ ] Documentation is changed or added in [GitHub Wiki](https://github.wdf.sap.corp/security-services/taint-node/wiki)
+- [ ] Taint API version updated in ``src/node_version.h`` and ``README.md`` according to semantic versioning rules
