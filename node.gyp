@@ -76,6 +76,8 @@
       'lib/string_decoder.js',
       'lib/sys.js',
       'lib/_taint_buffer_util.js',
+      'lib/_taint_buffer.js',
+      'lib/internal/buffer_util.js',
       'lib/timers.js',
       'lib/tls.js',
       'lib/_tls_common.js',
