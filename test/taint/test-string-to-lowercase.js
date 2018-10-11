@@ -3,11 +3,12 @@ require('../common');
 const assert = require('assert');
 
 const stringASCII_3 = 'foo';
+const stringASCII_4 = 'Fooo';
 const stringUTF8_3 = '😃!';
 const stringASCII_300 = 'foo'.repeat(100);
 const stringUTF8_300 = '😃!'.repeat(100);
 
-const stringSet = [stringASCII_3, stringUTF8_3,
+const stringSet = [stringASCII_3, stringASCII_4, stringUTF8_3,
                    stringASCII_300, stringUTF8_300];
 
 stringSet.forEach((string) => {
