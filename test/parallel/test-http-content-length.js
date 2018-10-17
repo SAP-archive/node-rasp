@@ -24,6 +24,7 @@ const countdown = new Countdown(3, () => server.close());
 
 const server = http.createServer(function(req, res) {
   res.removeHeader('Date');
+  res.setSecurityHeaders({ 'addHeaders': false });
 
   switch (req.url.substr(1)) {
     case 'multiple-writes':
@@ -54,6 +55,7 @@ server.listen(0, function() {
     method: 'POST',
     path: '/multiple-writes'
   });
+  req.setSecurityHeaders({ 'addHeaders': false });
   req.removeHeader('Date');
   req.removeHeader('Host');
   req.write('hello ');
@@ -67,6 +69,7 @@ server.listen(0, function() {
     method: 'POST',
     path: '/end-with-data'
   });
+  req.setSecurityHeaders({ 'addHeaders': false });
   req.removeHeader('Date');
   req.removeHeader('Host');
   req.end('hello world');
@@ -79,6 +82,7 @@ server.listen(0, function() {
     method: 'POST',
     path: '/empty'
   });
+  req.setSecurityHeaders({ 'addHeaders': false });
   req.removeHeader('Date');
   req.removeHeader('Host');
   req.end();

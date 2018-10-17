@@ -66,9 +66,12 @@ const server = http.createServer(common.mustCall((req, res) => {
 
 server.listen(0, common.mustCall(() => {
   expectedMethods.forEach((method) => {
-    http.request({
+    const req = http.request({
       method: method,
       port: server.address().port
-    }).end();
+    });
+
+    req.setSecurityHeaders({ 'addHeaders': false });
+    req.end();
   });
 }));
