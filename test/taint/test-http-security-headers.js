@@ -3,85 +3,192 @@ require('../common');
 const assert = require('assert');
 const net = require('net');
 const http = require('http');
-const url = require('url');
-const qs = require('querystring');
 
-const response1 = 'HTTP/1.1 200 OK\r\n' +
-  'Connection: keep-alive\r\n' +
-  'Content-Length: 0\r\n\r\n';
+const firstLine = 'HTTP/1.1 200 OK\r\n';
 
-let request_number = 0;
+const headers = 'Connection: keep-alive\r\n' +
+  'Content-Length: 0\r\n';
+
+const response1 = firstLine + headers + '\r\n';
+
+const response2 = firstLine +
+  'Content-Type: text/plain\r\n' +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Referrer-Policy: no-referrer\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  'X-DNS-Prefatch-Control: off\r\n' +
+  'X-Permitted-Cross-Domain-Policies: none\r\n' +
+  headers + '\r\n';
+
+const response3 = firstLine +
+  'Content-Type: text/html\r\n' +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Referrer-Policy: no-referrer\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  'X-DNS-Prefatch-Control: off\r\n' +
+  'X-Permitted-Cross-Domain-Policies: none\r\n' +
+  'Content-Security-Policy: script-src self; object-src self\r\n' +
+  'X-Download-Options: noopen\r\n' +
+  'X-Frame-Options: deny\r\n' +
+  'X-XSS-Protection: 1; mode=block\r\n' +
+  headers + '\r\n';
+
+const response4 = firstLine +
+  'Referrer-Policy: origin\r\n' +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  'X-DNS-Prefatch-Control: off\r\n' +
+  'X-Permitted-Cross-Domain-Policies: none\r\n' +
+  headers + '\r\n';
+
+const response5 = firstLine +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Referrer-Policy: no-referrer\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  'X-DNS-Prefatch-Control: off\r\n' +
+  'X-Permitted-Cross-Domain-Policies: none\r\n' +
+  headers + '\r\n';
+
+const response6 = firstLine +
+  'X-Foo: bar\r\n' +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Referrer-Policy: no-referrer\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  'X-DNS-Prefatch-Control: off\r\n' +
+  'X-Permitted-Cross-Domain-Policies: none\r\n' +
+  headers + '\r\n';
+
+const response7 = firstLine +
+  'Expect-CT: max-age=86400, enforce\r\n' +
+  'X-Content-Type-Options: nosniff\r\n' +
+  headers + '\r\n';
+
 let requests_sent = 0;
-let server_response = '';
-let client_got_eof = false;
+let requests_received = 0;
 
 const server = http.createServer(function(req, res) {
-  res.id = request_number;
-  req.id = request_number++;
 
   // Deactivate Security Headers
-  if (req.id === 0) {
-    res.setSecurityHeaders({'addHeaders': false});
+  if (requests_received === 0) {
+    res.setSecurityHeaders({ 'addHeaders': false });
   }
 
   // Default Security Headers
-  if (req.id >= 1 && req.id <= 5) {
-    res.setSecurityHeaders({'addHeaders': true});
+  if (requests_received >= 1 && requests_received <= 5) {
+    res.setSecurityHeaders({ 'addHeaders': true });
+  }
+
+  // Content-Type text/plain
+  if (requests_received === 1) {
+    res.setHeader('Content-Type', 'text/plain');
+  }
+
+  // Content-Type text/html
+  if (requests_received === 2) {
+    res.setHeader('Content-Type', 'text/html');
+  }
+
+  if (requests_received === 3) {
+    res.setHeader('Referrer-Policy', 'origin');
+  }
+
+  if (requests_received === 4) {
+    res.setHeader('X-Powered-By', 'Taint-Node');
+  }
+
+  if (requests_received === 5) {
+    res.setHeader('X-Foo', 'bar');
   }
 
   // Specific Security Headers
-  if (req.id === 6) {
+  if (requests_received === 6) {
     res.setSecurityHeaders({ 'addHeaders': true,
-                                  'headers':
-                                  { 'x-powered-by': false,
-                                    'expect-ct': true,
-                                    'strict-transport-security': false,
-                                    'referrer-policy': false,
-                                    'x-dns-prefatch-control': false,
-                                    'x-permitted-cross-domain-policies': false,
-                                    'content-type': false,
-                                    'content-security-policy': false,
-                                    'x-download-options': false,
-                                    'x-frame-options': false,
-                                    'x-xss-protection': true,
-                                    'feature-policy': false,
-                                    'public-key-pins': false,
-                                    'cache-control': false
-                                  }
-                                }
+                             'headers':
+                             { 'x-powered-by': false,
+                               'expect-ct': true,
+                               'strict-transport-security': false,
+                               'referrer-policy': false,
+                               'x-dns-prefatch-control': false,
+                               'x-permitted-cross-domain-policies': false,
+                               'x-content-type-options': true,
+                               'content-security-policy': false,
+                               'x-download-options': false,
+                               'x-frame-options': false,
+                               'x-xss-protection': true,
+                               'feature-policy': false,
+                               'public-key-pins': false,
+                               'cache-control': false
+                             }
+    }
     );
-    //this.close();
+    this.close();
   }
- 
-  res.sendDate = false; 
+
+  res.sendDate = false;
   res.end();
-  this.close();
+  requests_received += 1;
 });
 
 server.listen(0);
 
 server.on('listening', function() {
-  console.log('Server listens');
   const c = net.createConnection(this.address().port);
   c.setEncoding('utf8');
-  
-  // Deactivated Security Headers
+
   c.on('connect', function() {
-    console.log('Connect');
-    c.write('GET / HTTP/1.1\r\nX-X: foo\r\n\r\n');
+    c.write('GET / HTTP/1.1\r\n\r\n');
     requests_sent += 1;
   });
 
   c.on('data', function(chunk) {
-    console.log('data');
-    console.log('requests_sent: ' + requests_sent);
-    server_response += chunk;
+    const server_response = chunk;
+    console.log('Chunk: ' + chunk);
 
-     if (requests_sent === 1) {
-      console.log(server_response);
+    // Deactivated Security Headers
+    if (requests_sent === 1) {
       assert.strictEqual(server_response, response1);
-      c.end();
     }
+
+    // Default Security Headers (non-http)
+    if (requests_sent === 2) {
+      assert.strictEqual(server_response, response2);
+    }
+
+    // Default Security Headers (http)
+    if (requests_sent === 3) {
+      assert.strictEqual(server_response, response3);
+    }
+
+    // Do not overwrite exisitng security headers
+    if (requests_sent === 4) {
+      assert.strictEqual(server_response, response4);
+    }
+
+    // Remove powered-by header
+    if (requests_sent === 5) {
+      assert.strictEqual(server_response, response5);
+    }
+
+    // Keep other headers
+    if (requests_sent === 6) {
+      assert.strictEqual(server_response, response6);
+    }
+
+    // Sepcific set of security headers
+    if (requests_sent === 7) {
+      assert.strictEqual(server_response, response7);
+
+      c.end();
+      return;
+    }
+
+    c.write('GET / HTTP/1.1\r\n\r\n');
+    requests_sent += 1;
   });
 
   c.on('end', function() {
@@ -91,17 +198,4 @@ server.on('listening', function() {
   c.on('close', function() {
 
   });
-
-   // Default Security Headers (non-http)
-
-  // Default Security Headers (http)
-
-  // Do not overwrite existing security headers
-
-  // Keep other headers
-
-  // Handle implicit headers
-
-
-  // Set specific set of security headers
 });
