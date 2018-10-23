@@ -68,6 +68,8 @@ const response7 = firstLine +
   'X-Content-Type-Options: nosniff\r\n' +
   headers + '\r\n';
 
+const response8 = response7;
+
 let requests_sent = 0;
 let requests_received = 0;
 
@@ -78,13 +80,14 @@ const server = http.createServer(function(req, res) {
     res.setSecurityHeaders({ 'addHeaders': false });
   }
 
-  // Default Security Headers
+  /*// Default Security Headers
   if (requests_received >= 1 && requests_received <= 5) {
     res.setSecurityHeaders({ 'addHeaders': true });
-  }
+  }*/
 
   // Content-Type text/plain
   if (requests_received === 1) {
+    res.setSecurityHeaders({ 'addHeaders': true });
     res.setHeader('Content-Type', 'text/plain');
   }
 
@@ -124,10 +127,12 @@ const server = http.createServer(function(req, res) {
                                'public-key-pins': false,
                                'cache-control': false
                              }
-    }
-    );
-    this.close();
+    });
   }
+
+  // Security Header Prototype should be stored
+  if (requests_received === 7)
+    this.close();
 
   res.sendDate = false;
   res.end();
@@ -182,7 +187,11 @@ server.on('listening', function() {
     // Sepcific set of security headers
     if (requests_sent === 7) {
       assert.strictEqual(server_response, response7);
+    }
 
+    // Security headers should be stored over multiple responses
+    if (requests_sent === 8) {
+      assert.strictEqual(server_response, response8);
       c.end();
       return;
     }
