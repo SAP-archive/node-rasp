@@ -25,6 +25,10 @@ const assert = require('assert');
 const http = require('http');
 const Countdown = require('../common/countdown');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 const expectedHeaders = {
   'DELETE': ['host', 'connection'],
   'GET': ['host', 'connection'],
@@ -66,12 +70,9 @@ const server = http.createServer(common.mustCall((req, res) => {
 
 server.listen(0, common.mustCall(() => {
   expectedMethods.forEach((method) => {
-    const req = http.request({
+    http.request({
       method: method,
       port: server.address().port
-    });
-
-    req.setSecurityHeaders({ 'addHeaders': false });
-    req.end();
+    }).end();
   });
 }));

@@ -30,6 +30,10 @@ const net = require('net');
 const http = require('http');
 const fixtures = require('../common/fixtures');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 let gotRequest = false;
 
 const key = fixtures.readKey('agent1-key.pem');
@@ -39,7 +43,6 @@ const options = { key, cert };
 
 const server = https.createServer(options, function(req, res) {
   console.log('SERVER: got request');
-  res.setSecurityHeaders({ 'addHeaders': false });
   res.writeHead(200, {
     'content-type': 'text/plain'
   });
@@ -105,7 +108,6 @@ proxy.listen(0, function() {
       'Proxy-Connections': 'keep-alive'
     }
   });
-  req.setSecurityHeaders({ 'addHeaders': false });
   req.useChunkedEncodingByDefault = false; // for v0.6
   req.on('response', onResponse); // for v0.6
   req.on('upgrade', onUpgrade);   // for v0.6
@@ -113,7 +115,6 @@ proxy.listen(0, function() {
   req.end();
 
   function onResponse(res) {
-    res.setSecurityHeaders({ 'addHeaders': false });
     // Very hacky. This is necessary to avoid http-parser leaks.
     res.upgrade = true;
   }

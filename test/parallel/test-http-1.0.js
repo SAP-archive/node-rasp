@@ -25,6 +25,9 @@ const assert = require('assert');
 const net = require('net');
 const http = require('http');
 
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 const body = 'hello world\n';
 
 function test(handler, request_generator, response_validator) {
@@ -90,7 +93,6 @@ function test(handler, request_generator, response_validator) {
     assert.strictEqual(1, req.httpVersionMajor);
     assert.strictEqual(0, req.httpVersionMinor);
     res.sendDate = false;
-    res.setSecurityHeaders({ 'addHeaders': false });
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.write('Hello, '); res._send('');
     res.write('world!'); res._send('');
@@ -127,7 +129,6 @@ function test(handler, request_generator, response_validator) {
     assert.strictEqual(1, req.httpVersionMajor);
     assert.strictEqual(1, req.httpVersionMinor);
     res.sendDate = false;
-    res.setSecurityHeaders({ 'addHeaders': false });
     res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.write('Hello, '); res._send('');
     res.write('world!'); res._send('');

@@ -24,6 +24,10 @@ require('../common');
 const assert = require('assert');
 const http = require('http');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 let requests = 0;
 let responses = 0;
 
@@ -48,7 +52,6 @@ const server = http.createServer(function(req, res) {
     expected = maxAndExpected[requests][1];
     server.maxHeadersCount = max;
   }
-  res.setSecurityHeaders({ 'addHeaders': false });
   res.writeHead(200, headers);
   res.end();
 });
@@ -79,7 +82,6 @@ server.listen(0, function() {
       });
       res.resume();
     });
-    req.setSecurityHeaders({ 'addHeaders': false });
     req.maxHeadersCount = max;
     req.end();
   }

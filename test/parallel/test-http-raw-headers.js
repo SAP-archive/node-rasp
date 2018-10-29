@@ -25,6 +25,10 @@ const assert = require('assert');
 
 const http = require('http');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 http.createServer(function(req, res) {
   const expectRawHeaders = [
     'Host',
@@ -65,7 +69,6 @@ http.createServer(function(req, res) {
   });
 
   req.resume();
-  res.setSecurityHeaders({ 'addHeaders': false });
   res.setHeader('Trailer', 'x-foo');
   res.addTrailers([
     ['x-fOo', 'xOxOxOx'],
@@ -76,7 +79,6 @@ http.createServer(function(req, res) {
   res.end('x f o o');
 }).listen(0, function() {
   const req = http.request({ port: this.address().port, path: '/' });
-  req.setSecurityHeaders({ 'addHeaders': false });
   req.addTrailers([
     ['x-bAr', 'yOyOyOy'],
     ['x-baR', 'OyOyOyO'],
