@@ -7,19 +7,6 @@ const stringUTF8_3 = '  😃. ';
 
 const stringSet = [stringASCII_3, stringUTF8_3];
 
-// assert for string taint
-assert.taintEqual = taintEqual;
-function taintEqual(string, expectedTaint) {
-  const actualTaint = string.getTaint();
-
-  assert.strictEqual(actualTaint.length, expectedTaint.length);
-
-  expectedTaint.forEach(function(range, i) {
-    assert.strictEqual(actualTaint[i].begin, range.begin);
-    assert.strictEqual(actualTaint[i].end, range.end);
-  });
-}
-
 stringSet.forEach((string) => {
   const len = string.length;
   const str = string.setTaint('bar');
