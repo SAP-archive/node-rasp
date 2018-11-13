@@ -11,6 +11,7 @@
 #include "src/heap/factory.h"
 #include "src/objects/name-inl.h"
 #include "src/string-hasher-inl.h"
+#include "src/global-handles.h"
 #include "src/taint.h"
 
 // Has to be the last include (doesn't have include guards):
@@ -377,13 +378,12 @@ const StringTaint& String::GetTaint() {
   }	
 }
 
-// TODO: Fix WeakCallbackInfo / WeakCallbackData was removed
-/*static void FinalizeTaintedString(const v8::WeakCallbackInfo<v8::Value>& data) {
+static void FinalizeTaintedString(const v8::WeakCallbackInfo<void>& data) {
   String** p = reinterpret_cast<String**>(data.GetParameter());
   String* str = *p;
   str->ClearTaint();
   GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
-}*/
+}
 
 void String::SetTaint(StringTaint value){
   if (!value.hasTaint()) {
@@ -399,8 +399,10 @@ void String::SetTaint(StringTaint value){
     // Add finalizer to ensure deletion of the associated taint data
     Heap* heap = GetHeap();
     Isolate* isolate = heap->isolate();
-    //Handle<Object> wrapper = isolate->global_handles()->Create(this);
-    //GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(), FinalizeTaintedString);
+    Handle<Object> wrapper = isolate->global_handles()->Create(this);
+    GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(),
+                            FinalizeTaintedString,
+                            v8::WeakCallbackType::kFinalizer);
   }
 
   ptr = reinterpret_cast<intptr_t>(new StringTaint(std::move(value)));
