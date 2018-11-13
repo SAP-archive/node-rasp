@@ -326,7 +326,7 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
         if (IsUnescapePredicateInUriComponent(cc1) ||
             (is_uri && IsUriSeparator(cc1))) {
           buffer.push_back(cc1);
-          //taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
+          taint.concat(uri->GetTaint().subtaint(k, k+1), taintIndex);
         } else {
           EncodeSingle(cc1, &buffer);
           StringTaint subTaint = uri->GetTaint().subtaint(k, k+1);
