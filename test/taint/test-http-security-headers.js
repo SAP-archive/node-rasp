@@ -13,8 +13,8 @@ const response1 = firstLine + headers + '\r\n';
 
 const response2 = firstLine +
   'Content-Type: text/plain\r\n' +
-  'Expect-CT: max-age=86400, enforce\r\n' +
-  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200; includeSubdomains\r\n' +
   'Referrer-Policy: no-referrer\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   'X-DNS-Prefatch-Control: off\r\n' +
@@ -23,8 +23,8 @@ const response2 = firstLine +
 
 const response3 = firstLine +
   'Content-Type: text/html\r\n' +
-  'Expect-CT: max-age=86400, enforce\r\n' +
-  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200; includeSubdomains\r\n' +
   'Referrer-Policy: no-referrer\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   'X-DNS-Prefatch-Control: off\r\n' +
@@ -37,16 +37,16 @@ const response3 = firstLine +
 
 const response4 = firstLine +
   'Referrer-Policy: origin\r\n' +
-  'Expect-CT: max-age=86400, enforce\r\n' +
-  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200; includeSubdomains\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   'X-DNS-Prefatch-Control: off\r\n' +
   'X-Permitted-Cross-Domain-Policies: none\r\n' +
   headers + '\r\n';
 
 const response5 = firstLine +
-  'Expect-CT: max-age=86400, enforce\r\n' +
-  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200; includeSubdomains\r\n' +
   'Referrer-Policy: no-referrer\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   'X-DNS-Prefatch-Control: off\r\n' +
@@ -55,8 +55,8 @@ const response5 = firstLine +
 
 const response6 = firstLine +
   'X-Foo: bar\r\n' +
-  'Expect-CT: max-age=86400, enforce\r\n' +
-  'Strict-Transport-Security: max-age=6307200;includeSubdomains\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
+  'Strict-Transport-Security: max-age=6307200; includeSubdomains\r\n' +
   'Referrer-Policy: no-referrer\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   'X-DNS-Prefatch-Control: off\r\n' +
@@ -64,7 +64,7 @@ const response6 = firstLine +
   headers + '\r\n';
 
 const response7 = firstLine +
-  'Expect-CT: max-age=86400, enforce\r\n' +
+  'Expect-CT: max-age=86400; enforce\r\n' +
   'X-Content-Type-Options: nosniff\r\n' +
   headers + '\r\n';
 
@@ -152,7 +152,6 @@ server.on('listening', function() {
 
   c.on('data', function(chunk) {
     const server_response = chunk;
-    console.log('Chunk: ' + chunk);
 
     // Deactivated Security Headers
     if (requests_sent === 1) {
