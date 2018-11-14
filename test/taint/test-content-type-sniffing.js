@@ -2,7 +2,7 @@
 
 require('../common');
 const assert = require('assert');
-const contentType = require('../../lib/_contentTypeDetection');
+const contentType = require('../../lib/taint/_contentTypeDetection');
 
 const data1 = '';
 assert.strictEqual(contentType.isHTML(data1), false);
