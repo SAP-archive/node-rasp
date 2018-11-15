@@ -763,11 +763,21 @@ TF_BUILTIN(StringPrototypeGetTaint, CodeStubAssembler) {
 }
 
 TF_BUILTIN(StringPrototypeTaint, CodeStubAssembler) {
-  Node* context = Parameter(Descriptor::kContext);
-  Node* receiver = Parameter(Descriptor::kReceiver);
-  Node* taint = Parameter(Descriptor::kTaint);
+  Node* const context = Parameter(Descriptor::kContext);
+  Node* const receiver = Parameter(Descriptor::kReceiver);
+  Node* const taint = Parameter(Descriptor::kTaint);
 
-  Return(CallRuntime(Runtime::kStringTaint, context, receiver, taint));
+  Label undefined(this);
+
+  {
+    GotoIf(IsUndefined(taint), &undefined);
+    Return(CallRuntime(Runtime::kStringTaint, context, receiver, taint));
+  }
+
+  BIND(&undefined);
+  {
+    Return(CallRuntime(Runtime::kStringTaint, context, receiver, EmptyStringConstant()));
+  }
 }
 
 TF_BUILTIN(StringPrototypeUntaint, CodeStubAssembler) {
