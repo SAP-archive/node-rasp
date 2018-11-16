@@ -4,6 +4,27 @@ const assert = require('assert');
 const net = require('net');
 const http = require('http');
 
+// Set default security headers
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': true,
+                        'headers':
+                        { 'x-powered-by': true,
+                          'expect-ct': true,
+                          'strict-transport-security': true,
+                          'referrer-policy': true,
+                          'x-dns-prefatch-control': true,
+                          'x-permitted-cross-domain-policies': true,
+                          'x-content-type-options': true,
+                          'content-security-policy': true,
+                          'x-download-options': true,
+                          'x-frame-options': true,
+                          'x-xss-protection': true,
+                          'feature-policy': false,
+                          'public-key-pins': false,
+                          'cache-control': false
+                        }
+  });
+
 const firstLine = 'HTTP/1.1 200 OK\r\n';
 
 const headers = 'Connection: keep-alive\r\n' +
