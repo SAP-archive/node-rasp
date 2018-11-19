@@ -302,7 +302,6 @@ MaybeHandle<String> Uri::Encode(Isolate* isolate, Handle<String> uri,
   std::vector<uint8_t> buffer;
   buffer.reserve(uri_length);
 
-  // TaintV8 TODO: Enable after fix for SingleCharacterFromCharCode
   StringTaint taint;
 
   {
