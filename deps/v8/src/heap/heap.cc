@@ -4825,7 +4825,7 @@ void Heap::NotifyDeserializationComplete() {
 #endif  // DEBUG
   }
 
-  read_only_space()->MarkAsReadOnly();
+  //read_only_space()->MarkAsReadOnly();
   deserialization_complete_ = true;
 }
 
