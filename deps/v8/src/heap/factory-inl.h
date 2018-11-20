@@ -75,9 +75,8 @@ ACCESSOR_INFO_LIST(ACCESSOR_INFO_ACCESSOR)
 
 Handle<String> Factory::InternalizeString(Handle<String> string) {
   if (string->IsInternalizedString()) return string;
-  //StringTaint taint = string->GetTaint();
   Handle<String> result = StringTable::LookupString(isolate(), string);
-  //result->Taint(taint);
+  result->Taint(string->GetTaint());
   return result;
 }
 
