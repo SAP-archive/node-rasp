@@ -12,14 +12,13 @@ matrix:
         - NODE=$(which node)
       script:
         - make lint
-        # Lint the first commit in the PR.
-        - git log $TRAVIS_COMMIT_RANGE --pretty=format:'%h' --no-merges | tail -1 | xargs npx core-validate-commit --no-validate-metadata
     - name: "Test Suite"
       install:
         - ./configure
-        - make -j2 V=
+        - make -j4 V=
       script:
-        - make -j2 test
+        - make -j4 test
+        - make -j4 test-taint
       before_install:
         - export CXX="ccache clang++ -Qunused-arguments"
         - export CC="ccache clang -Qunused-arguments -Wno-unknown-warning-option"
