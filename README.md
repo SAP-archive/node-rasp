@@ -2,6 +2,11 @@
   <a href="">
     <img alt="Node RASP" src="logo.png" width="200"/>
   </a>
+  <br>
+  <a href="https://travis-ci.org/SAP/node-rasp">
+    <img alt="Travis status" src="https://travis-ci.org/SAP/node-rasp.svg?branch=master"/>
+  </a>
+  <img alt="Node base version" src="https://img.shields.io/badge/node-v10.14.0-blue.svg"/>
 </p>
 
 # Node RASP
