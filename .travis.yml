@@ -11,10 +11,6 @@ matrix:
         - NODE=$(which node)
       script:
         - make lint
-        # Lint the first commit in the PR.
-        - if [ "${TRAVIS_PULL_REQUEST}" != "false" ]; then
-            bash tools/lint-pr-commit-message.sh ${TRAVIS_PULL_REQUEST} || true;
-          fi
     - name: "Test Suite"
       addons:
         apt:
@@ -25,6 +21,11 @@ matrix:
       install:
         - export CC='ccache gcc-4.9' CXX='ccache g++-4.9' JOBS=2
         - ./configure
-        - make -j2 V=
+        - make -j4 V=
       script:
-        - PARALLEL_ARGS='--flaky-tests=skip' make -j1 test
+        - make -j4 test
+        - make -j4 test-taint
+      before_install:
+        - export CXX="ccache clang++ -Qunused-arguments"
+        - export CC="ccache clang -Qunused-arguments -Wno-unknown-warning-option"
+        - export JOBS=2
