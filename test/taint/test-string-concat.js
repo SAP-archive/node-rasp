@@ -12,8 +12,10 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  const str = string,
-    strTaint = string.taint('baz');
+  const str = string;
+
+
+  const strTaint = string.taint('baz');
   let strCon;
 
   strCon = strTaint.concat(str);
