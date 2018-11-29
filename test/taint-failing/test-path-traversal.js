@@ -140,7 +140,7 @@ const test42 = Buffer.from(test41);
 assert.deepStrictEqual(check.removePathTraversal(test42),
                        Buffer.from('.test...'));
 
-//checks for path traversal on URL not implented
+// checks for path traversal on URL not implented
 const test39 = new URL('file:///../tmp/hello'.taint('bar'));
 assert.deepStrictEqual(check.removePathTraversal(test39), new URL('file:///../tmp/hello'));
 

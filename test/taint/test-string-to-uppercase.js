@@ -12,8 +12,10 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.taint('bar'),
-    uppercase;
+  let str = string.taint('bar');
+
+
+  let uppercase;
 
   assert.strictEqual(str.isTainted(), true);
   assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);
