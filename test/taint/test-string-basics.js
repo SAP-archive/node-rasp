@@ -12,8 +12,10 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string,
-    strTaint;
+  let str = string;
+
+
+  let strTaint;
 
   assert.strictEqual(str.isTainted(), false);
   assert.taintEqual(str, []);

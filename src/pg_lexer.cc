@@ -21,8 +21,8 @@ using v8::Value;
 
 NODE_EXTERN Local<Array> HasInjection(Environment* env, const char* data) {
   PgQueryScanResult result;
-  Pgquery__ScanOutput *scan_output;
-  Pgquery__ScanToken *scan_token;
+  Pgquery__ScanOutput* scan_output;
+  Pgquery__ScanToken* scan_token;
   size_t j;
 
   result = pg_query_scan(data);

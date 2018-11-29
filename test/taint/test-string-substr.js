@@ -12,8 +12,10 @@ const stringSet = [stringASCII_3, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.taint('bar'),
-    substr;
+  let str = string.taint('bar');
+
+
+  let substr;
 
   substr = str.substr(0);
   assert.strictEqual(substr.isTainted(), true);

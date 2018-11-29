@@ -13,8 +13,10 @@ const stringSet = [stringASCII_3, stringASCII_4, stringUTF8_3,
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.taint('bar'),
-    lowercase;
+  let str = string.taint('bar');
+
+
+  let lowercase;
 
   assert.strictEqual(str.isTainted(), true);
   assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);

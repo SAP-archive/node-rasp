@@ -25,8 +25,10 @@ function taintEqual(string, expectedTaint) {
 
 stringSet.forEach((string) => {
   const len = string.length;
-  let str = string.taint('bar'),
-    character;
+  let str = string.taint('bar');
+
+
+  let character;
 
   assert.strictEqual(str.isTainted(), true);
   assert.taintEqual(str, [{ 'begin': 0, 'end': len }]);

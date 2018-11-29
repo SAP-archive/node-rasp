@@ -20,4 +20,4 @@ const str3 =
   assert.strictEqual(z.foo.isTainted(), true);
   assert.taintEqual(z.foo, [{'begin': 1, 'end': 2}]);
 })();
-/*eslint-enable */
+/* eslint-enable */
