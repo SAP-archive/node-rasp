@@ -8,7 +8,7 @@
          src="https://travis-ci.org/SAP/node-rasp.svg?branch=master"/>
   </a>
   <img alt="Node base version" 
-       src="https://img.shields.io/badge/node-v10.14.0-blue.svg"/>
+       src="https://img.shields.io/badge/node-v10.14.1-blue.svg"/>
 </p>
 
 # Node RASP
