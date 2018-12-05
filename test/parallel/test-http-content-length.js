@@ -4,6 +4,10 @@ const assert = require('assert');
 const http = require('http');
 const Countdown = require('../common/countdown');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 const expectedHeadersMultipleWrites = {
   'connection': 'close',
   'transfer-encoding': 'chunked',

@@ -25,6 +25,10 @@ const assert = require('assert');
 
 const http = require('http');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 const server = http.createServer(function(request, response) {
   // removed headers should stay removed, even if node automatically adds them
   // to the output:

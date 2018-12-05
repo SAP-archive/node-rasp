@@ -25,6 +25,10 @@ const assert = require('assert');
 const net = require('net');
 const http = require('http');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 const body = 'hello world\n';
 
 function test(handler, request_generator, response_validator) {
