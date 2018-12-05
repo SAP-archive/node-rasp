@@ -37,6 +37,7 @@
       'lib/taint/_pg.js',
       'lib/taint/pg_lexer.js',
       'lib/taint/_contentTypeDetection.js',
+      'lib/taint/_securityHeaderOptions.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
