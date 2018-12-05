@@ -13,6 +13,11 @@ const serverOptions = {
   cert: fixtures.readKey('agent1-cert.pem')
 };
 
+const http = require('http');
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 let requests = 0;
 let responses = 0;
 
