@@ -33,6 +33,10 @@ const net = require('net');
 const http = require('http');
 const fixtures = require('../common/fixtures');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 let gotRequest = false;
 
 const key = fixtures.readKey('agent1-key.pem');

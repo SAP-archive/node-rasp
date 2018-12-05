@@ -24,6 +24,10 @@ require('../common');
 const assert = require('assert');
 const http = require('http');
 
+// TaintNode
+http.ServerResponse.super_.prototype
+  .setSecurityHeaders({ 'addHeaders': false });
+
 let requests = 0;
 let responses = 0;
 
