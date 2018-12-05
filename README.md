@@ -137,6 +137,7 @@ changes in the central string and buffer implementations.
 * Marc Rahn (marc.rahn@sap.com)
 * Tobias Simolik (tobias.simolik@sap.com)
 * Hannah Keller (hannah.keller@sap.com)
+* Nils Neumann (nils.neumann@sap.com)
 
 #### Project Manager & Product Owner
 * Mathias Essenpreis (mathias.essenpreis@sap.com)
