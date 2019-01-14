@@ -149,6 +149,8 @@ changes in the central string and buffer implementations.
   <<a href="mailto:tobias.simolik@sap.com">tobias.simolik@sap.com</a>><br>
   Hannah Keller 
   <<a href="mailto:hannah.keller@sap.com">hannah.keller@sap.com</a>><br>
+  Nils Neumann
+  <<a href="mailto:nils.neumann@sap.com">nils.neumann@sap.com</a>><br>
 </p>
 <p align="center">
   <b>Project Manager & Product Owner </b><br>
@@ -170,8 +172,8 @@ changes in the central string and buffer implementations.
   <br>
   Innovation by SAP Security Research.
   <br>
-  Credits to Prof. Dr. Martin Johns <<a href="mailto:m.johns@sap.com">
-  m.johns@sap.com</a>> and team.
+  Credit to Prof. Dr. Martin Johns 
+  <<a href="mailto:m.johns@sap.com">m.johns@sap.com</a>> and team.
 </p>
 
 ## License
