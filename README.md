@@ -170,8 +170,8 @@ changes in the central string and buffer implementations.
   <br>
   Innovation by SAP Security Research.
   <br>
-  Credits to Prof. Dr. Martin Johns <<a href="mailto:m.johns@sap.com">
-  m.johns@sap.com</a>> and team.
+  Credit to Prof. Dr. Martin Johns 
+  <<a href="mailto:m.johns@sap.com">m.johns@sap.com</a>> and team.
 </p>
 
 ## License
