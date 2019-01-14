@@ -129,19 +129,50 @@ buffers, the relevant functions will be simply wrapped. This will reduce code
 changes in the central string and buffer implementations.
 
 <a name="contributors"></a>
+
 ## Get in touch
+<p align="center">
+  <a href="">
+    <img alt="Node RASP" src="sapcp.png" width="250"/>
+  </a>
+  <br>
+  Development by SAP Cloud Platform Security.
+</p>
+<p align="center">
+  <b>Contributors</b><br>
+  Patrick Spiegel 
+  <<a href="mailto:patrick.spiegel@sap.com">patrick.spiegel@sap.com</a>><br>
+  Jonas Zengerle 
+  <<a href="mailto:jonas.zengerle@sap.com">jonas.zengerle@sap.com</a>><br>
+  Marc Rahn <<a href="mailto:marc.rahn@sap.com">marc.rahn@sap.com</a>><br>
+  Tobias Simolik 
+  <<a href="mailto:tobias.simolik@sap.com">tobias.simolik@sap.com</a>><br>
+  Hannah Keller 
+  <<a href="mailto:hannah.keller@sap.com">hannah.keller@sap.com</a>><br>
+</p>
+<p align="center">
+  <b>Project Manager & Product Owner </b><br>
+  Mathias Essenpreis 
+  <<a href="mailto:mathias.essenpreis@sap.com">mathias.essenpreis@sap.com</a>>
+  <br>
+  Heiko Ettelbrück 
+  <<a href="mailto:heiko.ettelbrueck@sap.com">heiko.ettelbrueck@sap.com</a>>
+</p>
 
-#### Contributors
-* Patrick Spiegel (patrick.spiegel@sap.com)
-* Jonas Zengerle (jonas.zengerle@sap.com)
-* Marc Rahn (marc.rahn@sap.com)
-* Tobias Simolik (tobias.simolik@sap.com)
-* Hannah Keller (hannah.keller@sap.com)
 
-#### Project Manager & Product Owner
-* Mathias Essenpreis (mathias.essenpreis@sap.com)
-* Heiko Ettelbrück (heiko.ettelbrueck@sap.com)
 
+## Credits
+
+<p align="center">
+  <a href="">
+    <img alt="Node RASP" src="sap_fingerprint.png" width="70"/>
+  </a>
+  <br>
+  Innovation by SAP Security Research.
+  <br>
+  Credits to Prof. Dr. Martin Johns <<a href="mailto:m.johns@sap.com">
+  m.johns@sap.com</a>> and team.
+</p>
 
 ## License
 
