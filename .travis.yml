@@ -23,8 +23,7 @@ matrix:
         - ./configure
         - make -j4 V=
       script:
-        - make -j4 test
-        - make -j4 test-taint
+        - make -j4 test-only
       before_install:
         - export CXX="ccache clang++ -Qunused-arguments"
         - export CC="ccache clang -Qunused-arguments -Wno-unknown-warning-option"
