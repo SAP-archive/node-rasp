@@ -2757,6 +2757,9 @@ TNode<String> CodeStubAssembler::AllocateSeqOneByteString(
   StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+  StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return CAST(result);
 }
 
@@ -2794,6 +2797,9 @@ TNode<String> CodeStubAssembler::AllocateSeqOneByteString(
                                    length, MachineRepresentation::kTagged);
     StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kHashFieldSlot,
                                    IntPtrConstant(String::kEmptyHashField),
+                                   MachineType::PointerRepresentation());
+    StoreObjectFieldNoWriteBarrier(result, SeqOneByteString::kTaintOffset,
+                                   IntPtrConstant(0),
                                    MachineType::PointerRepresentation());
     var_result.Bind(result);
     Goto(&if_join);
@@ -2833,6 +2839,9 @@ TNode<String> CodeStubAssembler::AllocateSeqTwoByteString(
   StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
                                  MachineType::PointerRepresentation());
+  StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return CAST(result);
 }
 
@@ -2864,6 +2873,9 @@ TNode<String> CodeStubAssembler::AllocateSeqTwoByteString(
                                    length, MachineRepresentation::kTagged);
     StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kHashFieldSlot,
                                    IntPtrConstant(String::kEmptyHashField),
+                                   MachineType::PointerRepresentation());
+    StoreObjectFieldNoWriteBarrier(result, SeqTwoByteString::kTaintOffset,
+                                   IntPtrConstant(0),
                                    MachineType::PointerRepresentation());
     var_result.Bind(result);
     Goto(&if_join);
@@ -2905,6 +2917,9 @@ TNode<String> CodeStubAssembler::AllocateSlicedString(
                                  MachineRepresentation::kTagged);
   StoreObjectFieldNoWriteBarrier(result, SlicedString::kOffsetOffset, offset,
                                  MachineRepresentation::kTagged);
+  StoreObjectFieldNoWriteBarrier(result, SlicedString::kTaintOffset,
+                                 IntPtrConstant(0),
+                                 MachineType::PointerRepresentation());
   return CAST(result);
 }
 
@@ -2932,6 +2947,9 @@ TNode<String> CodeStubAssembler::AllocateConsString(
                                  MachineRepresentation::kTagged);
   StoreObjectFieldNoWriteBarrier(result, ConsString::kHashFieldSlot,
                                  IntPtrConstant(String::kEmptyHashField),
+                                 MachineType::PointerRepresentation());
+  StoreObjectFieldNoWriteBarrier(result, ConsString::kTaintOffset,
+                                 IntPtrConstant(0),
                                  MachineType::PointerRepresentation());
   bool const new_space = !(flags & kPretenured);
   if (new_space) {
