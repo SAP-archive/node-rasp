@@ -72,7 +72,8 @@ class Name : public HeapObject {
 #else
   static const int kHashFieldOffset = kHashFieldSlot + kInt32Size;
 #endif
-  static const int kSize = kHashFieldSlot + kPointerSize;
+  static const int kTaintOffset = kHashFieldOffset + kPointerSize;
+  static const int kSize = kTaintOffset + kPointerSize;
 
   // Mask constant for checking if a name has a computed hash code
   // and if it is a string that is an array index.  The least significant bit
