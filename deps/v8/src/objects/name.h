@@ -6,6 +6,7 @@
 #define V8_OBJECTS_NAME_H_
 
 #include "src/objects.h"
+#include "src/taint.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -74,6 +75,12 @@ class Name : public HeapObject {
 #endif
   static const int kTaintOffset = kHashFieldOffset + kPointerSize;
   static const int kSize = kTaintOffset + kPointerSize;
+
+  // TaintV8
+  inline const StringTaint& GetTaint();
+  inline void Taint(StringTaint value);
+  inline void ClearTaint();
+  inline void InitializeTaint();
 
   // Mask constant for checking if a name has a computed hash code
   // and if it is a string that is an array index.  The least significant bit

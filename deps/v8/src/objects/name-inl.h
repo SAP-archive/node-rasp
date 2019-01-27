@@ -8,6 +8,7 @@
 #include "src/objects/name.h"
 
 #include "src/heap/heap-inl.h"
+#include "src/global-handles.h"
 
 // Has to be the last include (doesn't have include guards):
 #include "src/objects/object-macros.h"
@@ -117,6 +118,62 @@ bool Name::AsArrayIndex(uint32_t* index) {
 // static
 bool Name::ContainsCachedArrayIndex(uint32_t hash) {
   return (hash & Name::kDoesNotContainCachedArrayIndexMask) == 0;
+}
+
+// TaintV8
+const StringTaint& Name::GetTaint() {
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+
+  if (ptr) {
+    return *reinterpret_cast<StringTaint*>(ptr);
+  } else {
+    return EmptyTaint;
+  }
+}
+
+static void FinalizeTaintedString(const v8::WeakCallbackInfo<void>& data) {
+  String** p = reinterpret_cast<String**>(data.GetParameter());
+  String* str = *p;
+  str->ClearTaint();
+  GlobalHandles::Destroy(reinterpret_cast<Object**>(data.GetParameter()));
+}
+
+void Name::Taint(StringTaint value){
+  if (!value.hasTaint()) {
+    return ClearTaint();
+  }
+
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+  StringTaint* taint = reinterpret_cast<StringTaint*>(ptr);
+
+  if (taint) {
+    delete taint;
+  } else {
+    // Add finalizer to ensure deletion of the associated taint data
+    Heap* heap = GetHeap();
+    Isolate* isolate = heap->isolate();
+    Handle<Object> wrapper = isolate->global_handles()->Create(this);
+    GlobalHandles::MakeWeak(wrapper.location(), wrapper.location(),
+      FinalizeTaintedString, v8::WeakCallbackType::kFinalizer);
+  }
+
+  ptr = reinterpret_cast<intptr_t>(new StringTaint(std::move(value)));
+  WRITE_INTPTR_FIELD(this, kTaintOffset, ptr);
+}
+
+void Name::ClearTaint() {
+  intptr_t ptr = READ_INTPTR_FIELD(this, kTaintOffset);
+  StringTaint* taint = reinterpret_cast<StringTaint*>(ptr);
+
+  if (taint) {
+    delete taint;
+  }
+
+  WRITE_INTPTR_FIELD(this, kTaintOffset, 0);
+}
+
+void Name::InitializeTaint() {
+  WRITE_INTPTR_FIELD(this, kTaintOffset, 0);
 }
 
 }  // namespace internal
