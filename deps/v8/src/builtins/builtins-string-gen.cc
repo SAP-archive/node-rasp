@@ -748,6 +748,45 @@ TF_BUILTIN(StringPrototypeCharAt, StringBuiltinsAssembler) {
                    });
 }
 
+TF_BUILTIN(StringPrototypeIsTainted, CodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+
+  Return(CallRuntime(Runtime::kStringIsTainted, context, receiver));
+}
+
+TF_BUILTIN(StringPrototypeGetTaint, CodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+
+  Return(CallRuntime(Runtime::kStringGetTaint, context, receiver));
+}
+
+TF_BUILTIN(StringPrototypeTaint, CodeStubAssembler) {
+  Node* const context = Parameter(Descriptor::kContext);
+  Node* const receiver = Parameter(Descriptor::kReceiver);
+  Node* const taint = Parameter(Descriptor::kTaint);
+
+  Label undefined(this);
+
+  {
+    GotoIf(IsUndefined(taint), &undefined);
+    Return(CallRuntime(Runtime::kStringTaint, context, receiver, taint));
+  }
+
+  BIND(&undefined);
+  {
+    Return(CallRuntime(Runtime::kStringTaint, context, receiver, EmptyStringConstant()));
+  }
+}
+
+TF_BUILTIN(StringPrototypeUntaint, CodeStubAssembler) {
+  Node* context = Parameter(Descriptor::kContext);
+  Node* receiver = Parameter(Descriptor::kReceiver);
+
+  Return(CallRuntime(Runtime::kStringUntaint, context, receiver));
+}
+
 // ES6 #sec-string.prototype.charcodeat
 TF_BUILTIN(StringPrototypeCharCodeAt, StringBuiltinsAssembler) {
   TNode<Context> context = CAST(Parameter(Descriptor::kContext));

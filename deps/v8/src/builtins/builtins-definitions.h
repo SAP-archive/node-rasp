@@ -1073,6 +1073,11 @@ namespace internal {
   /* ES6 #sec-string.prototype-@@iterator */                                   \
   TFJ(StringPrototypeIterator, 0)                                              \
                                                                                \
+  TFJ(StringPrototypeIsTainted, 0)                                             \
+  TFJ(StringPrototypeGetTaint, 0)                                              \
+  TFJ(StringPrototypeTaint, 1, kTaint)                                         \
+  TFJ(StringPrototypeUntaint, 0)                                               \
+                                                                               \
   /* StringIterator */                                                         \
   /* ES6 #sec-%stringiteratorprototype%.next */                                \
   TFJ(StringIteratorPrototypeNext, 0)                                          \
