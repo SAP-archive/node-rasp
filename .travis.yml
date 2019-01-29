@@ -25,6 +25,6 @@ matrix:
       install:
         - export CC='ccache gcc-4.9' CXX='ccache g++-4.9' JOBS=2
         - ./configure
-        - make -j2 V=
+        - make -j4 V=
       script:
-        - PARALLEL_ARGS='--flaky-tests=skip' make -j1 test
+        - PARALLEL_ARGS='--flaky-tests=skip' make -j4 test test-taint
