@@ -2728,6 +2728,8 @@ Node* EffectControlLinearizer::LowerNewConsString(Node* node) {
   __ StoreField(AccessBuilder::ForMap(), result, result_map);
   __ StoreField(AccessBuilder::ForNameHashField(), result,
                 jsgraph()->Int32Constant(Name::kEmptyHashField));
+  __ StoreField(AccessBuilder::ForNameTaint(), result,
+                __ IntPtrConstant(0));
   __ StoreField(AccessBuilder::ForStringLength(), result, length);
   __ StoreField(AccessBuilder::ForConsStringFirst(), result, first);
   __ StoreField(AccessBuilder::ForConsStringSecond(), result, second);
@@ -2999,6 +3001,8 @@ Node* EffectControlLinearizer::LowerStringFromSingleCharCode(Node* node) {
                     __ HeapConstant(factory()->one_byte_string_map()));
       __ StoreField(AccessBuilder::ForNameHashField(), vtrue2,
                     __ IntPtrConstant(Name::kEmptyHashField));
+      __ StoreField(AccessBuilder::ForNameTaint(), vtrue2,
+                    __ IntPtrConstant(0));
       __ StoreField(AccessBuilder::ForStringLength(), vtrue2,
                     __ SmiConstant(1));
       __ Store(
@@ -3023,6 +3027,8 @@ Node* EffectControlLinearizer::LowerStringFromSingleCharCode(Node* node) {
                   __ HeapConstant(factory()->string_map()));
     __ StoreField(AccessBuilder::ForNameHashField(), vfalse1,
                   __ IntPtrConstant(Name::kEmptyHashField));
+    __ StoreField(AccessBuilder::ForNameTaint(), vfalse1,
+                  __ IntPtrConstant(0));
     __ StoreField(AccessBuilder::ForStringLength(), vfalse1, __ SmiConstant(1));
     __ Store(
         StoreRepresentation(MachineRepresentation::kWord16, kNoWriteBarrier),
@@ -3121,6 +3127,8 @@ Node* EffectControlLinearizer::LowerStringFromSingleCodePoint(Node* node) {
                       __ HeapConstant(factory()->one_byte_string_map()));
         __ StoreField(AccessBuilder::ForNameHashField(), vtrue2,
                       __ IntPtrConstant(Name::kEmptyHashField));
+        __ StoreField(AccessBuilder::ForNameTaint(), vtrue2,
+                      __ IntPtrConstant(0));
         __ StoreField(AccessBuilder::ForStringLength(), vtrue2,
                       __ SmiConstant(1));
         __ Store(
@@ -3145,6 +3153,8 @@ Node* EffectControlLinearizer::LowerStringFromSingleCodePoint(Node* node) {
                     __ HeapConstant(factory()->string_map()));
       __ StoreField(AccessBuilder::ForNameHashField(), vfalse1,
                     __ IntPtrConstant(Name::kEmptyHashField));
+      __ StoreField(AccessBuilder::ForNameTaint(), vfalse1,
+                    __ IntPtrConstant(0));
       __ StoreField(AccessBuilder::ForStringLength(), vfalse1,
                     __ SmiConstant(1));
       __ Store(
@@ -3192,6 +3202,8 @@ Node* EffectControlLinearizer::LowerStringFromSingleCodePoint(Node* node) {
                   __ HeapConstant(factory()->string_map()));
     __ StoreField(AccessBuilder::ForNameHashField(), vfalse0,
                   __ IntPtrConstant(Name::kEmptyHashField));
+    __ StoreField(AccessBuilder::ForNameTaint(), vfalse0,
+                  __ IntPtrConstant(0));
     __ StoreField(AccessBuilder::ForStringLength(), vfalse0, __ SmiConstant(2));
     __ Store(
         StoreRepresentation(MachineRepresentation::kWord32, kNoWriteBarrier),
