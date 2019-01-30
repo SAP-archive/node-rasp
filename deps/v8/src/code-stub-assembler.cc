@@ -5916,6 +5916,9 @@ TNode<String> CodeStubAssembler::StringAdd(Node* context, TNode<String> left,
       done(this, &result), done_native(this, &result);
   Counters* counters = isolate()->counters();
 
+  // TaintV8: Bail-out to runtime
+  GotoIf(WordEqual(IntPtrConstant(0), IntPtrConstant(0)), &runtime);
+
   TNode<Smi> left_length = LoadStringLengthAsSmi(left);
   GotoIf(SmiNotEqual(SmiConstant(0), left_length), &check_right);
   result = right;
