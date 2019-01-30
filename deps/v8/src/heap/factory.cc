@@ -1060,10 +1060,15 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
 
   int length = left_length + right_length;
 
+  StringTaint taint = StringTaint::concat(
+    left->GetTaint(), left_length, right->GetTaint());
+
   if (length == 2) {
     uint16_t c1 = left->Get(0);
     uint16_t c2 = right->Get(0);
-    return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    result->Taint(taint);
+    return result;
   }
 
   // Make sure that an out of memory exception is thrown if the length
@@ -1111,19 +1116,24 @@ MaybeHandle<String> Factory::NewConsString(Handle<String> left,
                 ? Handle<ExternalOneByteString>::cast(right)->GetChars()
                 : Handle<SeqOneByteString>::cast(right)->GetChars();
       for (int i = 0; i < right_length; i++) *dest++ = src[i];
+      result->Taint(taint);
       return result;
     }
 
-    return (is_one_byte_data_in_two_byte_string)
+    Handle<String> result = (is_one_byte_data_in_two_byte_string)
                ? ConcatStringContent<uint8_t>(
                      NewRawOneByteString(length).ToHandleChecked(), left, right)
                : ConcatStringContent<uc16>(
                      NewRawTwoByteString(length).ToHandleChecked(), left,
                      right);
+    result->Taint(taint);
+    return result;
   }
 
   bool one_byte = (is_one_byte || is_one_byte_data_in_two_byte_string);
-  return NewConsString(left, right, length, one_byte);
+  Handle<String> result = NewConsString(left, right, length, one_byte);
+  result->Taint(taint);
+  return result;
 }
 
 Handle<String> Factory::NewConsString(Handle<String> left, Handle<String> right,
