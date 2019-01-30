@@ -500,8 +500,11 @@ BUILTIN(StringPrototypeToLocaleUpperCase) {
 BUILTIN(StringPrototypeToLowerCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLowerCase");
-  return ConvertCase(string, isolate,
+  Object* result = ConvertCase(string, isolate,
                      isolate->runtime_state()->to_lower_mapping());
+
+  String::cast(result)->Taint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToUpperCase) {

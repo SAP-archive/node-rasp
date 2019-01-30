@@ -45,6 +45,10 @@ TF_BUILTIN(StringToLowerCaseIntl, IntlBuiltinsAssembler) {
 
   Node* const dst = AllocateSeqOneByteString(context, length);
 
+  // TaintV8
+  Node* taint = LoadObjectField(string, String::kTaintOffset);
+  StoreObjectFieldNoWriteBarrier(dst, String::kTaintOffset, taint);
+
   const int kMaxShortStringLength = 24;  // Determined empirically.
   GotoIf(SmiGreaterThan(length, SmiConstant(kMaxShortStringLength)), &call_c);
 

@@ -628,7 +628,9 @@ RUNTIME_FUNCTION(Runtime_StringToLowerCaseIntl) {
   DCHECK_EQ(args.length(), 1);
   CONVERT_ARG_HANDLE_CHECKED(String, s, 0);
   s = String::Flatten(s);
-  return ConvertToLower(s, isolate);
+  Object* result = ConvertToLower(s, isolate);
+  String::cast(result)->Taint(s->GetTaint());
+  return result;
 }
 
 RUNTIME_FUNCTION(Runtime_StringToUpperCaseIntl) {
