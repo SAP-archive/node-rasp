@@ -510,8 +510,10 @@ BUILTIN(StringPrototypeToLowerCase) {
 BUILTIN(StringPrototypeToUpperCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toUpperCase");
-  return ConvertCase(string, isolate,
+  Object* result = ConvertCase(string, isolate,
                      isolate->runtime_state()->to_upper_mapping());
+  String::cast(result)->Taint(string->GetTaint());
+  return result;
 }
 #endif  // !V8_INTL_SUPPORT
 

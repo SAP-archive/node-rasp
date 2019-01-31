@@ -34,7 +34,9 @@ BUILTIN(StringPrototypeToUpperCaseIntl) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toUpperCase");
   string = String::Flatten(string);
-  return ConvertCase(string, true, isolate);
+  Object* result = ConvertCase(string, true, isolate);
+  String::cast(result)->Taint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeNormalizeIntl) {
