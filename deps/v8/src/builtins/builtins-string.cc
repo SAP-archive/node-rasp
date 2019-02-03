@@ -486,15 +486,19 @@ V8_WARN_UNUSED_RESULT static Object* ConvertCase(
 BUILTIN(StringPrototypeToLocaleLowerCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLocaleLowerCase");
-  return ConvertCase(string, isolate,
+  Object* result = ConvertCase(string, isolate,
                      isolate->runtime_state()->to_lower_mapping());
+  String::cast(result)->Taint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToLocaleUpperCase) {
   HandleScope scope(isolate);
   TO_THIS_STRING(string, "String.prototype.toLocaleUpperCase");
-  return ConvertCase(string, isolate,
+  Object* result = ConvertCase(string, isolate,
                      isolate->runtime_state()->to_upper_mapping());
+  String::cast(result)->Taint(string->GetTaint());
+  return result;
 }
 
 BUILTIN(StringPrototypeToLowerCase) {

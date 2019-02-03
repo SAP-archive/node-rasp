@@ -674,16 +674,30 @@ RUNTIME_FUNCTION(Runtime_StringLocaleConvertCase) {
   // in the root locale needs to be adjusted for az, lt and tr because even case
   // mapping of ASCII range characters are different in those locales.
   // Greek (el) does not require any adjustment.
-  if (V8_UNLIKELY(c1 == 't' && c2 == 'r'))
-    return LocaleConvertCase(s, isolate, is_upper, "tr");
-  if (V8_UNLIKELY(c1 == 'e' && c2 == 'l'))
-    return LocaleConvertCase(s, isolate, is_upper, "el");
-  if (V8_UNLIKELY(c1 == 'l' && c2 == 't'))
-    return LocaleConvertCase(s, isolate, is_upper, "lt");
-  if (V8_UNLIKELY(c1 == 'a' && c2 == 'z'))
-    return LocaleConvertCase(s, isolate, is_upper, "az");
+  if (V8_UNLIKELY(c1 == 't' && c2 == 'r')) {
+    Object* result = LocaleConvertCase(s, isolate, is_upper, "tr");
+    String::cast(result)->Taint(s->GetTaint());
+    return result;
+  }
+  if (V8_UNLIKELY(c1 == 'e' && c2 == 'l')) {
+    Object* result = LocaleConvertCase(s, isolate, is_upper, "el");
+    String::cast(result)->Taint(s->GetTaint());
+    return result;
+  }
+  if (V8_UNLIKELY(c1 == 'l' && c2 == 't')) {
+    Object* result = LocaleConvertCase(s, isolate, is_upper, "lt");
+    String::cast(result)->Taint(s->GetTaint());
+    return result;
+  }
+  if (V8_UNLIKELY(c1 == 'a' && c2 == 'z')) {
+    Object* result = LocaleConvertCase(s, isolate, is_upper, "az");
+    String::cast(result)->Taint(s->GetTaint());
+    return result;
+  }
 
-  return ConvertCase(s, is_upper, isolate);
+  Object* result = ConvertCase(s, is_upper, isolate);
+  String::cast(result)->Taint(s->GetTaint());
+  return result;
 }
 
 RUNTIME_FUNCTION(Runtime_DateCacheVersion) {
