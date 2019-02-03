@@ -1185,7 +1185,9 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   int length = end - begin;
   if (length <= 0) return empty_string();
   if (length == 1) {
-    return LookupSingleCharacterStringFromCode(str->Get(begin));
+    Handle<String> result = LookupSingleCharacterStringFromCode(str->Get(begin));
+    result->Taint(str->GetTaint().subtaint(begin, end));
+    return result;
   }
   if (length == 2) {
     // Optimization for 2-byte strings often used as keys in a decompression
@@ -1193,7 +1195,9 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
     // table to prevent creation of many unnecessary strings.
     uint16_t c1 = str->Get(begin);
     uint16_t c2 = str->Get(begin + 1);
-    return MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    Handle<String> result = MakeOrFindTwoCharacterString(isolate(), c1, c2);
+    result->Taint(str->GetTaint().subtaint(begin, end));
+    return result;
   }
 
   if (!FLAG_string_slices || length < SlicedString::kMinLength) {
@@ -1203,6 +1207,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
       uint8_t* dest = result->GetChars();
       DisallowHeapAllocation no_gc;
       String::WriteToFlat(*str, dest, begin, end);
+      result->Taint(str->GetTaint().subtaint(begin, end));
       return result;
     } else {
       Handle<SeqTwoByteString> result =
@@ -1210,6 +1215,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
       uc16* dest = result->GetChars();
       DisallowHeapAllocation no_gc;
       String::WriteToFlat(*str, dest, begin, end);
+      result->Taint(str->GetTaint().subtaint(begin, end));
       return result;
     }
   }
@@ -1238,6 +1244,7 @@ Handle<String> Factory::NewProperSubString(Handle<String> str, int begin,
   slice->set_parent(*str);
   slice->set_offset(offset);
   slice->InitializeTaint();
+  slice->Taint(str->GetTaint().subtaint(begin, end));
   return slice;
 }
 

@@ -5555,6 +5555,9 @@ TNode<String> CodeStubAssembler::SubString(TNode<String> string,
   ToDirectStringAssembler to_direct(state(), string);
   Label end(this), runtime(this);
 
+  // TaintV8: Bail-out to runtime
+  GotoIf(IsString(string), &runtime);
+
   TNode<IntPtrT> const substr_length = IntPtrSub(to, from);
   TNode<IntPtrT> const string_length = LoadStringLengthAsWord(string);
 
