@@ -115,6 +115,9 @@ class JsonStringifier BASE_EMBEDDED {
   uc16* gap_;
   int indent_;
 
+  // TaintV8
+  StringTaint resultTaint = StringTaint();
+
   static const int kJsonEscapeTableEntrySize = 8;
   static const char* const JsonEscapeTable;
 };

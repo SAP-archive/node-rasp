@@ -97,7 +97,12 @@ MaybeHandle<Object> JsonStringifier::Stringify(Handle<Object> object,
   PostponeInterruptsScope no_debug_breaks(isolate_, StackGuard::DEBUGBREAK);
   Result result = SerializeObject(object);
   if (result == UNCHANGED) return factory()->undefined_value();
-  if (result == SUCCESS) return builder_.Finish();
+  if (result == SUCCESS) {
+    // TaintV8
+    Handle<String> result = builder_.Finish().ToHandleChecked();
+    result->Taint(resultTaint);
+    return result;
+  }
   DCHECK(result == EXCEPTION);
   return MaybeHandle<Object>();
 }
@@ -653,6 +658,8 @@ template <typename SrcChar, typename DestChar>
 void JsonStringifier::SerializeString_(Handle<String> string) {
   int length = string->length();
   builder_.Append<uint8_t, DestChar>('"');
+  // TaintV8
+  int old_index = builder_.Length();
   // We might be able to fit the whole escaped string in the current string
   // part, or we might need to allocate.
   if (int worst_case_length = builder_.EscapedLengthIfCurrentPartFits(length)) {
@@ -672,6 +679,10 @@ void JsonStringifier::SerializeString_(Handle<String> string) {
       }
     }
   }
+
+  // TaintV8
+  resultTaint.insert(old_index, string->GetTaint());
+
   builder_.Append<uint8_t, DestChar>('"');
 }
 
