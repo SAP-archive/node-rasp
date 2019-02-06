@@ -743,8 +743,8 @@ TF_BUILTIN(StringPrototypeCharAt, StringBuiltinsAssembler) {
                    EmptyStringConstant(),
                    [this](TNode<String> string, TNode<IntPtrT> length,
                           TNode<IntPtrT> index) {
-                     TNode<Int32T> code = StringCharCodeAt(string, index);
-                     return StringFromSingleCharCode(code);
+                     return SubString(string, index,
+                                      IntPtrAdd(index, IntPtrConstant(1)));
                    });
 }
 
