@@ -793,8 +793,9 @@ RUNTIME_FUNCTION(Runtime_StringToArray) {
     elements = isolate->factory()->NewFixedArray(length);
   }
   for (int i = position; i < length; ++i) {
-    Handle<Object> str =
+    Handle<String> str =
         isolate->factory()->LookupSingleCharacterStringFromCode(s->Get(i));
+    str->Taint(s->GetTaint().subtaint(i, i+1));
     elements->set(i, *str);
   }
 
