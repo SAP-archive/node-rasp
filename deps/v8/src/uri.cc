@@ -397,6 +397,7 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
 
   int dest_position = 0;
   Handle<String> second_part;
+  StringTaint taint;
   DCHECK_LE(unescaped_length, String::kMaxLength);
   if (one_byte) {
     Handle<SeqOneByteString> dest = isolate->factory()
@@ -408,6 +409,8 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
       int step;
       dest->SeqOneByteStringSet(dest_position,
                                 UnescapeChar(vector, i, length, &step));
+      // TaintV8: Keep taint of first unescaped character
+      taint.concat(string->GetTaint().subtaint(i, i+1), dest_position);
       i += step;
     }
     second_part = dest;
@@ -421,10 +424,13 @@ MaybeHandle<String> UnescapeSlow(Isolate* isolate, Handle<String> string,
       int step;
       dest->SeqTwoByteStringSet(dest_position,
                                 UnescapeChar(vector, i, length, &step));
+      // TaintV8: Keep taint of first unescaped character
+      taint.concat(string->GetTaint().subtaint(i, i+1), dest_position);
       i += step;
     }
     second_part = dest;
   }
+  second_part->Taint(taint);
   return isolate->factory()->NewConsString(first_part, second_part);
 }
 
@@ -466,6 +472,8 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
   DCHECK(string->IsFlat());
   int escaped_length = 0;
   int length = string->length();
+
+  StringTaint taint;
 
   {
     DisallowHeapAllocation no_allocation;
@@ -509,19 +517,27 @@ static MaybeHandle<String> EscapePrivate(Isolate* isolate,
         dest->SeqOneByteStringSet(dest_position + 4,
                                   HexCharOfValue((c >> 4) & 0xF));
         dest->SeqOneByteStringSet(dest_position + 5, HexCharOfValue(c & 0xF));
+        StringTaint subTaint = string->GetTaint().subtaint(i, i+1);
+        subTaint.setNewEnd(0, 5);
+        taint.concat(subTaint, dest_position);
         dest_position += 6;
       } else if (IsNotEscaped(c)) {
         dest->SeqOneByteStringSet(dest_position, c);
+        taint.concat(string->GetTaint().subtaint(i, i+1), dest_position);
         dest_position++;
       } else {
         dest->SeqOneByteStringSet(dest_position, '%');
         dest->SeqOneByteStringSet(dest_position + 1, HexCharOfValue(c >> 4));
         dest->SeqOneByteStringSet(dest_position + 2, HexCharOfValue(c & 0xF));
+        StringTaint subTaint = string->GetTaint().subtaint(i, i+1);
+        subTaint.setNewEnd(0, 2);
+        taint.concat(subTaint, dest_position);
         dest_position += 3;
       }
     }
   }
-
+  
+  dest->Taint(taint);
   return dest;
 }
 
