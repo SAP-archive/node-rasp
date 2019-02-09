@@ -30,6 +30,8 @@
       'lib/internal/bootstrap/loaders.js',
       'lib/internal/bootstrap/node.js',
       'lib/internal/buffer_util.js',
+      'lib/taint/logger.js',
+      'lib/taint/module-wrapper.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
