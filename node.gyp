@@ -33,6 +33,7 @@
       'lib/taint/_mongodb-core.js',
       'lib/taint/logger.js',
       'lib/taint/module-wrapper.js',
+      'lib/taint/_pathTraversalCheck.js',
       'lib/async_hooks.js',
       'lib/assert.js',
       'lib/buffer.js',
